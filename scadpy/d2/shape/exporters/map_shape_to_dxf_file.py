@@ -1,0 +1,38 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+from typeguard import typechecked
+
+if TYPE_CHECKING:
+    from scadpy import Shape
+
+
+@typechecked
+def map_shape_to_dxf_file(shape: Shape, path: str | Path) -> int:
+    """Save a shape as a DXF file.
+
+    Parameters
+    ----------
+    shape : Shape
+        The shape to export.
+    path : str or Path
+        Destination file path.
+
+    Returns
+    -------
+    int
+        Number of characters written.
+
+    Examples
+    --------
+    >>> from scadpy import square, circle, map_shape_to_dxf_file
+
+    >>> map_shape_to_dxf_file(  # doctest: +SKIP
+    ...     shape=square(4) - circle(1), path="output.dxf"
+    ... )
+    """
+    from scadpy import map_shape_to_dxf
+
+    return Path(path).write_text(map_shape_to_dxf(shape), encoding="utf-8")

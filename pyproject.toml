@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ScadPy"
+version = "0.2.0"
+description = "Simplified 2D/3D modeling for Python with fluent API and boolean operations"
+requires-python = ">= 3.12"
+authors = [{ name = "m-fabregue" }]
+license = { file = "LICENSE.md" }
+readme = "README.md"
+keywords = ["python", "scad", "shape", "solid", "3d", "2d", "modeling"]
+classifiers = ["Development Status :: 3 - Alpha"]
+dependencies = ["triangle == 20250106", "PySide6 ~= 6.10", "typeguard ~= 4.4", "trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6"]
+
+[project.optional-dependencies]
+dev = [
+    "sphinx",
+    "sphinx-pyproject",
+    "numpydoc",
+    "sphinx-autodoc-typehints",
+    "furo",
+    "interrogate",
+    "coverage",
+    "genbadge[coverage]"
+]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[tool.sphinx-pyproject]
+source-dir = "docs"
+language = "en"
+extensions = [
+    'numpydoc',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.doctest',
+]
+
+[tool.coverage.report]
+omit = [
+    "*/shibokensupport/*",
+    "*/site-packages/*",
+]

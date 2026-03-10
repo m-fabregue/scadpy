@@ -1,0 +1,58 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from scadpy.color.constants import BLACK, WHITE
+from typeguard import typechecked
+
+if TYPE_CHECKING:
+    from scadpy import Color, Solid
+
+
+@typechecked
+def map_solid_to_html_file(
+    solid: Solid,
+    path: str,
+    background_color: Color = WHITE,
+    foreground_color: Color = BLACK,
+) -> int:
+    """Save a solid as an HTML file.
+
+    Shortcut for :func:`map_component_to_html_file`.
+    See :func:`map_component_to_html_file` for full documentation.
+
+    Parameters
+    ----------
+    solid : Solid
+        The solid to save.
+    path : str
+        The file path where the HTML will be written.
+    background_color : Color, default=WHITE
+        The background color of the rendered output.
+    foreground_color : Color, default=BLACK
+        The foreground color (axes, grid) of the rendered output.
+
+    Returns
+    -------
+    int
+        The number of characters written to the file.
+
+    Examples
+    --------
+    >>> from scadpy import cuboid, map_solid_to_html_file
+
+    >>> map_solid_to_html_file(  # doctest: +SKIP
+    ...     solid=cuboid(4), path="output.html"
+    ... )
+    """
+    from scadpy import map_component_to_html_file, map_solid_to_html
+
+    return map_component_to_html_file(
+        component=solid,
+        path=path,
+        to_html=lambda component: map_solid_to_html(
+            solid=component,
+            background_color=background_color,
+            foreground_color=foreground_color,
+        ),
+    )

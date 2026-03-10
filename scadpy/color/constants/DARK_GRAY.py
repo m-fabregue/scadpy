@@ -1,0 +1,3 @@
+from scadpy.color.constants.DEFAULT_OPACITY import DEFAULT_OPACITY
+
+DARK_GRAY = [0.25, 0.25, 0.25, DEFAULT_OPACITY]

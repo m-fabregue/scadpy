@@ -1,0 +1,6 @@
+2D
+==
+
+.. toctree::
+
+   shape <d2/shape>

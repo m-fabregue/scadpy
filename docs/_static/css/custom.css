@@ -1,0 +1,157 @@
+.horizontal-code-with-visualization {
+    display: flex;
+    margin: 1em 0;
+}
+
+.horizontal-code-with-visualization .highlight-python {
+    margin: 0;
+}
+
+.horizontal-code-with-visualization > .visualization {
+    width: 100%;
+    display: flex;
+}
+
+.horizontal-code-with-visualization > .visualization > .included-html > div {
+    height: 100%;
+}
+
+.vertical-code-with-visualization {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+}
+
+.vertical-code-with-visualization > .column {
+    flex: 1;
+    min-width: 290px;
+    max-width: 290px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.vertical-code-with-visualization > .column svg {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    vertical-align: top;
+}
+
+.vertical-code-with-visualization > .column > .highlight-python {
+    margin: 0;
+}
+
+.vertical-code-with-visualization > .column > .included-html {
+    height: 100%;
+}
+
+.vertical-code-with-visualization > .column > .included-html > div {
+    width: 100%;
+}
+
+/*
+* Include HTML into code examples
+*/
+
+div.doctest.highlight-default:has(+ div.doctest.highlight-default) {
+    margin-bottom: 0;
+}
+
+div.doctest.highlight-default:has(+ div.doctest.highlight-default)
+    > .highlight {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.doctest.highlight-default + div.doctest.highlight-default {
+    margin-top: 0;
+}
+
+div.doctest.highlight-default + div.doctest.highlight-default > .highlight {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+div.doctest.highlight-default:has(+ div.render-example) {
+    margin-bottom: 0;
+}
+
+div.render-example:has(+ div.doctest.highlight-default) > div {
+    display: flex;
+    padding-bottom: 0.625rem;
+}
+
+div.render-example:has(+ div.doctest.highlight-default) {
+    display: flex;
+    justify-content: left;
+    background-color: var(--color-code-background);
+    padding: 0 0.875rem;
+}
+
+div.render-example + div.doctest.highlight-default {
+    margin-top: 0;
+}
+
+div.render-example svg {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+div.render-example canvas {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+div.doctest.highlight-default + div.render-example {
+    display: flex;
+    justify-content: left;
+    padding: 0 0.875rem;
+    background-color: var(--color-code-background);
+}
+
+div.doctest.highlight-default:has(+ div.doctest.highlight-default) {
+    margin-bottom: 0;
+}
+
+div.highlight-pycon:has(+ div.highlight-pycon) > .highlight {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.highlight-pycon + div.highlight-pycon {
+    margin-top: 0;
+}
+
+div.highlight-pycon + div.highlight-pycon > .highlight {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+div.highlight-pycon:has(+ div.render-example) {
+    margin-bottom: 0;
+}
+
+div.render-example:has(+ div.highlight-pycon) > div {
+    display: flex;
+    padding-bottom: 0.625rem;
+}
+
+div.render-example:has(+ div.highlight-pycon) {
+    display: flex;
+    justify-content: left;
+    background-color: var(--color-code-background);
+    padding: 0 0.875rem;
+}
+
+div.render-example + div.highlight-pycon {
+    margin-top: 0;
+}
+
+div.highlight-pycon + div.render-example {
+    display: flex;
+    justify-content: left;
+    padding: 0 0.875rem;
+    background-color: var(--color-code-background);
+}

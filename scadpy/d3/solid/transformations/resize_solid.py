@@ -1,0 +1,92 @@
+from __future__ import annotations
+
+from collections.abc import Iterable
+from typing import TYPE_CHECKING
+
+from typeguard import typechecked
+
+if TYPE_CHECKING:
+    from scadpy import Solid, TopologyFilter
+
+
+@typechecked
+def resize_solid(
+    solid: Solid,
+    size: Iterable[float | None],
+    auto: bool = False,
+    pivot: float | Iterable[float] | None = None,
+    vertex_filter: TopologyFilter[Solid] | None = None,
+) -> Solid:
+    """Resize a solid to fit target dimensions.
+
+    Scales the solid so that each non-``None`` axis matches the given target
+    size. The scaling pivot defaults to the center of the bounding box so the
+    solid stays in place.
+
+    Shortcut delegating to :func:`resize_vertex_coordinates`.
+
+    Parameters
+    ----------
+    solid : Solid
+        The solid to resize.
+    size : Iterable[float | None]
+        Target dimensions ``[width, height, depth]``. Pass ``None`` for an
+        axis to leave it unchanged (or scale it proportionally when
+        ``auto=True``).
+    auto : bool, default=False
+        If ``True``, axes with ``None`` are scaled proportionally to the
+        average ratio of the defined axes. If ``False``, ``None`` axes are
+        left unchanged.
+    pivot : float | Iterable[float] | None, default=None
+        The point relative to which scaling is performed. Defaults to the
+        center of the bounding box.
+    vertex_filter : TopologyFilter[Solid] | None, default=None
+        Boolean array or callable selecting which vertices are resized. If ``None``, all
+        vertices are resized.
+
+    Returns
+    -------
+    Solid
+        A new solid resized to the target dimensions.
+
+    Examples
+    --------
+    >>> from scadpy import cuboid, resize_solid
+
+    >>> # resize to an exact size on all axes:
+    >>> resize_solid(solid=cuboid([4, 2, 1]), size=[6, 6, 6]) # doctest: +SKIP
+
+    .. render-example::
+       :name: resize_solid_exact
+       :example: resize_solid(solid=cuboid([4, 2, 1]), size=[6, 6, 6])
+       :ghost: cuboid([4, 2, 1])
+
+    >>> # freeze two axes (``None``) and scale only the first:
+    >>> resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None]) # doctest: +SKIP
+
+    .. render-example::
+       :name: resize_solid_freeze
+       :example: resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None])
+       :ghost: cuboid([4, 2, 1])
+
+    >>> # scale frozen axes proportionally with ``auto=True``:
+    >>> resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None], auto=True) # doctest: +SKIP
+
+    .. render-example::
+       :name: resize_solid_auto
+       :example: resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None], auto=True)
+       :ghost: cuboid([4, 2, 1])
+    """
+    from scadpy import resolve_topology_filter, resize_vertex_coordinates
+
+    resolved_vertex_filter = resolve_topology_filter(solid, len(solid.vertex_coordinates), vertex_filter)
+    return solid.recoordinate(
+        resize_vertex_coordinates(
+            solid.vertex_coordinates,
+            size=size,
+            n_dims=3,
+            auto=auto,
+            pivot=pivot,
+            vertex_filter=resolved_vertex_filter,
+        )
+    )

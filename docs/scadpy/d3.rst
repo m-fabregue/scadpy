@@ -1,0 +1,6 @@
+3D
+==
+
+.. toctree::
+
+   solid <d3/solid>
