@@ -32,12 +32,6 @@ def map_solid_to_screen(
     Returns
     -------
     None
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, map_solid_to_screen
-
-    >>> map_solid_to_screen(solid=cuboid(4)) # doctest: +SKIP
     """
     from scadpy import map_component_to_screen, map_solid_to_html
 

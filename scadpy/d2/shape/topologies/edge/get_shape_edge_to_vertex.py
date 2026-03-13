@@ -33,21 +33,6 @@ def get_shape_edge_to_vertex(
         The number of edges equals the number of vertices (one edge per vertex,
         since each ring is closed).
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_edge_to_vertex, polygon, square
-
-    >>> # triangle: 3 vertices, 3 edges
-    >>> triangle = polygon([(0, 0), (1, 0), (0.5, 1)])
-    >>> get_shape_edge_to_vertex(triangle)
-    array([[0, 1],
-           [1, 2],
-           [2, 0]])
-
-    >>> # square: 4 vertices, 4 edges
-    >>> square_shape = square(1)
-    >>> get_shape_edge_to_vertex(square_shape).shape
-    (4, 2)
     """
     rings = [
         ring

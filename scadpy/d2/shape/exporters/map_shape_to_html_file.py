@@ -37,13 +37,6 @@ def map_shape_to_html_file(
     int
         The number of characters written to the file.
 
-    Examples
-    --------
-    >>> from scadpy import square, map_shape_to_html_file
-
-    >>> map_shape_to_html_file(  # doctest: +SKIP
-    ...     shape=square(4), path="output.html"
-    ... )
     """
     from scadpy import map_component_to_html_file, map_shape_to_html
 

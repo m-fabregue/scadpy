@@ -25,19 +25,6 @@ def get_shape_vertex_coordinates(shape: Shape) -> NDArray[np.float64]:
     NDArray[np.float64]
         2D array of shape (n_vertices, 2), one row per vertex.
 
-    Examples
-    --------
-    >>> from shapely.geometry import Polygon
-    >>> from scadpy import Shape, get_shape_vertex_coordinates
-
-    >>> polygon = Polygon([(0, 0), (2, 0), (2, 2), (0, 2)])
-    >>> get_shape_vertex_coordinates(
-    ...     Shape.from_geometry(polygon)
-    ... ) # doctest: +NORMALIZE_WHITESPACE
-    array([[0., 0.],
-           [2., 0.],
-           [2., 2.],
-           [0., 2.]])
     """
     from scadpy import get_assembly_vertex_coordinates, get_shape_part_vertex_coordinates
 

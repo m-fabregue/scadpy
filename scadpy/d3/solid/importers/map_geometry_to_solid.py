@@ -24,18 +24,6 @@ def map_geometry_to_solid(geometry: Trimesh) -> Solid:
     -------
     Solid
         A new solid containing the single geometry as a part.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, map_geometry_to_solid
-
-    >>> map_geometry_to_solid(  # doctest: +SKIP
-    ...     cuboid(4)._parts[0].geometry
-    ... )
-
-    .. render-example::
-        :name: map_geometry_to_solid
-        :example: map_geometry_to_solid(cuboid(4)._parts[0].geometry)
     """
     from scadpy.d3.solid.importers import map_geometries_to_solid
 

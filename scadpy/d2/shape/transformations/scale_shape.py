@@ -36,19 +36,6 @@ def scale_shape(
     -------
     Shape
         A new shape with the selected vertices scaled relative to the pivot.
-
-    Examples
-    --------
-    >>> from scadpy import square, scale_shape
-
-    >>> scale_shape(  # doctest: +SKIP
-    ...     shape=square(4), scale=2, pivot=[2, 2]
-    ... )
-
-    .. render-example::
-        :name: scale_shape
-        :example: scale_shape(shape=square(4), scale=2, pivot=[2, 2])
-        :ghost: square(4)
     """
     from scadpy import resolve_topology_filter, scale_vertex_coordinates
 

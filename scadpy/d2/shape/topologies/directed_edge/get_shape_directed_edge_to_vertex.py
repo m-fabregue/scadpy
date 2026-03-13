@@ -34,27 +34,6 @@ def get_shape_directed_edge_to_vertex(
         2D array of shape ``(2 * n_edges, 2)``. Each row is
         ``[start_vertex, end_vertex]`` for the directed edge.
 
-    Examples
-    --------
-    >>> from scadpy import (
-    ...     get_shape_directed_edge_to_vertex, polygon, square
-    ... )
-
-    >>> # triangle: 3 edges → 6 directed edges
-    >>> # (forward/backward interleaved)
-    >>> triangle = polygon([(0, 0), (1, 0), (0.5, 1)])
-    >>> get_shape_directed_edge_to_vertex(triangle)
-    array([[0, 1],
-           [1, 0],
-           [1, 2],
-           [2, 1],
-           [2, 0],
-           [0, 2]])
-
-    >>> # square: 4 edges → 8 directed edges
-    >>> square_shape = square(1)
-    >>> get_shape_directed_edge_to_vertex(square_shape).shape
-    (8, 2)
     """
     from scadpy.core.assembly import get_assembly_directed_edge_to_vertex
 

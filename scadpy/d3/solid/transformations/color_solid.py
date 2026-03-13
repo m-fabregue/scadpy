@@ -23,18 +23,6 @@ def color_solid(solid: Solid, color: Color) -> Solid:
     -------
     Solid
         A new solid with all parts set to the given color.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, color_solid
-    >>> from scadpy.color.constants import RED
-
-    >>> color_solid(solid=cuboid(4), color=RED) # doctest: +SKIP
-
-    .. render-example::
-        :name: color_solid
-        :example: color_solid(solid=cuboid(4), color=RED)
-        :keep-color:
     """
     from scadpy import Solid, color_assembly
 

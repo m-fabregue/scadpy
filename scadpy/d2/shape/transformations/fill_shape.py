@@ -28,31 +28,6 @@ def fill_shape(shape: Shape, part_filter: TopologyFilter[Shape] | None = None) -
     -------
     Shape
         A new shape with the selected parts filled and the unselected parts unchanged.
-
-    Examples
-    --------
-    >>> from scadpy import fill_shape, square, circle
-    >>> import numpy as np
-
-    >>> shape = square(10) - circle(3)
-    >>> fill_shape(shape) # doctest: +SKIP
-
-    .. render-example::
-        :name: fill_shape
-        :example: fill_shape(shape)
-        :ghost: shape
-
-    >>> # partial fill
-    >>> a = square(5) - circle(1)
-    >>> b = (square(3) - circle(0.5)).translate(10)
-    >>> fill_shape(  # doctest: +SKIP
-    ...     a + b, part_filter=np.array([True, False])
-    ... )
-
-    .. render-example::
-        :name: fill_shape_partial
-        :example: fill_shape(a + b, part_filter=np.array([True, False]))
-        :ghost: a + b
     """
     from scadpy import Part, Shape, transform_filtered_parts
 

@@ -25,19 +25,6 @@ def subtract_solid(to_be_subtracted: Solid, to_subtract: Solid) -> Solid:
     -------
     Solid
         A new solid with the geometry of ``to_subtract`` removed from ``to_be_subtracted``.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, sphere, subtract_solid
-
-    >>> subtract_solid(  # doctest: +SKIP
-    ...     to_be_subtracted=cuboid(4), to_subtract=sphere(radius=2)
-    ... )
-
-    .. render-example::
-        :name: subtract_solid
-        :example: subtract_solid(to_be_subtracted=cuboid(4), to_subtract=sphere(radius=2))
-        :ghost: cuboid(4)
     """
     from scadpy import (
         Solid,

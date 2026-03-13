@@ -25,19 +25,6 @@ def exclude_shape(shapes: Sequence[Shape]) -> Shape:
     -------
     Shape
         A new shape containing only the non-overlapping regions of the input shapes.
-
-    Examples
-    --------
-    >>> from scadpy import square, circle, exclude_shape
-
-    >>> exclude_shape(  # doctest: +SKIP
-    ...     shapes=[square(4), circle(radius=2).translate([1, 1])]
-    ... )
-
-    .. render-example::
-        :name: exclude_shape
-        :example: exclude_shape(shapes=[square(4), circle(radius=2).translate([1, 1])])
-        :ghost: square(4)
     """
     from scadpy import (
         Shape,

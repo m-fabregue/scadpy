@@ -23,18 +23,6 @@ def map_geometries_to_solid(geometries: Sequence[Trimesh]) -> Solid:
     -------
     Solid
         A new solid containing all input geometries as parts.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, map_geometries_to_solid
-
-    >>> map_geometries_to_solid(  # doctest: +SKIP
-    ...     [cuboid(4)._parts[0].geometry]
-    ... )
-
-    .. render-example::
-        :name: map_geometries_to_solid
-        :example: map_geometries_to_solid([cuboid(4)._parts[0].geometry])
     """
     from scadpy.core.part import Part
     from scadpy.d3.solid import Solid

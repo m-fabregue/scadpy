@@ -4,7 +4,7 @@ from typeguard import typechecked
 
 
 @typechecked
-def z(n: float) -> NDArray[np.float64]:
+def z(n: float = 1) -> NDArray[np.float64]:
     """
     Creates a 3D vector along the Z-axis.
 

@@ -25,19 +25,6 @@ def subtract_shape(to_be_subtracted: Shape, to_subtract: Shape) -> Shape:
     -------
     Shape
         A new shape with the geometry of ``to_subtract`` removed from ``to_be_subtracted``.
-
-    Examples
-    --------
-    >>> from scadpy import square, circle, subtract_shape
-
-    >>> subtract_shape(  # doctest: +SKIP
-    ...     to_be_subtracted=square(4), to_subtract=circle(radius=1)
-    ... )
-
-    .. render-example::
-        :name: subtract_shape
-        :example: subtract_shape(to_be_subtracted=square(4), to_subtract=circle(radius=1))
-        :ghost: square(4)
     """
     from scadpy import (
         Shape,

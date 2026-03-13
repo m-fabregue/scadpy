@@ -23,16 +23,5 @@ def is_shape_empty(shape: Shape) -> bool:
     bool
         True if the shape has no vertices, False otherwise.
 
-    Examples
-    --------
-    >>> from shapely.geometry import Polygon
-    >>> from scadpy import Shape, is_shape_empty
-
-    >>> is_shape_empty(Shape.from_parts([]))
-    True
-
-    >>> polygon = Polygon([(0, 0), (2, 0), (2, 2), (0, 2)])
-    >>> is_shape_empty(Shape.from_geometry(polygon))
-    False
     """
     return len(shape.vertex_coordinates) == 0

@@ -26,14 +26,6 @@ def get_shape_bounds(shape: Shape) -> NDArray[np.float64]:
         1D array ``[min_x, min_y, max_x, max_y]``.
         Returns zeros if the shape is empty.
 
-    Examples
-    --------
-    >>> from shapely.geometry import Polygon
-    >>> from scadpy import Shape, get_shape_bounds
-
-    >>> polygon = Polygon([(0, 0), (2, 0), (2, 2), (0, 2)])
-    >>> get_shape_bounds(Shape.from_geometry(polygon))
-    array([0., 0., 2., 2.])
     """
     from scadpy import get_component_bounds
 

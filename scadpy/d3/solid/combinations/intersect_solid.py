@@ -24,19 +24,6 @@ def intersect_solid(solids: Sequence[Solid]) -> Solid:
     -------
     Solid
         A new solid containing only the regions present in all input solids.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, sphere, intersect_solid
-
-    >>> intersect_solid(  # doctest: +SKIP
-    ...     solids=[cuboid(4), sphere(radius=2).translate(1)]
-    ... )
-
-    .. render-example::
-        :name: intersect_solid
-        :example: intersect_solid(solids=[cuboid(4), sphere(radius=2).translate(1)])
-        :ghost: cuboid(4) + sphere(radius=2).translate(1)
     """
     from scadpy import (
         Solid,

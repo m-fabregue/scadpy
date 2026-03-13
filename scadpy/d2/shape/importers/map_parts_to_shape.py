@@ -34,19 +34,6 @@ def map_parts_to_shape(
     Shape
         A new shape containing all valid, oriented polygons from the input parts.
 
-    Examples
-    --------
-    >>> from shapely.geometry import Polygon
-    >>> from scadpy import map_parts_to_shape
-    >>> from scadpy.core.part import Part
-
-    >>> map_parts_to_shape(  # doctest: +SKIP
-    ...     [Part.from_geometry(Polygon([(0, 0), (4, 0), (4, 4), (0, 4)]))]
-    ... )
-
-    .. render-example::
-        :name: map_parts_to_shape
-        :example: map_parts_to_shape([Part.from_geometry(Polygon([(0, 0), (4, 0), (4, 4), (0, 4)]))])
     """
     from scadpy.core.part import Part
     from scadpy.d2.shape import Shape

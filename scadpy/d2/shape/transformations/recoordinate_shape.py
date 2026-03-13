@@ -29,24 +29,6 @@ def recoordinate_shape(
     -------
     Shape
         A new shape with the same topology as *shape* but at the new positions.
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> from shapely.geometry import Polygon
-    >>> from scadpy import recoordinate_shape, Shape, square
-
-    >>> recoordinate_shape(  # doctest: +SKIP
-    ...     shape=square(4),
-    ...     vertex_coordinates=(
-    ...         square(4).vertex_coordinates + [2.0, 1.0]
-    ...     ),
-    ... )
-
-    .. render-example::
-        :name: recoordinate_shape
-        :example: recoordinate_shape(shape=square(4), vertex_coordinates=square(4).vertex_coordinates + [2.0, 1.0])
-        :ghost: square(4)
     """
     from scadpy.core.part import Part
 

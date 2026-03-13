@@ -41,15 +41,6 @@ def map_shape_to_html(
     -------
     HTML
         An IPython HTML object containing the SVG rendering of the shape.
-
-    Examples
-    --------
-    >>> from IPython.core.display import HTML
-    >>> from scadpy import square, map_shape_to_html
-
-    >>> html = map_shape_to_html(shape=square(4))
-    >>> isinstance(html, HTML)
-    True
     """
     foreground_color_hex = "#{:02X}{:02X}{:02X}".format(
         *(int(x * 255) for x in foreground_color[:-1])

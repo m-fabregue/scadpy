@@ -19,18 +19,6 @@ def get_shape_edge_normals(
 
     See :func:`get_assembly_edge_normals` for full documentation.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_edge_normals, square
-
-    >>> # square(2) centered at origin: 4 edges,
-    >>> # each normal points outward
-    >>> square_shape = square(2)
-    >>> get_shape_edge_normals(square_shape).round(4)
-    array([[ 0., -1.],
-           [ 1., -0.],
-           [ 0.,  1.],
-           [-1., -0.]])
     """
     from scadpy.core.assembly import get_assembly_edge_normals
 

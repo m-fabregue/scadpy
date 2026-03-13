@@ -33,11 +33,6 @@ def map_shape_to_screen(
     -------
     None
 
-    Examples
-    --------
-    >>> from scadpy import square, map_shape_to_screen
-
-    >>> map_shape_to_screen(shape=square(4)) # doctest: +SKIP
     """
     from scadpy import map_component_to_screen, map_shape_to_html
 

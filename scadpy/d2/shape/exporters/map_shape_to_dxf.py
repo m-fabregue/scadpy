@@ -28,13 +28,6 @@ def map_shape_to_dxf(shape: Shape) -> str:
     str
         A DXF document as a string.
 
-    Examples
-    --------
-    >>> from scadpy import square, circle, map_shape_to_dxf
-
-    >>> dxf = map_shape_to_dxf(square(4) - circle(1))
-    >>> dxf.startswith("999")
-    True
     """
     geometries = [part.geometry for part in shape._parts]
     if not geometries:

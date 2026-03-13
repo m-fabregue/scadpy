@@ -32,19 +32,6 @@ def translate_shape(
     -------
     Shape
         A new shape with the selected vertices shifted by the translation vector.
-
-    Examples
-    --------
-    >>> from scadpy import square, translate_shape
-
-    >>> translate_shape(  # doctest: +SKIP
-    ...     shape=square(4), translation=[3, 2]
-    ... )
-
-    .. render-example::
-        :name: translate_shape
-        :example: translate_shape(shape=square(4), translation=[3, 2])
-        :ghost: square(4)
     """
     from scadpy import resolve_topology_filter, translate_vertex_coordinates
 

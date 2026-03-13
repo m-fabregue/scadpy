@@ -27,13 +27,6 @@ def get_shape_edge_lengths(
     NDArray[np.float64]
         1D array of shape ``(n_edges,)``, one length per edge.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_edge_lengths, square
-
-    >>> square_shape = square(2)
-    >>> get_shape_edge_lengths(square_shape)
-    array([2., 2., 2., 2.])
     """
     from scadpy.core.assembly import get_assembly_edge_lengths
 

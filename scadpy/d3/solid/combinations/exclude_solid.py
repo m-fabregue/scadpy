@@ -25,19 +25,6 @@ def exclude_solid(solids: Sequence[Solid]) -> Solid:
     -------
     Solid
         A new solid containing only the non-overlapping regions of the input solids.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, exclude_solid, x
-
-    >>> exclude_solid(  # doctest: +SKIP
-    ...     solids=[cuboid(4), cuboid(4).translate(x(2))]
-    ... )
-
-    .. render-example::
-        :name: exclude_solid
-        :example: exclude_solid(solids=[cuboid(4), cuboid(4).translate(x(2))])
-        :ghost: concat_solid(solids=[cuboid(4), cuboid(4).translate(x(2))])
     """
     from scadpy import (
         Solid,

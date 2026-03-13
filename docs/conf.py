@@ -114,14 +114,20 @@ def check_snapshots(app, exception):
         normalized = re.sub(r"<dc:date>[^<]*</dc:date>", "", html_content)
         normalized = re.sub(r"\b[pm][0-9a-f]{8,}\b", "X", normalized)
         normalized = re.sub(r"\bscadpy-[0-9a-f]+\b", "X", normalized)
-        normalized = re.sub(r"-?\d+\.\d+(?:[eE][+-]?\d+)?", lambda m: str(round(float(m.group()), 6)), normalized)
+        normalized = re.sub(
+            r"-?\d+\.\d+(?:[eE][+-]?\d+)?",
+            lambda m: str(round(float(m.group()), 6)),
+            normalized,
+        )
         digest = hashlib.md5(normalized.encode()).hexdigest()
         if not snap_path.exists() or update:
             snap_path.write_text(digest)
         else:
             stored = snap_path.read_text().strip()
             if digest != stored:
-                errors.append(f"Snapshot mismatch: {stem} (stored={stored!r}, got={digest!r})")
+                errors.append(
+                    f"Snapshot mismatch: {stem} (stored={stored!r}, got={digest!r})"
+                )
 
     if errors:
         raise RuntimeError("\n".join(errors))
@@ -186,3 +192,8 @@ FOREGROUND_DARK = [0.972, 0.972, 0.949, DEFAULT_OPACITY]
 GHOST_DARK = [1.0, 0.64, 0.2, 0.0]
 GHOST_LIGHT = [0.85, 0.468, 0.0, 0.0]
 """
+
+# Github light background: [1.0, 1.0, 1.0, DEFAULT_OPACITY]
+# Github dark background: [0.051, 0.067, 0.090, DEFAULT_OPACITY]
+# Furo light background: [0.949, 0.949, 0.949, DEFAULT_OPACITY]
+# Furo dark background: [0.168, 0.168, 0.168, DEFAULT_OPACITY]

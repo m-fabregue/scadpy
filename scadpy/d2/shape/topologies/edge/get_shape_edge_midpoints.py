@@ -27,16 +27,6 @@ def get_shape_edge_midpoints(
     NDArray[np.float64]
         2D array of shape ``(n_edges, 2)``, one midpoint per edge.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_edge_midpoints, square
-
-    >>> square_shape = square(2)
-    >>> get_shape_edge_midpoints(square_shape)
-    array([[ 0., -1.],
-           [ 1.,  0.],
-           [ 0.,  1.],
-           [-1.,  0.]])
     """
     from scadpy.core.assembly import get_assembly_edge_midpoints
 

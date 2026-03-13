@@ -46,53 +46,6 @@ def radial_slice_shape(
         A new shape containing only the angular sector of the selected parts,
         plus the unselected parts unchanged. If start equals end, the shape
         is returned unchanged.
-
-    Examples
-    --------
-    >>> from scadpy import radial_slice_shape, square, circle
-    >>> import numpy as np
-
-    >>> shape = square(10) - circle(3)
-
-    >>> # quarter slice
-    >>> radial_slice_shape(shape, start=0, end=90) # doctest: +SKIP
-
-    .. render-example::
-        :name: radial_slice_shape_quarter
-        :example: radial_slice_shape(shape, start=0, end=90)
-        :ghost: shape
-
-    >>> # three quarter slice
-    >>> radial_slice_shape(shape, start=45, end=315) # doctest: +SKIP
-
-    .. render-example::
-        :name: radial_slice_shape_three_quarter
-        :example: radial_slice_shape(shape, start=45, end=315)
-        :ghost: shape
-
-    >>> # off-center pivot
-    >>> radial_slice_shape(  # doctest: +SKIP
-    ...     shape, start=0, end=180, pivot=[3, 3]
-    ... )
-
-    .. render-example::
-        :name: radial_slice_shape_pivot
-        :example: radial_slice_shape(shape, start=0, end=180, pivot=[3, 3])
-        :ghost: shape
-
-    >>> # partial slice on a composite shape
-    >>> a = square(6) - circle(2)
-    >>> b = circle(3).translate(10)
-
-    >>> radial_slice_shape(  # doctest: +SKIP
-    ...     a + b, start=0, end=120,
-    ...     part_filter=np.array([True, False]),
-    ... )
-
-    .. render-example::
-        :name: radial_slice_shape_partial
-        :example: radial_slice_shape(a + b, start=0, end=120, part_filter=np.array([True, False]))
-        :ghost: a + b
     """
     from scadpy import resolve_vector_2d, transform_filtered_parts, Shape
 

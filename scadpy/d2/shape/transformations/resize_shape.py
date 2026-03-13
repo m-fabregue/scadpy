@@ -47,34 +47,6 @@ def resize_shape(
     -------
     Shape
         A new shape resized to the target dimensions.
-
-    Examples
-    --------
-    >>> from scadpy import rectangle, resize_shape
-
-    >>> # resize to an exact size on both axes:
-    >>> resize_shape(shape=rectangle([4, 2]), size=[6, 6]) # doctest: +SKIP
-
-    .. render-example::
-       :name: resize_shape_exact
-       :example: resize_shape(shape=rectangle([4, 2]), size=[6, 6])
-       :ghost: rectangle([4, 2])
-
-    >>> # freeze one axis (``None``) to leave it unchanged:
-    >>> resize_shape(shape=rectangle([4, 2]), size=[6, None]) # doctest: +SKIP
-
-    .. render-example::
-       :name: resize_shape_freeze
-       :example: resize_shape(shape=rectangle([4, 2]), size=[6, None])
-       :ghost: rectangle([4, 2])
-
-    >>> # scale frozen axes proportionally with ``auto=True``:
-    >>> resize_shape(shape=rectangle([4, 2]), size=[6, None], auto=True) # doctest: +SKIP
-
-    .. render-example::
-       :name: resize_shape_auto
-       :example: resize_shape(shape=rectangle([4, 2]), size=[6, None], auto=True)
-       :ghost: rectangle([4, 2])
     """
     from scadpy import resolve_topology_filter, resize_vertex_coordinates
 

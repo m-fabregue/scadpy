@@ -14,37 +14,37 @@ if TYPE_CHECKING:
 def fillet_shape(
     shape: Shape,
     size: float | np.ndarray,
-    corner_filter: TopologyFilter[Shape] | None = None,
+    vertex_filter: TopologyFilter[Shape] | None = None,
     segment_count: int = 32,
     epsilon: float = 1e-8,
 ) -> Shape:
     """
-    Apply a fillet (circular arc) to every corner of a shape.
+    Apply a fillet (circular arc) to every vertex of a shape.
 
-    Convex corners are rounded; concave corners are filled with a circular arc.
+    Convex vertices are rounded; concave vertices are filled with a circular arc.
 
     Parameters
     ----------
     shape : Shape
         The input shape to fillet.
     size : float or ndarray
-        Fillet size: distance from the corner vertex to each tangent point along
+        Fillet size: distance from the vertex to each tangent point along
         the edges. Can be:
 
-        - ``float``: same size on both sides of every corner.
-        - ``(n_active,)``: per-active-corner size, same on both sides.
-        - ``(n_active, 2)``: per-active-corner, per-side size. Column 0 is
+        - ``float``: same size on both sides of every vertex.
+        - ``(n_active,)``: per-active-vertex size, same on both sides.
+        - ``(n_active, 2)``: per-active-vertex, per-side size. Column 0 is
           the incoming side, column 1 is the outgoing side.
 
-        ``n_active`` is the number of corners selected by ``corner_filter``
-        (or all corners if no filter). In all cases, each value is
+        ``n_active`` is the number of vertices selected by ``vertex_filter``
+        (or all vertices if no filter). In all cases, each value is
         automatically clamped to half the length of the corresponding edge
         to avoid overlapping tangent points.
-    corner_filter : TopologyFilter[Shape] | None, optional
-        Boolean mask or callable ``(shape) -> NDArray[bool]`` of length ``n_corners``
-        selecting which corners to fillet. If None, all corners are filleted.
+    vertex_filter : TopologyFilter[Shape] | None, optional
+        Boolean mask or callable ``(shape) -> NDArray[bool]`` of length ``n_vertices``
+        selecting which vertices to fillet. If None, all vertices are filleted.
     segment_count : int, optional
-        Number of arc segments per corner. Defaults to 32.
+        Number of arc segments per vertex. Defaults to 32.
     epsilon : float, optional
         Small offset used to avoid coincident edges in boolean operations.
         Defaults to ``1e-8``.
@@ -52,80 +52,14 @@ def fillet_shape(
     Returns
     -------
     Shape
-        A new shape with filleted corners.
+        A new shape with filleted vertices.
 
     Examples
     --------
-    >>> from scadpy import square, polygon, fillet_shape
-
-    >>> sq = square(4)
-    >>> l_shape = polygon(
-    ...     [(0, 0), (4, 0), (4, 2), (2, 2), (2, 4), (0, 4)]
-    ... )
-    >>> arrow = polygon(
-    ...     [(0, 1), (3, 0), (5, 2), (3, 4),
-    ...      (0, 3), (1, 2.5), (1, 1.5)]
-    ... )
-
-    >>> # all corners
-    >>> fillet_shape(sq, size=1.0)  # doctest: +SKIP
-
-    .. render-example::
-        :name: fillet_shape_all
-        :example: fillet_shape(sq, size=1.0)
-        :ghost: sq
-
-    >>> # convex corners only (the 5 outer corners of the L-shape)
-    >>> fillet_shape(  # doctest: +SKIP
-    ...     l_shape, size=0.5,
-    ...     corner_filter=lambda s: s.are_corners_convex,
-    ... )
-
-    .. render-example::
-        :name: fillet_shape_convex_only
-        :example: fillet_shape(l_shape, size=0.5, corner_filter=lambda s: s.are_corners_convex)
-        :ghost: l_shape
-
+    >>> from scadpy import square, fillet_shape
     >>> import numpy as np
 
-    >>> # asymmetric: one side fills the full edge (length 2),
-    >>> # the other stays at 1.0
-    >>> fillet_shape(  # doctest: +SKIP
-    ...     l_shape, size=np.array([[2.0, 1.0]]),
-    ...     corner_filter=lambda s: ~s.are_corners_convex,
-    ... )
-
-    .. render-example::
-        :name: fillet_shape_concave_asymmetric
-        :example: fillet_shape(l_shape, size=np.array([[2.0, 1.0]]), corner_filter=lambda s: ~s.are_corners_convex)
-        :ghost: l_shape
-
-    >>> # only sharp convex corners (angle > 100°):
-    >>> # the two 135° corners of the arrow tail
-    >>> fillet_shape(  # doctest: +SKIP
-    ...     arrow, size=0.4,
-    ...     corner_filter=lambda s: (
-    ...         s.are_corners_convex & (s.corner_angles > 100)
-    ...     ),
-    ... )
-
-    .. render-example::
-        :name: fillet_shape_sharp_convex
-        :example: fillet_shape(arrow, size=0.4, corner_filter=lambda s: s.are_corners_convex & (s.corner_angles > 100))
-        :ghost: arrow
-
-    >>> # oversized: the 2 concave corners share an edge of length ~1;
-    >>> # size=10 is clamped proportionally so their contributions
-    >>> # sum to the edge length (0.5 + 0.5 each)
-    >>> fillet_shape(  # doctest: +SKIP
-    ...     arrow, size=10,
-    ...     corner_filter=lambda s: ~s.are_corners_convex,
-    ... )
-
-    .. render-example::
-        :name: fillet_shape_clamp_proportional
-        :example: fillet_shape(arrow, size=10, corner_filter=lambda s: ~s.are_corners_convex)
-        :ghost: arrow
+    >>> sq = square(4)
 
     >>> # wrong size length raises ValueError
     >>> fillet_shape(
@@ -137,29 +71,29 @@ def fillet_shape(
     """
     from scadpy import resolve_topology_filter, Shape
 
-    corner_to_vertex = shape.corner_to_vertex
-    if len(corner_to_vertex) == 0:
+    vertex_neighborhoods = shape.vertex_to_neighbor_vertex
+    if len(vertex_neighborhoods) == 0:
         return shape
 
     vertex_coordinates = shape.vertex_coordinates
-    is_corner_convex = shape.are_corners_convex
+    is_vertex_convex = shape.are_vertices_convex
 
-    active_mask = resolve_topology_filter(shape, len(corner_to_vertex), corner_filter)
+    active_mask = resolve_topology_filter(shape, len(vertex_neighborhoods), vertex_filter)
     if active_mask is not None and not np.any(active_mask):
         return shape
 
-    # Filter all per-corner data to active corners only
+    # Filter all per-vertex data to active vertices only
     active_indices = (
         np.where(active_mask)[0]
         if active_mask is not None
-        else np.arange(len(corner_to_vertex))
+        else np.arange(len(vertex_neighborhoods))
     )
-    active_is_corner_convex = is_corner_convex[active_indices]
+    active_is_vertex_convex = is_vertex_convex[active_indices]
 
-    current_vertices = vertex_coordinates[corner_to_vertex[active_indices, 1]]
+    current_vertices = vertex_coordinates[active_indices]
 
-    incoming_de = shape.corner_to_incoming_directed_edge[active_indices]
-    outgoing_de = shape.corner_to_outgoing_directed_edge[active_indices]
+    incoming_de = shape.vertex_to_incoming_directed_edge[active_indices]
+    outgoing_de = shape.vertex_to_outgoing_directed_edge[active_indices]
     incoming_edge = shape.directed_edge_to_edge[incoming_de]
     outgoing_edge = shape.directed_edge_to_edge[outgoing_de]
 
@@ -180,18 +114,18 @@ def fillet_shape(
     if sizes.shape != (n_active, 2):
         raise ValueError(
             f"size array shape {sizes.shape} does not match "
-            f"expected ({n_active}, 2) for {n_active} active corners"
+            f"expected ({n_active}, 2) for {n_active} active vertices"
         )
-    # Clamp sizes proportionally so adjacent corners don't overlap on a shared edge.
-    # For each active corner, find the adjacent corner on its outgoing/incoming edge.
+    # Clamp sizes proportionally so adjacent vertices don't overlap on a shared edge.
+    # For each active vertex, find the adjacent vertex on its outgoing/incoming edge.
     # If both are active: scale both contributions so they sum to at most edge_length.
     # If only one is active: it can use the full edge length.
-    active_index_of = np.full(len(shape.corner_to_vertex), -1, dtype=np.int64)
+    active_index_of = np.full(len(shape.vertex_to_neighbor_vertex), -1, dtype=np.int64)
     active_index_of[active_indices] = np.arange(n_active, dtype=np.int64)
-    de_to_corner = shape.directed_edge_to_corner
+    de_to_vertex = shape.directed_edge_to_vertex
     sizes_orig = sizes.copy()
 
-    adj_target_out = de_to_corner[outgoing_de, 1]
+    adj_target_out = de_to_vertex[outgoing_de, 1]
     adj_idx_out = active_index_of[adj_target_out]
     adj_size_out = np.where(adj_idx_out >= 0, sizes_orig[adj_idx_out.clip(0), 0], 0.0)
     total_out = sizes_orig[:, 1] + adj_size_out
@@ -200,7 +134,7 @@ def fillet_shape(
     )
     sizes[:, 1] *= scale_out
 
-    adj_source_in = de_to_corner[incoming_de, 0]
+    adj_source_in = de_to_vertex[incoming_de, 0]
     adj_idx_in = active_index_of[adj_source_in]
     adj_size_in = np.where(adj_idx_in >= 0, sizes_orig[adj_idx_in.clip(0), 1], 0.0)
     total_in = sizes_orig[:, 0] + adj_size_in
@@ -209,7 +143,7 @@ def fillet_shape(
     )
     sizes[:, 0] *= scale_in
 
-    signs = np.where(active_is_corner_convex, 1.0, -1.0)
+    signs = np.where(active_is_vertex_convex, 1.0, -1.0)
 
     # Tangent points: slightly beyond size to avoid coincident inner points
     tangent_points_incoming = current_vertices - incoming_directions_normalized * (
@@ -229,15 +163,15 @@ def fillet_shape(
         + signs[:, np.newaxis] * outward_normals_outgoing * epsilon
     )
 
-    # Extended corner vertex: push outward along the bisector
-    corner_normals = shape.corner_normals[active_indices]
-    current_vertices_extended = current_vertices + corner_normals * epsilon
+    # Extended vertex: push outward along the bisector
+    vertex_normals = shape.vertex_normals[active_indices]
+    current_vertices_extended = current_vertices + vertex_normals * epsilon
 
-    # Elliptic arc centered on the corner vertex:
-    # P(t) = corner - a*cos(t)*incoming_dir + b*sin(t)*outgoing_dir,  t ∈ [0, π/2]
-    # At t=0: corner - a*incoming_dir = tp_in
-    # At t=π/2: corner + b*outgoing_dir = tp_out
-    # The arc bulges away from the corner (toward the shape interior for convex corners).
+    # Elliptic arc centered on the vertex:
+    # P(t) = vertex - a*cos(t)*incoming_dir + b*sin(t)*outgoing_dir,  t ∈ [0, π/2]
+    # At t=0: vertex - a*incoming_dir = tp_in
+    # At t=π/2: vertex + b*outgoing_dir = tp_out
+    # The arc bulges away from the vertex (toward the shape interior for convex vertices).
     t_values = np.linspace(0.0, np.pi / 2, segment_count)  # (segment_count,)
     cos_t = np.cos(t_values)  # (segment_count,)
     sin_t = np.sin(t_values)  # (segment_count,)
@@ -247,7 +181,7 @@ def fillet_shape(
     for i in range(n_active):
         a = sizes[i, 0] + epsilon
         b = sizes[i, 1] + epsilon
-        corner_ext = current_vertices_extended[i]
+        vertex_ext = current_vertices_extended[i]
         inc = incoming_directions_normalized[i]
         out = outgoing_directions_normalized[i]
 
@@ -262,12 +196,12 @@ def fillet_shape(
         mid = (arc_points[0] + arc_points[-1]) / 2
         arc_points = 2 * mid - arc_points
 
-        # Polygon: extended corner → outer tp_in → arc → outer tp_out
-        # For convex: corner_ext is outside the arc → polygon is the wedge to cut
-        # For concave: corner_ext is inside the arc → polygon is the notch to fill
+        # Polygon: extended vertex → outer tp_in → arc → outer tp_out
+        # For convex: vertex_ext is outside the arc → polygon is the wedge to cut
+        # For concave: vertex_ext is inside the arc → polygon is the notch to fill
         polygon = Polygon(
             [
-                corner_ext,
+                vertex_ext,
                 tangent_points_outgoing_outer[i],
                 *arc_points,
                 tangent_points_incoming_outer[i],
@@ -275,7 +209,7 @@ def fillet_shape(
         )
         if polygon.is_empty or not polygon.is_valid:
             continue
-        if active_is_corner_convex[i]:
+        if active_is_vertex_convex[i]:
             cutters.append(polygon)
         else:
             fillers.append(polygon)

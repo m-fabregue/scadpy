@@ -32,19 +32,6 @@ def mirror_shape(
     -------
     Shape
         A new shape with all vertices mirrored across the specified line.
-
-    Examples
-    --------
-    >>> from scadpy import square, mirror_shape
-
-    >>> mirror_shape(  # doctest: +SKIP
-    ...     shape=square(4), normal=[1, 0], pivot=[2, 0]
-    ... )
-
-    .. render-example::
-        :name: mirror_shape
-        :example: mirror_shape(shape=square(4), normal=[1, 0], pivot=[2, 0])
-        :ghost: square(4)
     """
     from scadpy import mirror_vertex_coordinates
 

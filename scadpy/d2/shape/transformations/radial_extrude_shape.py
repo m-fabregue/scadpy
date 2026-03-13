@@ -236,30 +236,6 @@ def radial_extrude_shape(
     -------
     Solid
         The resulting 3D solid.
-
-    Examples
-    --------
-    >>> from scadpy import radial_extrude_shape, circle
-
-    >>> # torus: circle profile offset from the Y-axis, revolved 360°
-    >>> radial_extrude_shape(  # doctest: +SKIP
-    ...     shape=circle(radius=0.5).translate([2, 0]),
-    ...     axis=[0, 1],
-    ... )
-
-    .. render-example::
-        :name: radial_extrude_shape
-        :example: radial_extrude_shape(shape=circle(radius=0.5).translate([2, 0]), axis=[0, 1])
-
-    >>> # partial torus (270°)
-    >>> radial_extrude_shape(  # doctest: +SKIP
-    ...     shape=circle(radius=0.5).translate([2, 0]),
-    ...     axis=[0, 1], end=270,
-    ... )
-
-    .. render-example::
-        :name: radial_extrude_shape_partial
-        :example: radial_extrude_shape(shape=circle(radius=0.5).translate([2, 0]), axis=[0, 1], end=270)
     """
     from scadpy import Part, Solid, linear_cut_shape, unify_solid
 

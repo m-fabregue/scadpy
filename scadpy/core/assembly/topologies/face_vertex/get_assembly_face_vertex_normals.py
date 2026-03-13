@@ -6,78 +6,78 @@ from typeguard import typechecked
 
 
 @typechecked
-def get_assembly_face_corner_normals(
-    corner_to_vertex: NDArray[np.int64],
+def get_assembly_face_vertex_normals(
+    vertex_neighborhoods: NDArray[np.int64],
     vertex_coordinates: NDArray[np.float64],
-    are_corners_convex: NDArray[np.bool_],
+    are_vertices_convex: NDArray[np.bool_],
     epsilon: float = 1e-10,
 ) -> NDArray[np.float64]:
     """
-    For each corner, return its outward unit normal.
+    For each vertex, return its outward unit normal.
 
     The normal is the bisector of the two adjacent edge normals (90° CW
-    rotation of each edge direction), oriented outward for convex corners
-    and inward for concave ones. For degenerate 180° corners where the
+    rotation of each edge direction), oriented outward for convex vertices
+    and inward for concave ones. For degenerate 180° vertices where the
     bisector vanishes, falls back to the incoming edge normal.
 
-    The term *face* distinguishes this from a purely topological corner:
+    The term *face* distinguishes this from a purely topological vertex:
     the computation relies on face geometry (vertex coordinates) and face
     orientation (convexity), making it applicable to both 2D shape rings
     and 3D solid faces.
 
     Parameters
     ----------
-    corner_to_vertex : NDArray[np.int64]
-        2D array of shape ``(n_corners, 3)``. Each row is
-        ``[prev_vertex, curr_vertex, next_vertex]``.
+    vertex_neighborhoods : NDArray[np.int64]
+        2D array of shape ``(n_vertices, 2)``. Each row is
+        ``[prev_vertex, next_vertex]``.
     vertex_coordinates : NDArray[np.float64]
         2D array of shape ``(n_vertices, d)`` with vertex coordinates.
-    are_corners_convex : NDArray[np.bool_]
-        1D boolean array of shape ``(n_corners,)``. True if the corner
+    are_vertices_convex : NDArray[np.bool_]
+        1D boolean array of shape ``(n_vertices,)``. True if the vertex
         is convex (normal points outward), False if concave (normal points
         inward).
     epsilon : float, optional
         Threshold below which the bisector norm is considered degenerate
-        (straight 180° corner). Defaults to ``1e-10``.
+        (straight 180° vertex). Defaults to ``1e-10``.
 
     Returns
     -------
     NDArray[np.float64]
-        2D array of shape ``(n_corners, 2)``. Each row is a unit vector
+        2D array of shape ``(n_vertices, 2)``. Each row is a unit vector
         ``[nx, ny]``.
 
     Examples
     --------
     >>> import numpy as np
-    >>> from scadpy import get_assembly_face_corner_normals
+    >>> from scadpy import get_assembly_face_vertex_normals
 
-    >>> # square: 4 convex corners, normals point outward
+    >>> # square: 4 convex vertices, normals point outward
     >>> # (diagonal directions)
-    >>> corner_to_vertex = np.array(
-    ...     [[3, 0, 1], [0, 1, 2], [1, 2, 3], [2, 3, 0]],
+    >>> vertex_neighborhoods = np.array(
+    ...     [[3, 1], [0, 2], [1, 3], [2, 0]],
     ...     dtype=np.int64
     ... )
     >>> vertex_coordinates = np.array(
     ...     [[-1., -1.], [1., -1.], [1., 1.], [-1., 1.]]
     ... )
-    >>> are_corners_convex = np.array([True, True, True, True])
-    >>> get_assembly_face_corner_normals(
-    ...     corner_to_vertex,
+    >>> are_vertices_convex = np.array([True, True, True, True])
+    >>> get_assembly_face_vertex_normals(
+    ...     vertex_neighborhoods,
     ...     vertex_coordinates,
-    ...     are_corners_convex,
+    ...     are_vertices_convex,
     ... ).round(4)
     array([[-0.7071, -0.7071],
            [ 0.7071, -0.7071],
            [ 0.7071,  0.7071],
            [-0.7071,  0.7071]])
     """
-    if len(corner_to_vertex) == 0:
+    if len(vertex_neighborhoods) == 0:
         d = vertex_coordinates.shape[1] if vertex_coordinates.ndim == 2 else 0
         return np.empty((0, d), dtype=np.float64)
 
-    prev_coords = vertex_coordinates[corner_to_vertex[:, 0]]
-    curr_coords = vertex_coordinates[corner_to_vertex[:, 1]]
-    next_coords = vertex_coordinates[corner_to_vertex[:, 2]]
+    prev_coords = vertex_coordinates[vertex_neighborhoods[:, 0]]
+    curr_coords = vertex_coordinates
+    next_coords = vertex_coordinates[vertex_neighborhoods[:, 1]]
 
     v_in = curr_coords - prev_coords
     v_out = next_coords - curr_coords
@@ -98,6 +98,6 @@ def get_assembly_face_corner_normals(
 
     bisector_norm = bisector / np.linalg.norm(bisector, axis=1, keepdims=True)
 
-    sign = np.where(are_corners_convex, 1.0, -1.0)[:, np.newaxis]
+    sign = np.where(are_vertices_convex, 1.0, -1.0)[:, np.newaxis]
 
     return bisector_norm * sign

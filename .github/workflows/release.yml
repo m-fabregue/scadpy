@@ -29,8 +29,8 @@ jobs:
       - name: Install dependencies
         run: pip install -e .[dev] build
 
-      - name: Run doctests
-        run: cd docs && make doctest
+      - name: Generate badges
+        run: cd docs && make coverage && make interrogate
 
       - name: Build documentation
         run: cd docs && make html

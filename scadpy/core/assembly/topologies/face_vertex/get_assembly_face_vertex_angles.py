@@ -6,60 +6,60 @@ from typeguard import typechecked
 
 
 @typechecked
-def get_assembly_face_corner_angles(
-    corner_to_vertex: NDArray[np.int64],
+def get_assembly_face_vertex_angles(
+    vertex_neighborhoods: NDArray[np.int64],
     vertex_coordinates: NDArray[np.float64],
 ) -> NDArray[np.float64]:
     """
-    For each corner, return its interior angle in degrees.
+    For each vertex, return its interior angle in degrees.
 
     The angle is always positive, in the range (0°, 180°). It represents
-    the turning angle at the corner, regardless of whether the corner is
+    the turning angle at the vertex, regardless of whether the vertex is
     convex or concave. Use convexity information separately to distinguish
     the two cases.
 
     The angle is computed as the absolute value of the signed angle from the
-    incoming edge to the outgoing edge at each corner, using the 2D cross
+    incoming edge to the outgoing edge at each vertex, using the 2D cross
     product to determine orientation.
 
     Parameters
     ----------
-    corner_to_vertex : NDArray[np.int64]
-        2D array of shape ``(n_corners, 3)``. Each row is
-        ``[prev_vertex, curr_vertex, next_vertex]``.
+    vertex_neighborhoods : NDArray[np.int64]
+        2D array of shape ``(n_vertices, 2)``. Each row is
+        ``[prev_vertex, next_vertex]``.
     vertex_coordinates : NDArray[np.float64]
         2D array of shape ``(n_vertices, 2)`` with vertex coordinates.
 
     Returns
     -------
     NDArray[np.float64]
-        1D array of shape ``(n_corners,)``, one angle per corner in degrees.
+        1D array of shape ``(n_vertices,)``, one angle per vertex in degrees.
         All values are in the range (0°, 180°).
 
     Examples
     --------
     >>> import numpy as np
-    >>> from scadpy import get_assembly_face_corner_angles
+    >>> from scadpy import get_assembly_face_vertex_angles
 
-    >>> # square: 4 right-angle corners
-    >>> corner_to_vertex = np.array(
-    ...     [[3, 0, 1], [0, 1, 2], [1, 2, 3], [2, 3, 0]],
+    >>> # square: 4 right-angle vertices
+    >>> vertex_neighborhoods = np.array(
+    ...     [[3, 1], [0, 2], [1, 3], [2, 0]],
     ...     dtype=np.int64
     ... )
     >>> vertex_coordinates = np.array(
     ...     [[-1., -1.], [1., -1.], [1., 1.], [-1., 1.]]
     ... )
-    >>> get_assembly_face_corner_angles(
-    ...     corner_to_vertex, vertex_coordinates
+    >>> get_assembly_face_vertex_angles(
+    ...     vertex_neighborhoods, vertex_coordinates
     ... )
     array([90., 90., 90., 90.])
     """
-    if len(corner_to_vertex) == 0:
+    if len(vertex_neighborhoods) == 0:
         return np.empty(0, dtype=np.float64)
 
-    prev_coords = vertex_coordinates[corner_to_vertex[:, 0]]
-    curr_coords = vertex_coordinates[corner_to_vertex[:, 1]]
-    next_coords = vertex_coordinates[corner_to_vertex[:, 2]]
+    prev_coords = vertex_coordinates[vertex_neighborhoods[:, 0]]
+    curr_coords = vertex_coordinates
+    next_coords = vertex_coordinates[vertex_neighborhoods[:, 1]]
 
     v_in = curr_coords - prev_coords
     v_out = next_coords - curr_coords

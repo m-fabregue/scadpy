@@ -48,34 +48,6 @@ def resize_solid(
     -------
     Solid
         A new solid resized to the target dimensions.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, resize_solid
-
-    >>> # resize to an exact size on all axes:
-    >>> resize_solid(solid=cuboid([4, 2, 1]), size=[6, 6, 6]) # doctest: +SKIP
-
-    .. render-example::
-       :name: resize_solid_exact
-       :example: resize_solid(solid=cuboid([4, 2, 1]), size=[6, 6, 6])
-       :ghost: cuboid([4, 2, 1])
-
-    >>> # freeze two axes (``None``) and scale only the first:
-    >>> resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None]) # doctest: +SKIP
-
-    .. render-example::
-       :name: resize_solid_freeze
-       :example: resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None])
-       :ghost: cuboid([4, 2, 1])
-
-    >>> # scale frozen axes proportionally with ``auto=True``:
-    >>> resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None], auto=True) # doctest: +SKIP
-
-    .. render-example::
-       :name: resize_solid_auto
-       :example: resize_solid(solid=cuboid([4, 2, 1]), size=[6, None, None], auto=True)
-       :ghost: cuboid([4, 2, 1])
     """
     from scadpy import resolve_topology_filter, resize_vertex_coordinates
 

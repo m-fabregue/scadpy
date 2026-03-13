@@ -25,18 +25,6 @@ def unify_solid(solids: Sequence[Solid]) -> Solid:
     -------
     Solid
         A new solid containing the geometric union of all input solids.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, sphere, unify_solid, x
-
-    >>> unify_solid(  # doctest: +SKIP
-    ...     solids=[cuboid(4), sphere(radius=2).translate(x(2))]
-    ... )
-
-    .. render-example::
-        :name: unify_solid
-        :example: unify_solid(solids=[cuboid(4), sphere(radius=2).translate(x(2))])
     """
     from scadpy import Solid, unify_solid_parts
     from scadpy.core.assembly import unify_assemblies

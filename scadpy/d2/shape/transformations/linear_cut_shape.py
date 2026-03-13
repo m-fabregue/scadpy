@@ -68,28 +68,6 @@ def linear_cut_shape(
     Shape
         A new shape whose parts are the two halves of the original shape
         concatenated together.
-
-    Examples
-    --------
-    >>> from scadpy import linear_cut_shape, square, circle
-
-    >>> shape = square(6) - circle(2)
-
-    >>> # vertical cut along the Y-axis
-    >>> linear_cut_shape(shape, axis=[0, 1], pivot=[-1, 0])  # doctest: +SKIP
-
-    .. render-example::
-        :name: linear_cut_shape
-        :example: linear_cut_shape(shape, axis=[0, 1], pivot=[-1, 0])
-        :ghost: shape
-
-    >>> # diagonal cut: axis=[1, 1]
-    >>> linear_cut_shape(shape, axis=[1, 1])  # doctest: +SKIP
-
-    .. render-example::
-        :name: linear_cut_shape_diagonal
-        :example: linear_cut_shape(shape, axis=[1, 1])
-        :ghost: shape
     """
     from scadpy import resolve_vector_2d
 

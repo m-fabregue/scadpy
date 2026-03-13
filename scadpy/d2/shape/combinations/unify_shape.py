@@ -25,18 +25,6 @@ def unify_shape(shapes: Sequence[Shape]) -> Shape:
     -------
     Shape
         A new shape containing the geometric union of all input shapes.
-
-    Examples
-    --------
-    >>> from scadpy import square, circle, unify_shape
-
-    >>> unify_shape(  # doctest: +SKIP
-    ...     shapes=[square(4), circle(radius=2).translate([2, 0])]
-    ... )
-
-    .. render-example::
-        :name: unify_shape
-        :example: unify_shape(shapes=[square(4), circle(radius=2).translate([2, 0])])
     """
     from scadpy import Shape, unify_shape_parts
     from scadpy.core.assembly import unify_assemblies

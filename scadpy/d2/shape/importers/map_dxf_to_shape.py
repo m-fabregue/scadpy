@@ -32,15 +32,6 @@ def map_dxf_to_shape(source: str | Path) -> Shape:
         A new shape whose parts correspond to the closed filled regions
         found in the DXF.
 
-    Examples
-    --------
-    >>> from scadpy import map_dxf_to_shape
-
-    >>> map_dxf_to_shape("https://raw.githubusercontent.com/mikedh/trimesh/main/models/2D/wrench.dxf")  # doctest: +SKIP
-
-    .. render-example::
-        :name: map_dxf_to_shape
-        :example: map_dxf_to_shape("https://raw.githubusercontent.com/mikedh/trimesh/main/models/2D/wrench.dxf")
     """
     from scadpy import map_geometries_to_shape
 

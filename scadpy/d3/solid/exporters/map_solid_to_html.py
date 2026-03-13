@@ -290,6 +290,22 @@ def map_solid_to_html(
     background_color: Color = WHITE,
     foreground_color: Color = BLACK,
 ) -> HTML:
+    """Render a solid as an interactive Three.js HTML widget.
+
+    Parameters
+    ----------
+    solid : Solid
+        The solid to render.
+    background_color : Color, default=WHITE
+        The background color of the rendered output.
+    foreground_color : Color, default=BLACK
+        The foreground color (grid, axes) of the rendered output.
+
+    Returns
+    -------
+    HTML
+        An IPython HTML object containing a self-contained Three.js viewer.
+    """
     background_color_hex = "#{:02X}{:02X}{:02X}".format(
         *(int(x * 255) for x in background_color[:-1])
     )

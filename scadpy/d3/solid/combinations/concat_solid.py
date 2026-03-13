@@ -25,18 +25,6 @@ def concat_solid(solids: Sequence[Solid]) -> Solid:
     -------
     Solid
         A new solid containing all parts from all input solids.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, sphere, concat_solid
-
-    >>> concat_solid(  # doctest: +SKIP
-    ...     solids=[cuboid(4), sphere(radius=2).translate([3, 2, 0])]
-    ... )
-
-    .. render-example::
-        :name: concat_solid
-        :example: concat_solid(solids=[cuboid(4), sphere(radius=2).translate([3, 2, 0])])
     """
     from scadpy import Solid
     from scadpy.core.assembly import concat_assemblies

@@ -59,6 +59,18 @@ def map_parts_to_solid(
         if needs_fix:
             mesh = mesh.copy()
             mesh.fix_normals()
+        is_mesh_valid = (
+            mesh.is_winding_consistent and mesh.is_watertight and mesh.volume > 0
+        )
+        if not is_mesh_valid:
+            raise ValueError(
+                (
+                    f"Solid must be manifold. Mesh check results:\n"
+                    f" - Winding consistent: {mesh.is_winding_consistent}\n"
+                    f" - Watertight: {mesh.is_watertight}\n"
+                    f" - Positive volume: {mesh.volume > 0}"
+                )
+            )
         fixed_parts.append(Part[Trimesh].from_geometry(mesh, part.color))
 
     solid = Solid()

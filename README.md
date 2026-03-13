@@ -1,9 +1,11 @@
 # ScadPy
 
-![test coverage](docs/_static/badges/coverage.svg)
-![doc coverage](docs/_static/badges/interrogate.svg)
+[![PyPI](https://img.shields.io/pypi/v/scadpy)](https://pypi.org/project/scadpy/)
+[![CI](https://img.shields.io/github/actions/workflow/status/m-fabregue/scadpy/ci.yml?branch=main&label=CI)](https://github.com/m-fabregue/scadpy/actions)
+![coverage](https://m-fabregue.github.io/scadpy/_static/badges/coverage.svg)
+![doc coverage](https://m-fabregue.github.io/scadpy/_static/badges/interrogate.svg)
 
-**Programmatic CAD in Pure Python.**
+**Programmatic CAD in Pure Python.** — [Documentation](https://m-fabregue.github.io/scadpy/)
 
 ScadPy provides a fluent, type-safe API for 2D and 3D parametric modeling,
 built on [Shapely](https://shapely.readthedocs.io) and
@@ -22,28 +24,50 @@ Requirements: Python ≥ 3.12.
 
 ```python
 # 2D — chamfered mounting plate
-from scadpy import *
+from scadpy import rectangle, circle, text
 import numpy as np
 
-PLATE_WIDTH  = 80
-PLATE_HEIGHT = 50
-HOLE_RADIUS  = 4
-HOLE_MARGIN  = 10
-CHAMFER_SIZE = 8
+PLATE_WIDTH   = 80
+PLATE_HEIGHT  = 50
+PLATE_THICKNESS = 10
+HOLE_RADIUS   = 4
+HOLE_MARGIN   = 10
+CHAMFER_SIZE  = 8
 
-base               = rectangle([PLATE_WIDTH, PLATE_HEIGHT])
-plate              = base.chamfer(CHAMFER_SIZE)
-corner_coordinates = base.vertex_coordinates[base.corner_to_vertex[:, 1]]
+base  = rectangle([PLATE_WIDTH, PLATE_HEIGHT])
+plate = base.chamfer(CHAMFER_SIZE)
 
-for position, normal in zip(corner_coordinates, base.corner_normals):
+for position, normal in zip(base.vertex_coordinates, base.vertex_normals):
     hole_center = position - HOLE_MARGIN * np.sqrt(2) * normal
     plate -= circle(HOLE_RADIUS).translate(hole_center)
+
+plate.to_screen()
 ```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/plate_dark.png">
+  <img src="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/plate_light.png" alt="chamfered mounting plate" width="400">
+</picture>
+
+```python
+# 3D — extruded mounting plate with label (continues from above)
+TEXT_THICKNESS = 2
+
+extruded_plate = plate.linear_extrude(PLATE_THICKNESS)
+label = text("ScadPy", size=15).linear_extrude(TEXT_THICKNESS)
+extruded_plate |= label.translate(z(PLATE_THICKNESS))
+extruded_plate.to_screen()
+```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/extruded_plate_dark.png">
+  <img src="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/extruded_plate_light.png" alt="chamfered mounting plate" width="400">
+</picture>
 
 ```python
 # 3D — parametric ball bearing
+from scadpy import circle, rectangle, sphere, x, y, GRAY, ORANGE
 import numpy as np
-from scadpy import *
 
 BALL_RADIUS    = 3
 RACE_RADIUS    = 15
@@ -52,16 +76,84 @@ CLEARANCE      = 0.1
 RING_HEIGHT    = 7
 RACE_THICKNESS = 10
 
-groove = circle(BALL_RADIUS + CLEARANCE) | rectangle([BALL_RADIUS, RING_HEIGHT])
-race   = rectangle([RACE_THICKNESS, RING_HEIGHT]) - groove
-race   = race.radial_extrude(axis=y(1), pivot=x(RACE_RADIUS))
+groove  = circle(BALL_RADIUS + CLEARANCE) | rectangle([BALL_RADIUS, RING_HEIGHT])
+race    = rectangle([RACE_THICKNESS, RING_HEIGHT]) - groove
+bearing = race.radial_extrude(axis=y(), pivot=x(RACE_RADIUS)).color(GRAY)
 
-balls = Solid()
+ball = sphere(BALL_RADIUS).color(ORANGE)
 for angle in np.linspace(0, 360, NB_BALLS, endpoint=False):
-    balls += sphere(BALL_RADIUS).rotate(angle, axis=y(1), pivot=x(RACE_RADIUS))
+    bearing += ball.rotate(angle, axis=y(), pivot=x(RACE_RADIUS))
 
-bearing = race + balls
+bearing.to_screen()
 ```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/bearing_dark.png">
+  <img src="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/bearing_light.png" alt="parametric ball bearing" width="400">
+</picture>
+
+```python
+# 3D — dice
+from scadpy import cuboid, sphere, x, y, z
+
+SIZE = 20
+dice = cuboid(SIZE)
+pip  = sphere(SIZE / 12).translate(z(SIZE / 2))
+
+one   = pip
+two   = pip.translate([SIZE / 4, SIZE / 4, 0]) + pip.translate([-SIZE / 4, -SIZE / 4, 0])
+three = one + two
+four  = two + two.rotate(90, z())
+five  = one + four
+six   = four + pip.translate(x(SIZE / 4)) + pip.translate(x(-SIZE / 4))
+
+dice -= (
+    one
+    + two.rotate(90, x())
+    + three.rotate(90, y())
+    + four.rotate(-90, y())
+    + five.rotate(-90, x())
+    + six.rotate(-180, x())
+)
+
+dice.to_screen()
+```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/dice_dark.png">
+  <img src="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/dice_light.png" alt="chamfered mounting plate" width="400">
+</picture>
+
+```python
+# 3D — storage box
+from scadpy import square, x, z
+
+SIZE_OUTER      = 20
+SIZE_INNER      = 18
+FILLET          = 1
+BASE_HEIGHT     = 10
+CUT_HEIGHT      = 8
+CAP_HEIGHT_OUTER = 1.5
+CAP_HEIGHT_INNER = 3
+CAP_OFFSET_X    = 25
+CUT_OFFSET_Z    = 2
+
+outer_base = square(SIZE_OUTER).fillet(FILLET).linear_extrude(BASE_HEIGHT)
+inner_cut  = square(SIZE_INNER).linear_extrude(CUT_HEIGHT).translate(z(CUT_OFFSET_Z))
+base       = outer_base - inner_cut
+
+cap_outer = square(SIZE_OUTER).fillet(FILLET).linear_extrude(CAP_HEIGHT_OUTER)
+cap_inner = square(SIZE_INNER).linear_extrude(CAP_HEIGHT_INNER)
+cap       = (cap_outer | cap_inner).translate(x(CAP_OFFSET_X))
+
+storage_box = base + cap
+storage_box.to_screen()
+```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/storage_box_dark.png">
+  <img src="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/storage_box_light.png" alt="chamfered mounting plate" width="400">
+</picture>
 
 ## Cheat sheet
 
@@ -89,14 +181,14 @@ s ^ c    # symmetric difference
 s + c    # concat (no merge)
 
 # transforms
-s.chamfer(size=0.8)              # corner_filter=None, epsilon=1e-8
+s.chamfer(size=0.8)              # vertex_filter=None, epsilon=1e-8
 s.color(color=RED)
 s.convexify()                    # part_filter=None
 s.fill()                         # part_filter=None
-s.fillet(size=0.8)               # corner_filter=None, segment_count=32, epsilon=1e-8
+s.fillet(size=0.8)               # vertex_filter=None, segment_count=32, epsilon=1e-8
 s.grow(distance=0.5)             # part_filter=None
-s.linear_cut(axis=x(1))          # pivot=0
-s.linear_slice(thickness=2, direction=x(1))  # pivot=0, part_filter=None
+s.linear_cut(axis=x())          # pivot=0
+s.linear_slice(thickness=2, direction=x())  # pivot=0, part_filter=None
 s.mirror(normal=[1, 0])          # pivot=0
 s.pull(distance=1.0)             # pivot=0, vertex_filter=None
 s.push(distance=1.0)             # pivot=0, vertex_filter=None
@@ -108,31 +200,30 @@ s.shrink(distance=0.5)           # part_filter=None
 s.translate(translation=[2, 1])  # vertex_filter=None
 
 # topology — coordinates & attributes
-s.are_corners_convex             # (n_corners,)    — convexity mask
-s.corner_angles                  # (n_corners,)    — interior angles (°)
-s.corner_normals                 # (n_corners,  2) — outward unit normals
+s.are_vertices_convex            # (n_vertices,)   — convexity mask
 s.directed_edge_directions       # (2*n_edges, 2)
 s.edge_lengths                   # (n_edges,)
 s.edge_midpoints                 # (n_edges,  2)
 s.edge_normals                   # (n_edges,  2)
 s.ring_types                     # (n_rings,)  — "exterior"|"interior"
+s.vertex_angles                  # (n_vertices,)   — interior angles (°)
 s.vertex_coordinates             # (n_vertices, 2)
+s.vertex_normals                 # (n_vertices, 2) — outward unit normals
 
 # topology — bridges (*_to_*)
-s.corner_to_incoming_directed_edge  # corner        → directed_edge
-s.corner_to_outgoing_directed_edge  # corner        → directed_edge
-s.corner_to_vertex                  # corner        → [prev, curr, next]
-s.directed_edge_to_corner           # directed_edge → [source, target]
 s.directed_edge_to_edge             # directed_edge → edge
 s.directed_edge_to_vertex           # directed_edge → [start, end]
 s.edge_to_vertex                    # edge          → [start, end]
 s.ring_to_part                      # ring          → part
+s.vertex_to_incoming_directed_edge  # vertex        → directed_edge
+s.vertex_to_outgoing_directed_edge  # vertex        → directed_edge
+s.vertex_to_neighbor_vertex       # vertex        → [prev, next]
 s.vertex_to_part                    # vertex        → part
 s.vertex_to_ring                    # vertex        → ring
 
 # extrusions → Solid
 s.linear_extrude(height=3)
-s.radial_extrude(axis=y(1), pivot=x(5))  # start=0, end=360, segment_count=64
+s.radial_extrude(axis=y(), pivot=x(5))  # start=0, end=360, segment_count=64
 
 # export
 s.to_dxf_file("output.dxf")
@@ -169,7 +260,7 @@ a.mirror(normal=[1, 0, 0])       # pivot=0
 a.pull(distance=1.0)             # pivot=0, vertex_filter=None
 a.push(distance=1.0)             # pivot=0, vertex_filter=None
 a.resize(size=[6, None, None])   # auto=False, pivot=None, vertex_filter=None
-a.rotate(angle=30, axis=z(1))    # pivot=0, vertex_filter=None
+a.rotate(angle=30, axis=z())    # pivot=0, vertex_filter=None
 a.scale(scale=[2, 1, 0.5])       # pivot=0, vertex_filter=None
 a.translate(translation=[1, 0, 0])  # vertex_filter=None
 

@@ -33,32 +33,6 @@ def convexify_shape(
     Shape
         A new shape consisting of the convex hull of the selected parts, plus the
         unselected parts unchanged.
-
-    Examples
-    --------
-    >>> from scadpy import convexify_shape, square
-    >>> import numpy as np
-
-    >>> a = square(5)
-    >>> b = square(2).translate(10)
-    >>> c = square(3).translate([4, 8])
-    >>> convexify_shape(a + b + c) # doctest: +SKIP
-
-    .. render-example::
-        :name: convexify_shape
-        :example: convexify_shape(a + b + c)
-        :ghost: a + b + c
-
-    >>> # partial convexification
-    >>> convexify_shape(
-    ...     a + b + c,
-    ...     part_filter=np.array([True, True, False])
-    ... ) # doctest: +SKIP
-
-    .. render-example::
-        :name: convexify_shape_partial
-        :example: convexify_shape(a + b + c, part_filter=np.array([True, True, False]))
-        :ghost: a + b + c
     """
     from scadpy import Part, Shape, blend_part_colors, transform_filtered_parts
 

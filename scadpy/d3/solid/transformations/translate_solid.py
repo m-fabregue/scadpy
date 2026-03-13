@@ -32,19 +32,6 @@ def translate_solid(
     -------
     Solid
         A new solid with the selected vertices shifted by the translation vector.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, translate_solid
-
-    >>> translate_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4), translation=[3, 2, 1]
-    ... )
-
-    .. render-example::
-        :name: translate_solid
-        :example: translate_solid(solid=cuboid(4), translation=[3, 2, 1])
-        :ghost: cuboid(4)
     """
     from scadpy import resolve_topology_filter, translate_vertex_coordinates
 

@@ -43,21 +43,6 @@ def push_solid(
     See Also
     --------
     pull_solid : Move solid vertices toward a pivot point.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, push_solid
-    >>> import numpy as np
-
-    >>> push_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4), distance=1.0, pivot=[2, 2, 2],
-    ...     vertex_filter=np.ones(8, dtype=bool),
-    ... )
-
-    .. render-example::
-        :name: push_solid
-        :example: push_solid(solid=cuboid(4), distance=1.0, pivot=[2, 2, 2], vertex_filter=cuboid(4).vertex_coordinates[:, 0] < 1)
-        :ghost: cuboid(4)
     """
     from scadpy import resolve_topology_filter, push_vertex_coordinates
 

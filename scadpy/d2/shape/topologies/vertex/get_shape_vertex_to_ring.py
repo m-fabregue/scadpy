@@ -27,25 +27,6 @@ def get_shape_vertex_to_ring(
     NDArray[np.float64]
         1D array of shape (n_vertices,), one element per vertex.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_vertex_to_ring, polygon, square
-
-    >>> # two separate triangles: 3 vertices in ring 0, 3 in ring 1
-    >>> shape = (
-    ...     polygon([(0, 0), (1, 0), (0.5, 1)])
-    ...     | polygon([(5, 0), (6, 0), (5.5, 1)])
-    ... )
-    >>> result = get_shape_vertex_to_ring(shape)
-    >>> result  # doctest: +NORMALIZE_WHITESPACE
-    array([0, 0, 0, 1, 1, 1])
-
-    >>> # square with a hole: 4 exterior vertices in ring 0,
-    >>> # 4 interior vertices in ring 1
-    >>> shape = square(4) - square(2)
-    >>> result = get_shape_vertex_to_ring(shape)
-    >>> result  # doctest: +NORMALIZE_WHITESPACE
-    array([0, 0, 0, 0, 1, 1, 1, 1])
     """
     # extract and flatmap polygon rings
     rings = [

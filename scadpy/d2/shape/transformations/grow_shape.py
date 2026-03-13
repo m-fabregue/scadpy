@@ -32,39 +32,6 @@ def grow_shape(
     -------
     Shape
         A new shape with the selected parts grown and the unselected parts unchanged.
-
-    Examples
-    --------
-    >>> from scadpy import grow_shape, square
-    >>> import numpy as np
-
-    >>> shape = square(10)
-    >>> grow_shape(shape, 2) # doctest: +SKIP
-
-    .. render-example::
-        :name: grow_shape
-        :example: grow_shape(shape, 2)
-        :ghost: shape
-
-    >>> # shrink with negative distance
-    >>> grow_shape(shape, -2) # doctest: +SKIP
-
-    .. render-example::
-        :name: grow_shape_shrink
-        :example: grow_shape(shape, -2)
-        :ghost: shape
-
-    >>> # partial grow
-    >>> a = square(4)
-    >>> b = square(2).translate(10)
-    >>> grow_shape(  # doctest: +SKIP
-    ...     a + b, 1, part_filter=np.array([True, False])
-    ... )
-
-    .. render-example::
-        :name: grow_shape_partial
-        :example: grow_shape(a + b, 1, part_filter=np.array([True, False]))
-        :ghost: a + b
     """
     from scadpy import Part, Shape, transform_filtered_parts
 

@@ -25,13 +25,6 @@ def map_shape_to_svg(shape: Shape) -> str:
     str
         A self-contained SVG document as a string.
 
-    Examples
-    --------
-    >>> from scadpy import square, circle, map_shape_to_svg
-
-    >>> svg = map_shape_to_svg(square(4) - circle(1))
-    >>> svg.startswith("<svg")
-    True
     """
     geometries = [part.geometry for part in shape._parts]
     if not geometries:

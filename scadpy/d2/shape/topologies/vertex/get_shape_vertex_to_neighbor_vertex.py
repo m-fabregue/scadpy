@@ -11,42 +11,32 @@ if TYPE_CHECKING:
 
 
 @typechecked
-def get_shape_corner_to_vertex(
+def get_shape_vertex_to_neighbor_vertex(
     shape: Shape,
 ) -> NDArray[np.int64]:
     """
-    For each corner in the shape, return its three vertex indices (prev, curr, next).
+    For each vertex in the shape, return its two neighbor vertex indices (prev, next).
 
-    A corner is defined by three consecutive vertices on a ring. Each ring of ``n``
-    vertices yields ``n`` corners (the ring is treated as cyclic).
+    A vertex neighborhood is defined by three consecutive vertices on a ring. Each ring
+    of ``n`` vertices yields ``n`` neighborhoods (the ring is treated as cyclic).
+    The current vertex index equals the row index, so it is not included.
 
     Parameters
     ----------
     shape : Shape
-        The shape to extract corner vertex indices from.
+        The shape to extract vertex neighbor indices from.
 
     Returns
     -------
     NDArray[np.int64]
-        2D array of shape (n_corners, 3). Each row contains the indices
-        ``[prev, curr, next]`` into the shape's global vertex array.
+        2D array of shape (n_vertices, 2). Each row contains the indices
+        ``[prev, next]`` into the shape's global vertex array.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_corner_to_vertex, polygon
-
-    >>> triangle = polygon([(0, 0), (1, 0), (0.5, 1)])
-    >>> get_shape_corner_to_vertex(  # doctest: +NORMALIZE_WHITESPACE
-    ...     triangle
-    ... )
-    array([[2, 0, 1],
-           [0, 1, 2],
-           [1, 2, 0]])
     """
     vertex_to_ring = shape.vertex_to_ring
 
     if len(vertex_to_ring) == 0:
-        return np.empty((0, 3), dtype=np.int64)
+        return np.empty((0, 2), dtype=np.int64)
 
     indices = np.arange(len(vertex_to_ring), dtype=np.int64)
 
@@ -62,4 +52,4 @@ def get_shape_corner_to_vertex(
     prev_indices = ring_starts[vertex_to_ring] + (offsets - 1) % ring_size_per_vertex
     next_indices = ring_starts[vertex_to_ring] + (offsets + 1) % ring_size_per_vertex
 
-    return np.stack([prev_indices, indices, next_indices], axis=1)
+    return np.stack([prev_indices, next_indices], axis=1)

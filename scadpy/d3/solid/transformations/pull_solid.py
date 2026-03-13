@@ -43,21 +43,6 @@ def pull_solid(
     See Also
     --------
     push_solid : Move solid vertices away from a pivot point.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, pull_solid
-    >>> import numpy as np
-
-    >>> pull_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4), distance=1.0, pivot=[2, 2, 2],
-    ...     vertex_filter=np.ones(8, dtype=bool),
-    ... )
-
-    .. render-example::
-        :name: pull_solid
-        :example: pull_solid(solid=cuboid(4), distance=1.0, pivot=[2, 2, 2], vertex_filter=cuboid(4).vertex_coordinates[:, 0] < 1)
-        :ghost: cuboid(4)
     """
     from scadpy import resolve_topology_filter, pull_vertex_coordinates
 

@@ -23,14 +23,6 @@ def get_solid_vertex_coordinates(solid: Solid) -> NDArray[np.float64]:
     -------
     NDArray[np.float64]
         2D array of shape (n_vertices, 3), one row per vertex.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, get_solid_vertex_coordinates
-
-    >>> vertex_coordinates = get_solid_vertex_coordinates(cuboid(2))
-    >>> vertex_coordinates.shape
-    (8, 3)
     """
     from scadpy import get_assembly_vertex_coordinates
 

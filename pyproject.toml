@@ -4,14 +4,18 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.2.0"
+version = "0.3.0"
 description = "Simplified 2D/3D modeling for Python with fluent API and boolean operations"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
 license = { file = "LICENSE.md" }
 readme = "README.md"
 keywords = ["python", "scad", "shape", "solid", "3d", "2d", "modeling"]
-classifiers = ["Development Status :: 3 - Alpha"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
 dependencies = ["triangle == 20250106", "PySide6 ~= 6.10", "typeguard ~= 4.4", "trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6"]
 
 [project.optional-dependencies]
@@ -20,7 +24,7 @@ dev = [
     "sphinx-pyproject",
     "numpydoc",
     "sphinx-autodoc-typehints",
-    "furo",
+    "furo == 2025.7.19",
     "interrogate",
     "coverage",
     "genbadge[coverage]"
@@ -38,6 +42,15 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.doctest',
+]
+
+[tool.skills]
+output = "AI_SKILLS.json"
+sources = [
+    "scadpy/d2/shape/primitives/",
+    "scadpy/d2/shape/types/shape.py",
+    "scadpy/d3/solid/primitives/",
+    "scadpy/d3/solid/types/solid.py",
 ]
 
 [tool.coverage.report]

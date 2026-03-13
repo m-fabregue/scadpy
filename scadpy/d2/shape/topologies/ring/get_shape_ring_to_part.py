@@ -27,16 +27,6 @@ def get_shape_ring_to_part(
     NDArray[np.float64]
         1D array of shape (n_rings,), one element per ring.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_ring_to_part, square
-
-    >>> # square with a hole (2 rings in part 0)
-    >>> # unioned with a separate square (1 ring in part 1)
-    >>> shape = (square(2) - square(1)) | square(1).translate([5, 0])
-    >>> result = get_shape_ring_to_part(shape)
-    >>> result  # doctest: +NORMALIZE_WHITESPACE
-    array([0, 0, 1])
     """
     part_indices = [
         i

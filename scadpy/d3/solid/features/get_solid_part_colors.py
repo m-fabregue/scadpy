@@ -23,16 +23,6 @@ def get_solid_part_colors(solid: Solid) -> NDArray[np.float64]:
     -------
     NDArray[np.float64]
         2D array of shape (n_parts, 4), one RGBA row per part.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, get_solid_part_colors, DEFAULT_OPACITY
-
-    >>> colors = get_solid_part_colors(cuboid(2))
-    >>> colors.shape
-    (1, 4)
-    >>> bool(colors[0, 3] == DEFAULT_OPACITY)
-    True
     """
     from scadpy import get_assembly_part_colors
 

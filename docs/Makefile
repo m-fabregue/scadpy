@@ -9,6 +9,9 @@ SPHINXAUTOGEN ?= sphinx-autogen
 SOURCEDIR = .
 BUILDDIR = build
 
+skills:
+	@python scripts/build_skills.py
+
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 

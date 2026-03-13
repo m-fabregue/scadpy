@@ -155,3 +155,19 @@ div.highlight-pycon + div.render-example {
     padding: 0 0.875rem;
     background-color: var(--color-code-background);
 }
+
+a.reference.external {
+    display: inline-flex;
+}
+
+dl.py.class dl.field-list {
+    display: none;
+}
+
+dl.py.class div.table-wrapper.docutils.container {
+    display: none;
+}
+
+dl.py.class p.rubric {
+    display: none;
+}

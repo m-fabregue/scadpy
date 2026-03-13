@@ -41,20 +41,6 @@ def rotate_solid(
     -------
     Solid
         A new solid with the selected vertices rotated around the axis and pivot.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, rotate_solid
-
-    >>> rotate_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4), angle=45,
-    ...     axis=[0, 0, 1], pivot=[2, 2, 2],
-    ... )
-
-    .. render-example::
-        :name: rotate_solid
-        :example: rotate_solid(solid=cuboid(4), angle=45, axis=[0, 0, 1], pivot=[2, 2, 2])
-        :ghost: cuboid(4)
     """
     from scadpy import resolve_topology_filter, rotate_vertex_coordinates, resolve_vector_3d
 

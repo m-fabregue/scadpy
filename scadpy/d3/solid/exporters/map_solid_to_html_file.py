@@ -36,14 +36,6 @@ def map_solid_to_html_file(
     -------
     int
         The number of characters written to the file.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, map_solid_to_html_file
-
-    >>> map_solid_to_html_file(  # doctest: +SKIP
-    ...     solid=cuboid(4), path="output.html"
-    ... )
     """
     from scadpy import map_component_to_html_file, map_solid_to_html
 

@@ -21,16 +21,5 @@ def is_solid_empty(solid: Solid) -> bool:
     -------
     bool
         True if the solid has no vertices, False otherwise.
-
-    Examples
-    --------
-    >>> from scadpy import Solid, is_solid_empty
-
-    >>> is_solid_empty(Solid.from_parts([]))
-    True
-
-    >>> from scadpy import cuboid
-    >>> is_solid_empty(cuboid(2))
-    False
     """
     return len(solid.vertex_coordinates) == 0

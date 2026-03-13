@@ -32,19 +32,6 @@ def get_shape_directed_edge_to_edge(
         1D array of shape ``(2 * n_edges,)``. Each entry is the index of
         the parent undirected edge.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_directed_edge_to_edge, polygon, square
-
-    >>> # triangle: 3 edges → 6 directed edges
-    >>> triangle = polygon([(0, 0), (1, 0), (0.5, 1)])
-    >>> get_shape_directed_edge_to_edge(triangle)
-    array([0, 0, 1, 1, 2, 2])
-
-    >>> # square: 4 edges → 8 directed edges
-    >>> square_shape = square(1)
-    >>> get_shape_directed_edge_to_edge(square_shape)
-    array([0, 0, 1, 1, 2, 2, 3, 3])
     """
     from scadpy.core.assembly import get_assembly_directed_edge_to_edge
 

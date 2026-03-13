@@ -2,12 +2,20 @@
 ScadPy
 ======
 
-|coverage| |interrogate|
+|pypi| |ci| |coverage| |interrogate|
 
-.. |coverage| image:: _static/badges/coverage.svg
+.. |pypi| image:: https://img.shields.io/pypi/v/scadpy
+   :target: https://pypi.org/project/scadpy/
+   :alt: PyPI
+
+.. |ci| image:: https://img.shields.io/github/actions/workflow/status/m-fabregue/scadpy/ci.yml?branch=main&label=CI
+   :target: https://github.com/m-fabregue/scadpy/actions
+   :alt: CI
+
+.. |coverage| image:: https://m-fabregue.github.io/scadpy/_static/badges/coverage.svg
    :alt: test coverage
 
-.. |interrogate| image:: _static/badges/interrogate.svg
+.. |interrogate| image:: https://m-fabregue.github.io/scadpy/_static/badges/interrogate.svg
    :alt: doc coverage
 
 **Programmatic CAD in Pure Python.**
@@ -33,34 +41,47 @@ Quick examples
 .. doctest::
 
    >>> # 2D — chamfered mounting plate
-   >>> from scadpy import *
+   >>> from scadpy import circle, cuboid, rectangle, sphere, square, text
+   >>> from scadpy import x, y, z, GRAY, ORANGE
    >>> import numpy as np
 
    >>> PLATE_WIDTH  = 80
    >>> PLATE_HEIGHT = 50
+   >>> PLATE_THICKNESS = 10
    >>> HOLE_RADIUS  = 4
    >>> HOLE_MARGIN  = 10
    >>> CHAMFER_SIZE = 8
 
-   >>> base               = rectangle([PLATE_WIDTH, PLATE_HEIGHT])
-   >>> plate              = base.chamfer(CHAMFER_SIZE)
-   >>> corner_coordinates = base.vertex_coordinates[base.corner_to_vertex[:, 1]]
+   >>> base  = rectangle([PLATE_WIDTH, PLATE_HEIGHT])
+   >>> plate = base.chamfer(CHAMFER_SIZE)
 
-   >>> for position, normal in zip(corner_coordinates, base.corner_normals):
+   >>> for position, normal in zip(base.vertex_coordinates, base.vertex_normals):
    ...     hole_center = position - HOLE_MARGIN * np.sqrt(2) * normal
    ...     plate -= circle(HOLE_RADIUS).translate(hole_center)
-   >>> plate # doctest: +SKIP
+
+   >>> plate.to_screen() # doctest: +SKIP
 
 .. render-example::
-   :name: index_2d
+   :name: index_plate
    :example: plate
 
 .. doctest::
 
-   >>> # 3D — parametric ball bearing
-   >>> import numpy as np
-   >>> from scadpy import *
+   >>> # 3D — extrude mounting plate with label
+   >>> TEXT_THICKNESS = 2
 
+   >>> extruded_plate = plate.linear_extrude(PLATE_THICKNESS)
+   >>> label = text("ScadPy", size=15).linear_extrude(TEXT_THICKNESS)
+   >>> extruded_plate |= label.translate(z(PLATE_THICKNESS))
+   >>> extruded_plate.to_screen() # doctest: +SKIP
+
+.. render-example::
+   :name: index_extruded_plate
+   :example: extruded_plate
+
+.. doctest::
+
+   >>> # 3D — parametric ball bearing
    >>> BALL_RADIUS    = 3
    >>> RACE_RADIUS    = 15
    >>> NB_BALLS       = 11
@@ -68,20 +89,81 @@ Quick examples
    >>> RING_HEIGHT    = 7
    >>> RACE_THICKNESS = 10
 
-   >>> groove = circle(BALL_RADIUS + CLEARANCE) | rectangle([BALL_RADIUS, RING_HEIGHT])
-   >>> race   = rectangle([RACE_THICKNESS, RING_HEIGHT]) - groove
-   >>> race   = race.radial_extrude(axis=y(1), pivot=x(RACE_RADIUS))
+   >>> groove  = circle(BALL_RADIUS + CLEARANCE) | rectangle([BALL_RADIUS, RING_HEIGHT])
+   >>> race    = rectangle([RACE_THICKNESS, RING_HEIGHT]) - groove
+   >>> bearing = race.radial_extrude(axis=y(), pivot=x(RACE_RADIUS)).color(GRAY)
 
-   >>> balls = Solid()
+   >>> ball = sphere(BALL_RADIUS).color(ORANGE)
    >>> for angle in np.linspace(0, 360, NB_BALLS, endpoint=False):
-   ...     balls += sphere(BALL_RADIUS).rotate(angle, axis=y(1), pivot=x(RACE_RADIUS))
+   ...     bearing += ball.rotate(angle, axis=y(), pivot=x(RACE_RADIUS))
 
-   >>> bearing = race + balls
-   >>> bearing # doctest: +SKIP
+   >>> bearing.to_screen() # doctest: +SKIP
 
 .. render-example::
-   :name: index_3d
+   :name: index_bearing
    :example: bearing
+   :keep-color:
+
+.. doctest::
+
+   >>> # 3D — dice
+   >>> SIZE = 20
+
+   >>> dice = cuboid(SIZE)
+   >>> pip  = sphere(SIZE / 12).translate(z(SIZE / 2))
+
+   >>> one   = pip
+   >>> two = (
+   ...     pip.translate([SIZE / 4, SIZE / 4, 0]) +
+   ...     pip.translate([-SIZE / 4, -SIZE / 4, 0])
+   ... )
+   >>> three = one + two
+   >>> four  = two + two.rotate(90, z())
+   >>> five  = one + four
+   >>> six   = four + pip.translate(x(SIZE / 4)) + pip.translate(x(-SIZE / 4))
+
+   >>> dice -= (
+   ...     one
+   ...     + two.rotate(90, x())
+   ...     + three.rotate(90, y())
+   ...     + four.rotate(-90, y())
+   ...     + five.rotate(-90, x())
+   ...     + six.rotate(-180, x())
+   ... )
+
+   >>> dice.to_screen() # doctest: +SKIP
+
+.. render-example::
+   :name: index_dice
+   :example: dice
+
+.. doctest::
+
+    >>> # 3D — storage box
+    >>> SIZE_OUTER = 20
+    >>> SIZE_INNER = 18
+    >>> FILLET = 1
+    >>> BASE_HEIGHT = 10
+    >>> CUT_HEIGHT = 8
+    >>> CAP_HEIGHT_OUTER = 1.5
+    >>> CAP_HEIGHT_INNER = 3
+    >>> CAP_OFFSET_X = 25
+    >>> CUT_OFFSET_Z = 2
+
+    >>> outer_base = square(SIZE_OUTER).fillet(FILLET).linear_extrude(BASE_HEIGHT)
+    >>> inner_cut = square(SIZE_INNER).linear_extrude(CUT_HEIGHT).translate(z(CUT_OFFSET_Z))
+    >>> base = outer_base - inner_cut
+
+    >>> cap_outer = square(SIZE_OUTER).fillet(FILLET).linear_extrude(CAP_HEIGHT_OUTER)
+    >>> cap_inner = square(SIZE_INNER).linear_extrude(CAP_HEIGHT_INNER)
+    >>> cap = (cap_outer | cap_inner).translate(x(CAP_OFFSET_X))
+
+    >>> storage_box = base + cap
+    >>> storage_box.to_screen() # doctest: +SKIP
+
+.. render-example::
+   :name: index_storage_box
+   :example: storage_box
 
 Cheat sheet
 ===========
@@ -111,14 +193,14 @@ Cheat sheet
    s + c    # concat (no merge)
 
    # transforms
-   s.chamfer(size=0.8)              # corner_filter=None, epsilon=1e-8
+   s.chamfer(size=0.8)              # vertex_filter=None, epsilon=1e-8
    s.color(color=RED)
    s.convexify()                    # part_filter=None
    s.fill()                         # part_filter=None
-   s.fillet(size=0.8)               # corner_filter=None, segment_count=32, epsilon=1e-8
+   s.fillet(size=0.8)               # vertex_filter=None, segment_count=32, epsilon=1e-8
    s.grow(distance=0.5)             # part_filter=None
-   s.linear_cut(axis=x(1))          # pivot=0
-   s.linear_slice(thickness=2, direction=x(1))  # pivot=0, part_filter=None
+   s.linear_cut(axis=x())          # pivot=0
+   s.linear_slice(thickness=2, direction=x())  # pivot=0, part_filter=None
    s.mirror(normal=[1, 0])          # pivot=0
    s.pull(distance=1.0)             # pivot=0, vertex_filter=None
    s.push(distance=1.0)             # pivot=0, vertex_filter=None
@@ -130,31 +212,30 @@ Cheat sheet
    s.translate(translation=[2, 1])  # vertex_filter=None
 
    # topology — coordinates & attributes
-   s.are_corners_convex             # (n_corners,)    — convexity mask
-   s.corner_angles                  # (n_corners,)    — interior angles (°)
-   s.corner_normals                 # (n_corners,  2) — outward unit normals
+   s.are_vertices_convex            # (n_vertices,)   — convexity mask
    s.directed_edge_directions       # (2*n_edges, 2)
    s.edge_lengths                   # (n_edges,)
    s.edge_midpoints                 # (n_edges,  2)
    s.edge_normals                   # (n_edges,  2)
    s.ring_types                     # (n_rings,)  — "exterior"|"interior"
+   s.vertex_angles                  # (n_vertices,)   — interior angles (°)
    s.vertex_coordinates             # (n_vertices, 2)
+   s.vertex_normals                 # (n_vertices, 2) — outward unit normals
 
    # topology — bridges (*_to_*)
-   s.corner_to_incoming_directed_edge  # corner        → directed_edge
-   s.corner_to_outgoing_directed_edge  # corner        → directed_edge
-   s.corner_to_vertex                  # corner        → [prev, curr, next]
-   s.directed_edge_to_corner           # directed_edge → [source, target]
    s.directed_edge_to_edge             # directed_edge → edge
    s.directed_edge_to_vertex           # directed_edge → [start, end]
    s.edge_to_vertex                    # edge          → [start, end]
    s.ring_to_part                      # ring          → part
+   s.vertex_to_incoming_directed_edge  # vertex        → directed_edge
+   s.vertex_to_outgoing_directed_edge  # vertex        → directed_edge
+   s.vertex_to_neighbor_vertex       # vertex        → [prev, next]
    s.vertex_to_part                    # vertex        → part
    s.vertex_to_ring                    # vertex        → ring
 
    # extrusions → Solid
    s.linear_extrude(height=3)
-   s.radial_extrude(axis=y(1), pivot=x(5))  # start=0, end=360, segment_count=64
+   s.radial_extrude(axis=y(), pivot=x(5))  # start=0, end=360, segment_count=64
 
    # export
    s.to_dxf_file("output.dxf")
@@ -191,7 +272,7 @@ Cheat sheet
    a.pull(distance=1.0)             # pivot=0, vertex_filter=None
    a.push(distance=1.0)             # pivot=0, vertex_filter=None
    a.resize(size=[6, None, None])   # auto=False, pivot=None, vertex_filter=None
-   a.rotate(angle=30, axis=z(1))    # pivot=0, vertex_filter=None
+   a.rotate(angle=30, axis=z())    # pivot=0, vertex_filter=None
    a.scale(scale=[2, 1, 0.5])       # pivot=0, vertex_filter=None
    a.translate(translation=[1, 0, 0])  # vertex_filter=None
 

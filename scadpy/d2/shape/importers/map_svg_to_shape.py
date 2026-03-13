@@ -32,15 +32,6 @@ def map_svg_to_shape(source: str | Path) -> Shape:
         A new shape whose parts correspond to the closed filled regions
         found in the SVG.
 
-    Examples
-    --------
-    >>> from scadpy import map_svg_to_shape
-
-    >>> map_svg_to_shape("https://upload.wikimedia.org/wikipedia/commons/0/04/Pentagon.svg")  # doctest: +SKIP
-
-    .. render-example::
-        :name: map_svg_to_shape
-        :example: map_svg_to_shape("https://upload.wikimedia.org/wikipedia/commons/0/04/Pentagon.svg")
     """
     from scadpy import map_geometries_to_shape
 

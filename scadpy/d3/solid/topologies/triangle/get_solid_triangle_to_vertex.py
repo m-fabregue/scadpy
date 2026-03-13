@@ -26,14 +26,6 @@ def get_solid_triangle_to_vertex(
     NDArray[np.int64]
         2D array of shape (n_triangles, 3), one row per triangle containing
         the global vertex indices of its three corners.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, get_solid_triangle_to_vertex
-
-    >>> triangle_to_vertex = get_solid_triangle_to_vertex(cuboid(2))
-    >>> triangle_to_vertex.shape[1]
-    3
     """
     if not solid._parts:
         return np.empty((0, 3), dtype=np.int64)

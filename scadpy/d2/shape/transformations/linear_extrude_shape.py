@@ -30,26 +30,6 @@ def linear_extrude_shape(shape: Shape, height: float) -> Solid:
     -------
     Solid
         A 3D solid created by extruding the shape.
-
-    Examples
-    --------
-    >>> from scadpy import linear_extrude_shape, square, circle
-
-    >>> # simple box
-    >>> linear_extrude_shape(square(10), height=5) # doctest: +SKIP
-
-    .. render-example::
-        :name: linear_extrude_shape_square
-        :example: linear_extrude_shape(square(10), height=5)
-
-    >>> # tube from a hollow circle
-    >>> linear_extrude_shape(  # doctest: +SKIP
-    ...     circle(5) - circle(3), height=10
-    ... )
-
-    .. render-example::
-        :name: linear_extrude_shape_tube
-        :example: linear_extrude_shape(circle(5) - circle(3), height=10)
     """
     from scadpy import Part, Solid
 

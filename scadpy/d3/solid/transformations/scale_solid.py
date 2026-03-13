@@ -36,19 +36,6 @@ def scale_solid(
     -------
     Solid
         A new solid with the selected vertices scaled relative to the pivot.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, scale_solid
-
-    >>> scale_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4), scale=2, pivot=[2, 2, 2]
-    ... )
-
-    .. render-example::
-        :name: scale_solid
-        :example: scale_solid(solid=cuboid(4), scale=2, pivot=[2, 2, 2])
-        :ghost: cuboid(4)
     """
     from scadpy import resolve_topology_filter, scale_vertex_coordinates
 

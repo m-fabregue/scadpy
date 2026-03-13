@@ -24,13 +24,6 @@ def get_solid_bounds(solid: Solid) -> NDArray[np.float64]:
     NDArray[np.float64]
         1D array ``[min_x, min_y, min_z, max_x, max_y, max_z]``.
         Returns zeros if the solid is empty.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, get_solid_bounds
-
-    >>> get_solid_bounds(cuboid(2))
-    array([-1., -1., -1.,  1.,  1.,  1.])
     """
     from scadpy import get_component_bounds
 

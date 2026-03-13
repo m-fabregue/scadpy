@@ -27,15 +27,6 @@ def get_shape_ring_types(
     NDArray[np.object_]
         1D array of shape (n_rings,), one element per ring.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_ring_types, square
-
-    >>> # square with a hole (exterior + interior)
-    >>> # unioned with a separate square (exterior only)
-    >>> shape = (square(2) - square(1)) | square(1).translate([5, 0])
-    >>> get_shape_ring_types(shape)  # doctest: +NORMALIZE_WHITESPACE
-    array(['exterior', 'interior', 'exterior'], dtype=object)
     """
     # extract and flatmap polygon ring types
     ring_types = [

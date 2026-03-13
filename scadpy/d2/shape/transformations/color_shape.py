@@ -23,18 +23,6 @@ def color_shape(shape: Shape, color: Color) -> Shape:
     -------
     Shape
         A new shape with all parts set to the given color.
-
-    Examples
-    --------
-    >>> from scadpy import square, color_shape
-    >>> from scadpy.color.constants import RED
-
-    >>> color_shape(shape=square(4), color=RED) # doctest: +SKIP
-
-    .. render-example::
-        :name: color_shape
-        :example: color_shape(shape=square(4), color=RED)
-        :keep-color:
     """
     from scadpy import Shape, color_assembly
 

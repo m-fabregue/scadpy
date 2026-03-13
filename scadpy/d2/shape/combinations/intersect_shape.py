@@ -24,19 +24,6 @@ def intersect_shape(shapes: Sequence[Shape]) -> Shape:
     -------
     Shape
         A new shape containing only the regions present in all input shapes.
-
-    Examples
-    --------
-    >>> from scadpy import square, circle, intersect_shape
-
-    >>> intersect_shape(  # doctest: +SKIP
-    ...     shapes=[square(4), circle(radius=2).translate([1, 1])]
-    ... )
-
-    .. render-example::
-        :name: intersect_shape
-        :example: intersect_shape(shapes=[square(4), circle(radius=2).translate([1, 1])])
-        :ghost: square(4)
     """
     from scadpy import (
         Shape,

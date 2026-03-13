@@ -16,6 +16,7 @@ dist/
 
 # --- Documentation build ---
 docs/build/
+docs/_build/
 
 # --- Logs and temporary files ---
 *.log

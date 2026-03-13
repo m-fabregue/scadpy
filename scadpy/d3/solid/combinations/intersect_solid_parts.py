@@ -36,7 +36,7 @@ def intersect_solid_parts(
 
     Examples
     --------
-    >>> from scadpy import cuboid, sphere, intersect_solid_parts, Solid
+    >>> from scadpy import cuboid, sphere, intersect_solid_parts, concat_solid, Solid
 
     >>> intersect_solid_parts(  # doctest: +SKIP
     ...     parts=(

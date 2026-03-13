@@ -36,7 +36,7 @@ def unify_shape_parts(
 
     Examples
     --------
-    >>> from scadpy import square, circle, unify_shape_parts, Shape
+    >>> from scadpy import square, circle, unify_shape_parts, concat_shape, Shape
 
     >>> unify_shape_parts(  # doctest: +SKIP
     ...     parts=(

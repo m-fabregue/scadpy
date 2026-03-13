@@ -43,21 +43,6 @@ def push_shape(
     See Also
     --------
     pull_shape : Move shape vertices toward a pivot point.
-
-    Examples
-    --------
-    >>> from scadpy import square, push_shape
-
-    >>> shape = square(4)
-    >>> push_shape(  # doctest: +SKIP
-    ...     shape=shape, distance=1.0, pivot=[2, 2],
-    ...     vertex_filter=shape.vertex_coordinates[:, 0] < 1,
-    ... )
-
-    .. render-example::
-        :name: push_shape
-        :example: push_shape(shape=square(4), distance=1.0, pivot=[2, 2], vertex_filter=square(4).vertex_coordinates[:, 0] < 1)
-        :ghost: square(4)
     """
     from scadpy import resolve_topology_filter, push_vertex_coordinates
 

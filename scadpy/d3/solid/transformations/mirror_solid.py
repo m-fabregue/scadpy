@@ -32,19 +32,6 @@ def mirror_solid(
     -------
     Solid
         A new solid with all vertices mirrored across the specified plane.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, mirror_solid
-
-    >>> mirror_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4), normal=[1, 0, 0], pivot=[2, 0, 0]
-    ... )
-
-    .. render-example::
-        :name: mirror_solid
-        :example: mirror_solid(solid=cuboid(4), normal=[1, 0, 0], pivot=[2, 0, 0])
-        :ghost: cuboid(4)
     """
     from scadpy import mirror_vertex_coordinates
 

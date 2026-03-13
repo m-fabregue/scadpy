@@ -37,19 +37,6 @@ def rotate_shape(
     -------
     Shape
         A new shape with the selected vertices rotated around the pivot.
-
-    Examples
-    --------
-    >>> from scadpy import square, rotate_shape
-
-    >>> rotate_shape(  # doctest: +SKIP
-    ...     shape=square(4), angle=45, pivot=[2, 2]
-    ... )
-
-    .. render-example::
-        :name: rotate_shape
-        :example: rotate_shape(shape=square(4), angle=45, pivot=[2, 2])
-        :ghost: square(4)
     """
     from scadpy import resolve_topology_filter, rotate_vertex_coordinates
 

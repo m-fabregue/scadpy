@@ -37,7 +37,7 @@ def intersect_shape_parts(
     Examples
     --------
     >>> from scadpy import (
-    ...     square, circle, intersect_shape_parts, Shape
+    ...     square, circle, intersect_shape_parts, concat_shape, Shape
     ... )
 
     >>> intersect_shape_parts(  # doctest: +SKIP

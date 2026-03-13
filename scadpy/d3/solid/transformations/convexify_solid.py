@@ -29,19 +29,6 @@ def convexify_solid(
     Solid
         A new solid consisting of the convex hull of the selected parts, plus the
         unselected parts unchanged.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, sphere, convexify_solid
-
-    >>> convexify_solid(  # doctest: +SKIP
-    ...     cuboid(4) + sphere(radius=2).translate([3, 3, 3])
-    ... )
-
-    .. render-example::
-        :name: convexify_solid
-        :example: convexify_solid(cuboid(4) + sphere(radius=2).translate([3, 3, 3]))
-        :ghost: cuboid(4) + sphere(radius=2).translate([3, 3, 3])
     """
     from scadpy import Part, Solid, blend_part_colors, transform_filtered_parts
 

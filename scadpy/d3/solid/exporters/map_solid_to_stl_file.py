@@ -29,12 +29,6 @@ def map_solid_to_stl_file(solid: Solid, path: str | Path) -> int:
     -------
     int
         The number of bytes written.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, map_solid_to_stl_file
-
-    >>> map_solid_to_stl_file(solid=cuboid(4), path="output.stl")  # doctest: +SKIP
     """
     meshes = [p.geometry for p in solid._parts if len(p.geometry.faces) > 0]
     if not meshes:

@@ -25,18 +25,6 @@ def concat_shape(shapes: Sequence[Shape]) -> Shape:
     -------
     Shape
         A new shape containing all parts from all input shapes.
-
-    Examples
-    --------
-    >>> from scadpy import square, circle, concat_shape
-
-    >>> concat_shape(  # doctest: +SKIP
-    ...     shapes=[square(4), circle(radius=2).translate([3, 2])]
-    ... )
-
-    .. render-example::
-        :name: concat_shape
-        :example: concat_shape(shapes=[square(4), circle(radius=2).translate([3, 2])])
     """
     from scadpy import Shape
     from scadpy.core.assembly import concat_assemblies

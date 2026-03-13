@@ -23,12 +23,6 @@ def map_stl_to_solid(source: str | Path) -> Solid:
     -------
     Solid
         A new solid loaded from the STL file.
-
-    Examples
-    --------
-    >>> from scadpy import map_stl_to_solid
-
-    >>> map_stl_to_solid("model.stl")  # doctest: +SKIP
     """
     from typing import cast
 

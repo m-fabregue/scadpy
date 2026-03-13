@@ -37,10 +37,17 @@ class Solid(Assembly[Trimesh]):
 
     @cached_property
     def vertex_coordinates(self: Self) -> NDArray[np.float64]:
-        """
-        Shortcut for :func:`get_solid_vertex_coordinates`.
+        """For each vertex in the solid, return its coordinates.
 
-        See :func:`get_solid_vertex_coordinates` for full documentation.
+        See :func:`get_solid_vertex_coordinates` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> vertex_coordinates = cuboid(2).vertex_coordinates
+        >>> vertex_coordinates.shape
+        (8, 3)
         """
         from scadpy.d3.solid import get_solid_vertex_coordinates
 
@@ -48,10 +55,17 @@ class Solid(Assembly[Trimesh]):
 
     @cached_property
     def vertex_to_part(self: Self) -> NDArray[np.int64]:
-        """
-        Shortcut for :func:`get_solid_vertex_to_part`.
+        """For each vertex in the solid, return its part index.
 
-        See :func:`get_solid_vertex_to_part` for full documentation.
+        See :func:`get_solid_vertex_to_part` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> solid = cuboid(2) + cuboid(2).translate(5)
+        >>> solid.vertex_to_part
+        array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1])
         """
         from scadpy.d3.solid import get_solid_vertex_to_part
 
@@ -63,10 +77,19 @@ class Solid(Assembly[Trimesh]):
 
     @cached_property
     def is_empty(self: Self) -> bool:
-        """
-        Shortcut for :func:`is_solid_empty`.
+        """Return whether the solid has no vertices.
 
-        See :func:`is_solid_empty` for full documentation.
+        See :func:`is_solid_empty` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import Solid, cuboid
+
+        >>> Solid.from_parts([]).is_empty
+        True
+
+        >>> cuboid(2).is_empty
+        False
         """
         from scadpy.d3.solid import is_solid_empty
 
@@ -74,10 +97,16 @@ class Solid(Assembly[Trimesh]):
 
     @cached_property
     def bounds(self: Self) -> NDArray[np.float64]:
-        """
-        Shortcut for :func:`get_solid_bounds`.
+        """Return the axis-aligned bounding box of the solid.
 
-        See :func:`get_solid_bounds` for full documentation.
+        See :func:`get_solid_bounds` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(2).bounds
+        array([-1., -1., -1.,  1.,  1.,  1.])
         """
         from scadpy.d3.solid import get_solid_bounds
 
@@ -89,10 +118,19 @@ class Solid(Assembly[Trimesh]):
 
     @cached_property
     def part_colors(self: Self) -> NDArray[np.float64]:
-        """
-        Shortcut for :func:`get_assembly_part_colors`.
+        """For each part in the solid, return its RGBA color.
 
-        See :func:`get_assembly_part_colors` for full documentation.
+        See :func:`get_solid_part_colors` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, DEFAULT_OPACITY
+
+        >>> colors = cuboid(2).part_colors
+        >>> colors.shape
+        (1, 4)
+        >>> bool(colors[0, 3] == DEFAULT_OPACITY)
+        True
         """
         from scadpy.d3.solid import get_solid_part_colors
 
@@ -100,10 +138,17 @@ class Solid(Assembly[Trimesh]):
 
     @cached_property
     def triangle_to_vertex(self: Self) -> NDArray[np.int64]:
-        """
-        Shortcut for :func:`get_solid_triangle_to_vertex`.
+        """For each triangle in the solid, return the indices of its three vertices.
 
-        See :func:`get_solid_triangle_to_vertex` for full documentation.
+        See :func:`get_solid_triangle_to_vertex` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> triangle_to_vertex = cuboid(2).triangle_to_vertex
+        >>> triangle_to_vertex.shape[1]
+        3
         """
         from scadpy.d3.solid import get_solid_triangle_to_vertex
 
@@ -144,50 +189,98 @@ class Solid(Assembly[Trimesh]):
         return exclude_solid(solids=[self, other])
 
     def concat(self: Self, solids: Sequence[Solid]) -> Solid:
-        """Concatenate this solid with others.
+        """Concatenate this solid with others without any boolean operation.
 
-        Shortcut for :func:`concat_solid`.
-        See :func:`concat_solid` for full documentation.
+        See :func:`concat_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere
+
+        >>> cuboid(4).concat([sphere(radius=2).translate([3, 2, 0])])  # doctest: +SKIP
+
+        .. render-example::
+            :name: concat_solid
+            :example: cuboid(4).concat([sphere(radius=2).translate([3, 2, 0])])
         """
         from scadpy import concat_solid
 
         return concat_solid(solids=[self, *solids])
 
     def unify(self: Self, solids: Sequence[Solid]) -> Solid:
-        """Unite this solid with others.
+        """Unite this solid with others using boolean union.
 
-        Shortcut for :func:`unify_solid`.
-        See :func:`unify_solid` for full documentation.
+        See :func:`unify_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere, x
+
+        >>> cuboid(4).unify([sphere(radius=2).translate(x(2))])  # doctest: +SKIP
+
+        .. render-example::
+            :name: unify_solid
+            :example: cuboid(4).unify([sphere(radius=2).translate(x(2))])
         """
         from scadpy import unify_solid
 
         return unify_solid(solids=[self, *solids])
 
     def intersect(self: Self, solids: Sequence[Solid]) -> Solid:
-        """Intersect this solid with others.
+        """Compute the intersection of this solid with others.
 
-        Shortcut for :func:`intersect_solid`.
-        See :func:`intersect_solid` for full documentation.
+        See :func:`intersect_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere
+
+        >>> cuboid(4).intersect([sphere(radius=2).translate(1)])  # doctest: +SKIP
+
+        .. render-example::
+            :name: intersect_solid
+            :example: cuboid(4).intersect([sphere(radius=2).translate(1)])
+            :ghost: cuboid(4) + sphere(radius=2).translate(1)
         """
         from scadpy import intersect_solid
 
         return intersect_solid(solids=[self, *solids])
 
     def subtract(self: Self, to_subtract: Solid) -> Solid:
-        """Subtract a solid from this solid.
+        """Subtract a solid from this solid using boolean difference.
 
-        Shortcut for :func:`subtract_solid`.
-        See :func:`subtract_solid` for full documentation.
+        See :func:`subtract_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere
+
+        >>> cuboid(4).subtract(sphere(radius=2))  # doctest: +SKIP
+
+        .. render-example::
+            :name: subtract_solid
+            :example: cuboid(4).subtract(sphere(radius=2))
+            :ghost: cuboid(4)
         """
         from scadpy import subtract_solid
 
         return subtract_solid(to_be_subtracted=self, to_subtract=to_subtract)
 
     def exclude(self: Self, solids: Sequence[Solid]) -> Solid:
-        """Compute the symmetric difference of this solid with others.
+        """Compute the symmetric difference (XOR) of this solid with others.
 
-        Shortcut for :func:`exclude_solid`.
-        See :func:`exclude_solid` for full documentation.
+        See :func:`exclude_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, concat_solid, x
+
+        >>> cuboid(4).exclude([cuboid(4).translate(x(2))])  # doctest: +SKIP
+
+        .. render-example::
+            :name: exclude_solid
+            :example: cuboid(4).exclude([cuboid(4).translate(x(2))])
+            :ghost: concat_solid(solids=[cuboid(4), cuboid(4).translate(x(2))])
         """
         from scadpy import exclude_solid
 
@@ -202,10 +295,20 @@ class Solid(Assembly[Trimesh]):
         translation: float | Iterable[float],
         vertex_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Translate this solid.
+        """Translate this solid by a given vector.
 
-        Shortcut for :func:`translate_solid`.
-        See :func:`translate_solid` for full documentation.
+        See :func:`translate_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).translate([3, 2, 1])  # doctest: +SKIP
+
+        .. render-example::
+            :name: translate_solid
+            :example: cuboid(4).translate([3, 2, 1])
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import translate_solid
 
@@ -217,10 +320,20 @@ class Solid(Assembly[Trimesh]):
         pivot: float | Iterable[float] = 0,
         vertex_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Scale this solid.
+        """Scale this solid by a given factor, relative to a pivot point.
 
-        Shortcut for :func:`scale_solid`.
-        See :func:`scale_solid` for full documentation.
+        See :func:`scale_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).scale(2, pivot=[2, 2, 2])  # doctest: +SKIP
+
+        .. render-example::
+            :name: scale_solid
+            :example: cuboid(4).scale(2, pivot=[2, 2, 2])
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import scale_solid
 
@@ -233,10 +346,37 @@ class Solid(Assembly[Trimesh]):
         pivot: float | Iterable[float] | None = None,
         vertex_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Resize this solid.
+        """Resize this solid to fit target dimensions.
 
-        Shortcut for :func:`resize_solid`.
-        See :func:`resize_solid` for full documentation.
+        See :func:`resize_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> # resize to an exact size on all axes:
+        >>> cuboid([4, 2, 1]).resize([6, 6, 6])  # doctest: +SKIP
+
+        .. render-example::
+           :name: resize_solid_exact
+           :example: cuboid([4, 2, 1]).resize([6, 6, 6])
+           :ghost: cuboid([4, 2, 1])
+
+        >>> # freeze two axes (``None``) and scale only the first:
+        >>> cuboid([4, 2, 1]).resize([6, None, None])  # doctest: +SKIP
+
+        .. render-example::
+           :name: resize_solid_freeze
+           :example: cuboid([4, 2, 1]).resize([6, None, None])
+           :ghost: cuboid([4, 2, 1])
+
+        >>> # scale frozen axes proportionally with ``auto=True``:
+        >>> cuboid([4, 2, 1]).resize([6, None, None], auto=True)  # doctest: +SKIP
+
+        .. render-example::
+           :name: resize_solid_auto
+           :example: cuboid([4, 2, 1]).resize([6, None, None], auto=True)
+           :ghost: cuboid([4, 2, 1])
         """
         from scadpy.d3.solid import resize_solid
 
@@ -247,10 +387,20 @@ class Solid(Assembly[Trimesh]):
         normal: float | Iterable[float],
         pivot: float | Iterable[float] = 0,
     ) -> Solid:
-        """Mirror this solid.
+        """Mirror this solid across a plane defined by a normal vector and a pivot point.
 
-        Shortcut for :func:`mirror_solid`.
-        See :func:`mirror_solid` for full documentation.
+        See :func:`mirror_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).mirror([1, 0, 0], pivot=[2, 0, 0])  # doctest: +SKIP
+
+        .. render-example::
+            :name: mirror_solid
+            :example: cuboid(4).mirror([1, 0, 0], pivot=[2, 0, 0])
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import mirror_solid
 
@@ -262,10 +412,20 @@ class Solid(Assembly[Trimesh]):
         pivot: float | Iterable[float] = 0,
         vertex_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Move vertices of this solid toward a pivot point.
+        """Move a subset of vertices of this solid toward a pivot point by a given distance.
 
-        Shortcut for :func:`pull_solid`.
-        See :func:`pull_solid` for full documentation.
+        See :func:`pull_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).pull(distance=1.0, pivot=[2, 2, 2], vertex_filter=cuboid(4).vertex_coordinates[:, 0] < 1)  # doctest: +SKIP
+
+        .. render-example::
+            :name: pull_solid
+            :example: cuboid(4).pull(distance=1.0, pivot=[2, 2, 2], vertex_filter=cuboid(4).vertex_coordinates[:, 0] < 1)
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import pull_solid
 
@@ -277,10 +437,20 @@ class Solid(Assembly[Trimesh]):
         pivot: float | Iterable[float] = 0,
         vertex_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Move vertices of this solid away from a pivot point.
+        """Move a subset of vertices of this solid away from a pivot point by a given distance.
 
-        Shortcut for :func:`push_solid`.
-        See :func:`push_solid` for full documentation.
+        See :func:`push_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).push(distance=1.0, pivot=[2, 2, 2], vertex_filter=cuboid(4).vertex_coordinates[:, 0] < 1)  # doctest: +SKIP
+
+        .. render-example::
+            :name: push_solid
+            :example: cuboid(4).push(distance=1.0, pivot=[2, 2, 2], vertex_filter=cuboid(4).vertex_coordinates[:, 0] < 1)
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import push_solid
 
@@ -293,10 +463,20 @@ class Solid(Assembly[Trimesh]):
         pivot: float | Iterable[float] = 0,
         vertex_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Rotate this solid around an axis.
+        """Rotate this solid by a given angle around an axis passing through a pivot point.
 
-        Shortcut for :func:`rotate_solid`.
-        See :func:`rotate_solid` for full documentation.
+        See :func:`rotate_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).rotate(angle=45, axis=[0, 0, 1], pivot=[2, 2, 2])  # doctest: +SKIP
+
+        .. render-example::
+            :name: rotate_solid
+            :example: cuboid(4).rotate(angle=45, axis=[0, 0, 1], pivot=[2, 2, 2])
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import rotate_solid
 
@@ -305,8 +485,19 @@ class Solid(Assembly[Trimesh]):
     def color(self: Self, color: Color) -> Solid:
         """Set the color of all parts in this solid.
 
-        Shortcut for :func:`color_solid`.
-        See :func:`color_solid` for full documentation.
+        See :func:`color_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+        >>> from scadpy.color.constants import RED
+
+        >>> cuboid(4).color(RED)  # doctest: +SKIP
+
+        .. render-example::
+            :name: color_solid
+            :example: cuboid(4).color(RED)
+            :keep-color:
         """
         from scadpy.d3.solid import color_solid
 
@@ -316,10 +507,20 @@ class Solid(Assembly[Trimesh]):
         self: Self,
         part_filter: TopologyFilter[Solid] | None = None,
     ) -> Solid:
-        """Replace selected parts with their convex hull.
+        """Create a new solid whose selected parts are replaced by their convex hull.
 
-        Shortcut for :func:`convexify_solid`.
-        See :func:`convexify_solid` for full documentation.
+        See :func:`convexify_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere
+
+        >>> (cuboid(4) + sphere(radius=2).translate([3, 3, 3])).convexify()  # doctest: +SKIP
+
+        .. render-example::
+            :name: convexify_solid
+            :example: (cuboid(4) + sphere(radius=2).translate([3, 3, 3])).convexify()
+            :ghost: cuboid(4) + sphere(radius=2).translate([3, 3, 3])
         """
         from scadpy.d3.solid import convexify_solid
 
@@ -328,10 +529,20 @@ class Solid(Assembly[Trimesh]):
     def recoordinate(
         self: Self, vertex_coordinates: NDArray[np.float64]
     ) -> Solid:
-        """Rebuild this solid with new vertex coordinates.
+        """Rebuild this solid with new vertex coordinates, preserving topology and colors.
 
-        Shortcut for :func:`recoordinate_solid`.
-        See :func:`recoordinate_solid` for full documentation.
+        See :func:`recoordinate_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).recoordinate(cuboid(4).vertex_coordinates + [2.0, 1.0, 0.0])  # doctest: +SKIP
+
+        .. render-example::
+            :name: recoordinate_solid
+            :example: cuboid(4).recoordinate(cuboid(4).vertex_coordinates + [2.0, 1.0, 0.0])
+            :ghost: cuboid(4)
         """
         from scadpy.d3.solid import recoordinate_solid
 
@@ -349,9 +560,19 @@ class Solid(Assembly[Trimesh]):
 
     @classmethod
     def from_geometries(cls, geometries: Sequence[Trimesh]) -> Solid:
-        """Shortcut for :func:`map_geometries_to_solid`.
+        """Map a sequence of Trimesh geometries to a solid.
 
-        See :func:`map_geometries_to_solid` for full documentation.
+        See :func:`map_geometries_to_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> Solid.from_geometries([cuboid(4)._parts[0].geometry])  # doctest: +SKIP
+
+        .. render-example::
+            :name: map_geometries_to_solid
+            :example: Solid.from_geometries([cuboid(4)._parts[0].geometry])
         """
         from scadpy.d3.solid.importers import map_geometries_to_solid
 
@@ -359,9 +580,19 @@ class Solid(Assembly[Trimesh]):
 
     @classmethod
     def from_geometry(cls, geometry: Trimesh) -> Solid:
-        """Shortcut for :func:`map_geometry_to_solid`.
+        """Map a single Trimesh geometry to a solid.
 
-        See :func:`map_geometry_to_solid` for full documentation.
+        See :func:`map_geometry_to_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> Solid.from_geometry(cuboid(4)._parts[0].geometry)  # doctest: +SKIP
+
+        .. render-example::
+            :name: map_geometry_to_solid
+            :example: Solid.from_geometry(cuboid(4)._parts[0].geometry)
         """
         from scadpy.d3.solid.importers import map_geometry_to_solid
 
@@ -369,9 +600,15 @@ class Solid(Assembly[Trimesh]):
 
     @classmethod
     def from_stl(cls, source: str | Path) -> Solid:
-        """Shortcut for :func:`map_stl_to_solid`.
+        """Load a solid from an STL file.
 
-        See :func:`map_stl_to_solid` for full documentation.
+        See :func:`map_stl_to_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import Solid
+
+        >>> Solid.from_stl("model.stl")  # doctest: +SKIP
         """
         from scadpy.d3.solid.importers import map_stl_to_solid
 
@@ -386,10 +623,18 @@ class Solid(Assembly[Trimesh]):
         background_color: Color = WHITE,
         foreground_color: Color = BLACK,
     ) -> HTML:
-        """Render this solid to an interactive HTML widget.
+        """Render this solid as an interactive HTML widget.
 
-        Shortcut for :func:`map_solid_to_html`.
-        See :func:`map_solid_to_html` for full documentation.
+        See :func:`map_solid_to_html` for parameter documentation.
+
+        Examples
+        --------
+        >>> from IPython.core.display import HTML
+        >>> from scadpy import cuboid
+
+        >>> html = cuboid(4).to_html()
+        >>> isinstance(html, HTML)
+        True
         """
         from scadpy import map_solid_to_html
 
@@ -405,10 +650,15 @@ class Solid(Assembly[Trimesh]):
         background_color: Color = WHITE,
         foreground_color: Color = BLACK,
     ) -> int:
-        """Write this solid to an HTML file.
+        """Save this solid as an HTML file.
 
-        Shortcut for :func:`map_solid_to_html_file`.
-        See :func:`map_solid_to_html_file` for full documentation.
+        See :func:`map_solid_to_html_file` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).to_html_file(path="output.html")  # doctest: +SKIP
         """
         from scadpy import map_solid_to_html_file
 
@@ -426,8 +676,13 @@ class Solid(Assembly[Trimesh]):
     ) -> None:
         """Display this solid in an interactive viewer.
 
-        Shortcut for :func:`map_solid_to_screen`.
-        See :func:`map_solid_to_screen` for full documentation.
+        See :func:`map_solid_to_screen` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).to_screen()  # doctest: +SKIP
         """
         from scadpy import map_solid_to_screen
 
@@ -440,8 +695,13 @@ class Solid(Assembly[Trimesh]):
     def to_stl_file(self: Self, path: str | Path) -> int:
         """Export this solid to an STL file.
 
-        Shortcut for :func:`map_solid_to_stl_file`.
-        See :func:`map_solid_to_stl_file` for full documentation.
+        See :func:`map_solid_to_stl_file` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(4).to_stl_file(path="output.stl")  # doctest: +SKIP
         """
         from scadpy import map_solid_to_stl_file
 

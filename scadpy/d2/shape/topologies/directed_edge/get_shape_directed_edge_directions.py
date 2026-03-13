@@ -19,22 +19,6 @@ def get_shape_directed_edge_directions(
 
     See :func:`get_assembly_directed_edge_directions` for full documentation.
 
-    Examples
-    --------
-    >>> from scadpy import get_shape_directed_edge_directions, square
-
-    >>> # unit square: 4 edges → 8 directed edges,
-    >>> # forward then backward interleaved
-    >>> square_shape = square(1)
-    >>> get_shape_directed_edge_directions(square_shape).round(4)
-    array([[ 1.,  0.],
-           [-1.,  0.],
-           [ 0.,  1.],
-           [ 0., -1.],
-           [-1.,  0.],
-           [ 1.,  0.],
-           [ 0., -1.],
-           [ 0.,  1.]])
     """
     from scadpy.core.assembly import get_assembly_directed_edge_directions
 

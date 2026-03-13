@@ -39,7 +39,7 @@ def subtract_solid_parts(
 
     Examples
     --------
-    >>> from scadpy import cuboid, sphere, subtract_solid_parts, Solid
+    >>> from scadpy import cuboid, sphere, subtract_solid_parts, concat_solid, Solid
 
     >>> subtract_solid_parts(  # doctest: +SKIP
     ...     to_be_subtracted=cuboid(4)._parts[0],

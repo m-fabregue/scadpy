@@ -43,21 +43,6 @@ def pull_shape(
     See Also
     --------
     push_shape : Move shape vertices away from a pivot point.
-
-    Examples
-    --------
-    >>> from scadpy import square, pull_shape
-
-    >>> shape = square(4)
-    >>> pull_shape(  # doctest: +SKIP
-    ...     shape=shape, distance=1.0, pivot=[2, 2],
-    ...     vertex_filter=shape.vertex_coordinates[:, 0] < 1,
-    ... )
-
-    .. render-example::
-        :name: pull_shape
-        :example: pull_shape(shape=square(4), distance=1.0, pivot=[2, 2], vertex_filter=square(4).vertex_coordinates[:, 0] < 1)
-        :ghost: square(4)
     """
     from scadpy import resolve_topology_filter, pull_vertex_coordinates
 

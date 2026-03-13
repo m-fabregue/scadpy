@@ -25,13 +25,6 @@ def map_shape_to_dxf_file(shape: Shape, path: str | Path) -> int:
     int
         Number of characters written.
 
-    Examples
-    --------
-    >>> from scadpy import square, circle, map_shape_to_dxf_file
-
-    >>> map_shape_to_dxf_file(  # doctest: +SKIP
-    ...     shape=square(4) - circle(1), path="output.dxf"
-    ... )
     """
     from scadpy import map_shape_to_dxf
 

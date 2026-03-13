@@ -29,20 +29,6 @@ def recoordinate_solid(
     -------
     Solid
         A new solid with the same topology as *solid* but at the new positions.
-
-    Examples
-    --------
-    >>> from scadpy import cuboid, recoordinate_solid
-
-    >>> recoordinate_solid(  # doctest: +SKIP
-    ...     solid=cuboid(4),
-    ...     vertex_coordinates=cuboid(4).vertex_coordinates + [2.0, 1.0, 0.0],
-    ... )
-
-    .. render-example::
-        :name: recoordinate_solid
-        :example: recoordinate_solid(solid=cuboid(4), vertex_coordinates=cuboid(4).vertex_coordinates + [2.0, 1.0, 0.0])
-        :ghost: cuboid(4)
     """
     from scadpy import Part, map_parts_to_solid
 
