@@ -10,15 +10,15 @@ if TYPE_CHECKING:
 # @typechecked
 def subtract_parts[A, P, G](
     to_be_subtracted: P,
-    to_subtract: P,
+    to_subtract: Sequence[P],
     get_part_color: Callable[[P], Color],
     get_part_geometry: Callable[[P], G],
-    subtract_geometries: Callable[[G, G], Iterable[G]],
+    subtract_geometries: Callable[[G, Sequence[G]], Iterable[G]],
     make_part_from_geometry: Callable[[G, Color], P],
     make_assembly_from_parts: Callable[[Sequence[P]], A],
 ) -> A:
     """
-    Subtract the geometry of one part from another and return a new assembly.
+    Subtract the geometries of multiple parts from one part and return a new assembly.
 
     This function is fully generic and uses dependency injection for all domain-specific
     operations, making it suitable for a wide range of applications (2D, 3D, CAD, etc.).
@@ -28,14 +28,14 @@ def subtract_parts[A, P, G](
     ----------
     to_be_subtracted : P
         The part whose geometry will be subtracted from.
-    to_subtract : P
-        The part whose geometry will be subtracted.
+    to_subtract : Sequence[P]
+        The parts whose geometries will be subtracted.
     get_part_color : Callable[[P], Color]
         Function to extract the color from a part (as a list or tuple of 4 floats: RGBA).
     get_part_geometry : Callable[[P], G]
         Function to extract the geometry from a part.
-    subtract_geometries : Callable[[G, G], Iterable[G]]
-        Function to compute the subtraction of two geometries.
+    subtract_geometries : Callable[[G, Sequence[G]], Iterable[G]]
+        Function to compute the subtraction of multiple geometries from one geometry.
     make_part_from_geometry : Callable[[G, Color], P]
         Function to create a part from a geometry and a color.
     make_assembly_from_parts : Callable[[Sequence[P]], A]
@@ -53,7 +53,8 @@ def subtract_parts[A, P, G](
     >>> part1 = {'bounds': [0, 0, 3, 3], 'color': [1, 0, 0, 1]}
     >>> part2 = {'bounds': [1, 1, 2, 2], 'color': [0, 1, 0, 1]}
     ...
-    >>> def subtract_geoms(g1, g2):
+    >>> def subtract_geoms(g1, g2_list):
+    ...     g2 = g2_list[0]
     ...     if (g2[0] > g1[0] and g2[2] < g1[2]
     ...             and g2[1] > g1[1] and g2[3] < g1[3]):
     ...         return [
@@ -65,7 +66,7 @@ def subtract_parts[A, P, G](
     ...     return [g1]
     ...
     >>> result = subtract_parts(
-    ...     part1, part2,
+    ...     part1, [part2],
     ...     get_part_color=lambda p: p['color'],
     ...     get_part_geometry=lambda p: p['bounds'],
     ...     subtract_geometries=subtract_geoms,
@@ -85,7 +86,8 @@ def subtract_parts[A, P, G](
     True
     """
     subtracted_geometries = subtract_geometries(
-        get_part_geometry(to_be_subtracted), get_part_geometry(to_subtract)
+        get_part_geometry(to_be_subtracted),
+        [get_part_geometry(p) for p in to_subtract],
     )
     subtracted_parts = [
         make_part_from_geometry(s, get_part_color(to_be_subtracted))

@@ -2,19 +2,13 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Sequence
 
-import numpy as np
-from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def exclude_assemblies[A, P](
     assemblies: Sequence[A],
     get_assembly_parts: Callable[[A], Iterable[P]],
-    get_part_bounds: Callable[[P], NDArray[np.float64]],
     are_parts_intersecting: Callable[[P, P], bool],
-    subtract_parts: Callable[[P, P], A],
-    intersect_parts: Callable[[Sequence[P]], A],
+    subtract_parts: Callable[[P, Sequence[P]], A],
     unify_parts: Callable[[Sequence[P]], A],
     concat_parts: Callable[[Sequence[P]], A],
 ) -> A:
@@ -31,14 +25,10 @@ def exclude_assemblies[A, P](
         Sequence of assembly objects to process.
     get_assembly_parts : Callable[[A], Iterable[P]]
         Function that extracts parts from an assembly.
-    get_part_bounds : Callable[[P], NDArray[np.float64]]
-        Function to extract the bounding box of a part.
     are_parts_intersecting : Callable[[P, P], bool]
         Function to determine if two parts intersect.
-    subtract_parts : Callable[[P, P], A]
-        Function to subtract one part from another, returning an assembly.
-    intersect_parts : Callable[[Sequence[P]], A]
-        Function to compute the intersection of a group of parts.
+    subtract_parts : Callable[[P, Sequence[P]], A]
+        Function to subtract multiple parts from one part, returning an assembly.
     unify_parts : Callable[[Sequence[P]], A]
         Function to unify (union) overlapping parts within an assembly.
     concat_parts : Callable[[Sequence[P]], A]
@@ -74,21 +64,19 @@ def exclude_assemblies[A, P](
     ...         ]
     ...     return [g1]
     ...
-    >>> def subtract_parts(p1, p2):
+    >>> def subtract_parts(p1, p2_list):
     ...     geometries = subtract_geometries(
-    ...         p1['bounds'], p2['bounds']
+    ...         p1['bounds'], p2_list[0]['bounds']
     ...     )
     ...     return [{'bounds': g} for g in geometries]
     ...
     >>> result = exclude_assemblies(
     ...     assemblies,
     ...     get_assembly_parts=lambda a: a,
-    ...     get_part_bounds=lambda p: p['bounds'],
     ...     are_parts_intersecting=are_intersecting,
     ...     subtract_parts=subtract_parts,
-    ...     intersect_parts= lambda parts: parts,
-    ...     unify_parts= lambda parts: parts,
-    ...     concat_parts= lambda parts: parts
+    ...     unify_parts=lambda parts: parts,
+    ...     concat_parts=lambda parts: parts
     ... )
     >>> result == [
     ...     {'bounds': [0, 0, 2, 2]},
@@ -110,22 +98,16 @@ def exclude_assemblies[A, P](
                     to_be_subtracted=result,
                     to_subtract=assembly,
                     get_assembly_parts=get_assembly_parts,
-                    get_part_bounds=get_part_bounds,
                     are_parts_intersecting=are_parts_intersecting,
                     subtract_parts=subtract_parts,
-                    intersect_parts=intersect_parts,
-                    unify_parts=unify_parts,
                     concat_parts=concat_parts,
                 ),
                 subtract_assemblies(
                     to_be_subtracted=assembly,
                     to_subtract=result,
                     get_assembly_parts=get_assembly_parts,
-                    get_part_bounds=get_part_bounds,
                     are_parts_intersecting=are_parts_intersecting,
                     subtract_parts=subtract_parts,
-                    intersect_parts=intersect_parts,
-                    unify_parts=unify_parts,
                     concat_parts=concat_parts,
                 ),
             ],

@@ -109,12 +109,48 @@ def unify_parts[A, P, G](
     ...     {'bounds': [5, 5, 6, 6], 'color': [0.0, 0.0, 1.0, 1.0]}
     ... ]
     True
+
+    When all parts share the same color, intersection detection is skipped entirely:
+
+    >>> same_color_parts = [
+    ...     {'bounds': [0, 0, 2, 2], 'color': [1, 0, 0, 1], 'magnitude': 1},
+    ...     {'bounds': [1, 1, 3, 3], 'color': [1, 0, 0, 1], 'magnitude': 2},
+    ... ]
+    ...
+    >>> def are_intersecting_raises(p1, p2):
+    ...     raise RuntimeError("should not be called")
+    ...
+    >>> result = unify_parts(
+    ...     same_color_parts,
+    ...     get_part_color=lambda p: p['color'],
+    ...     get_part_magnitude=lambda p: p['magnitude'],
+    ...     get_part_bounds=lambda p: p['bounds'],
+    ...     are_parts_intersecting=are_intersecting_raises,
+    ...     get_part_geometry=lambda p: p['bounds'],
+    ...     unify_geometries=unify_geometries,
+    ...     make_part_from_geometry=lambda geometry, color: {
+    ...         'bounds': geometry,
+    ...         'color': [round(float(v), 2) for v in color]
+    ...     },
+    ...     make_assembly_from_parts=lambda parts: parts
+    ... )
+    ...
+    >>> result
+    [{'bounds': [0, 0, 3, 3], 'color': [1.0, 0.0, 0.0, 1.0]}]
     """
 
     from scadpy.core.component.utils import (
         blend_component_colors,
         get_intersecting_component_index_groups,
     )
+
+    colors = [get_part_color(p) for p in parts]
+    if all(list(c) == list(colors[0]) for c in colors[1:]):
+        geometries = [get_part_geometry(p) for p in parts]
+        unified_geometries = unify_geometries(geometries)
+        return make_assembly_from_parts([
+            make_part_from_geometry(g, colors[0]) for g in unified_geometries
+        ])
 
     intersecting_part_index_groups: list[list[int]] = (
         get_intersecting_component_index_groups(

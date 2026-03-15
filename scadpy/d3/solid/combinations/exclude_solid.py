@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def exclude_solid(solids: Sequence[Solid]) -> Solid:
     """Compute the symmetric difference (XOR) of a sequence of solids.
 
@@ -29,8 +27,6 @@ def exclude_solid(solids: Sequence[Solid]) -> Solid:
     from scadpy import (
         Solid,
         are_solid_parts_intersecting,
-        get_solid_part_bounds,
-        intersect_solid_parts,
         subtract_solid_parts,
         unify_solid_parts,
     )
@@ -39,15 +35,10 @@ def exclude_solid(solids: Sequence[Solid]) -> Solid:
     return exclude_assemblies(
         assemblies=solids,
         get_assembly_parts=lambda assembly: assembly._parts,
-        get_part_bounds=get_solid_part_bounds,
         are_parts_intersecting=are_solid_parts_intersecting,
-        subtract_parts=lambda part_base, part_cutter: subtract_solid_parts(
+        subtract_parts=lambda part_base, parts_cutter: subtract_solid_parts(
             to_be_subtracted=part_base,
-            to_subtract=part_cutter,
-            make_assembly_from_parts=Solid.from_parts,
-        ),
-        intersect_parts=lambda parts: intersect_solid_parts(
-            parts=parts,
+            to_subtract=parts_cutter,
             make_assembly_from_parts=Solid.from_parts,
         ),
         unify_parts=lambda parts: unify_solid_parts(

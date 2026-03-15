@@ -2,21 +2,14 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Sequence
 
-import numpy as np
-from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def subtract_assemblies[A, P](
     to_be_subtracted: A,
     to_subtract: A,
     get_assembly_parts: Callable[[A], Iterable[P]],
-    get_part_bounds: Callable[[P], NDArray[np.float64]],
     are_parts_intersecting: Callable[[P, P], bool],
-    subtract_parts: Callable[[P, P], A],
-    intersect_parts: Callable[[Sequence[P]], A],
-    unify_parts: Callable[[Sequence[P]], A],
+    subtract_parts: Callable[[P, Sequence[P]], A],
     concat_parts: Callable[[Sequence[P]], A],
 ) -> A:
     """
@@ -34,16 +27,10 @@ def subtract_assemblies[A, P](
         The assembly whose parts will be subtracted.
     get_assembly_parts : Callable[[A], Iterable[P]]
         Function that extracts parts from an assembly.
-    get_part_bounds : Callable[[P], NDArray[np.float64]]
-        Function to extract the bounding box of a part.
     are_parts_intersecting : Callable[[P, P], bool]
         Function to determine if two parts intersect.
-    subtract_parts : Callable[[P, P], A]
-        Function to subtract one part from another, returning an assembly.
-    intersect_parts : Callable[[Sequence[P]], A]
-        Function to compute the intersection of a group of parts.
-    unify_parts : Callable[[Sequence[P]], A]
-        Function to unify (union) overlapping parts within an assembly.
+    subtract_parts : Callable[[P, Sequence[P]], A]
+        Function to subtract multiple parts from one part, returning an assembly.
     concat_parts : Callable[[Sequence[P]], A]
         Function to concatenate a sequence of parts into a new assembly.
 
@@ -75,20 +62,17 @@ def subtract_assemblies[A, P](
     ...         ]
     ...     return [g1]
     ...
-    >>> def subtract_parts(p1, p2):
+    >>> def subtract_parts(p1, p2_list):
     ...     geometries = subtract_geometries(
-    ...         p1['bounds'], p2['bounds']
+    ...         p1['bounds'], p2_list[0]['bounds']
     ...     )
     ...     return [{'bounds': g} for g in geometries]
     ...
     >>> result = subtract_assemblies(
     ...     assembly1, assembly2,
     ...     get_assembly_parts=lambda a: a,
-    ...     get_part_bounds=lambda p: p['bounds'],
     ...     are_parts_intersecting=are_intersecting,
     ...     subtract_parts=subtract_parts,
-    ...     intersect_parts=lambda p: p,
-    ...     unify_parts=lambda p: p,
     ...     concat_parts=lambda p: p
     ... )
     >>> result == [
@@ -100,20 +84,10 @@ def subtract_assemblies[A, P](
     True
     """
 
-    from scadpy.core.assembly import (
-        concat_assemblies,
-        intersect_assemblies,
-        unify_assemblies,
-    )
-
-    unified_to_subtract = unify_assemblies(
-        [to_subtract],
-        get_assembly_parts=get_assembly_parts,
-        unify_parts=unify_parts,
-    )
+    from scadpy.core.assembly import concat_assemblies
 
     parts_to_be_subtracted = get_assembly_parts(to_be_subtracted)
-    parts_to_subtract = get_assembly_parts(unified_to_subtract)
+    parts_to_subtract = list(get_assembly_parts(to_subtract))
 
     subtracted_assemblies: list[A] = []
     for part_to_be_subtracted in parts_to_be_subtracted:
@@ -126,23 +100,9 @@ def subtract_assemblies[A, P](
             subtracted_assemblies.append(concat_parts([part_to_be_subtracted]))
             continue
 
-        partially_subtracted_assemblies: list[A] = []
-        for part_to_subtract in intersecting_parts_to_subtract:
-            partially_subtracted_assemblies.append(
-                subtract_parts(part_to_be_subtracted, part_to_subtract)
-            )
-
-        subtracted_assemblies += [
-            intersect_assemblies(
-                assemblies=partially_subtracted_assemblies,
-                get_assembly_parts=get_assembly_parts,
-                get_part_bounds=get_part_bounds,
-                are_parts_intersecting=are_parts_intersecting,
-                intersect_parts=intersect_parts,
-                unify_parts=unify_parts,
-                concat_parts=concat_parts,
-            )
-        ]
+        subtracted_assemblies.append(
+            subtract_parts(part_to_be_subtracted, intersecting_parts_to_subtract)
+        )
 
     return concat_assemblies(
         assemblies=subtracted_assemblies,

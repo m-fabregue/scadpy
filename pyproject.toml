@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = ["triangle == 20250106", "PySide6 ~= 6.10", "typeguard ~= 4.4", "trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6"]
+dependencies = ["triangle == 20250106", "PySide6 ~= 6.10", "typeguard ~= 4.4", "trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6", "python-fcl ~= 0.7"]
 
 [project.optional-dependencies]
 dev = [
@@ -45,7 +45,7 @@ extensions = [
 ]
 
 [tool.skills]
-output = "AI_SKILLS.json"
+output = "docs/build/AI_SKILLS.json"
 sources = [
     "scadpy/d2/shape/primitives/",
     "scadpy/d2/shape/types/shape.py",

@@ -1,16 +1,15 @@
 from __future__ import annotations
 
+import numpy as np
 from typing import TYPE_CHECKING
 
 from trimesh import Trimesh
-from trimesh.boolean import boolean_manifold  # pyright: ignore[reportUnknownVariableType]
-from typeguard import typechecked
+from trimesh.collision import CollisionManager
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
 
 
-@typechecked
 def are_solid_parts_intersecting(part1: Part[Trimesh], part2: Part[Trimesh]) -> bool:
     """Return whether two solid parts intersect geometrically.
 
@@ -41,11 +40,12 @@ def are_solid_parts_intersecting(part1: Part[Trimesh], part2: Part[Trimesh]) -> 
     ... )
     False
     """
-    return bool(
-        boolean_manifold(  # pyright: ignore[reportAny]
-            [part1.geometry, part2.geometry],
-            operation="intersection",
-            check_volume=False,
-        ).volume
-        != 0
-    )
+    # AABB broad-phase: reject non-overlapping pairs without building FCL objects.
+    b1 = part1.geometry.bounds  # [[min_x, min_y, min_z], [max_x, max_y, max_z]]
+    b2 = part2.geometry.bounds
+    if np.any(b1[1] <= b2[0]) or np.any(b2[1] <= b1[0]):
+        return False
+
+    manager = CollisionManager()
+    manager.add_object("a", part1.geometry)  # pyright: ignore[reportUnknownMemberType]
+    return bool(manager.in_collision_single(part2.geometry))  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
