@@ -8,21 +8,21 @@ from typing import TYPE_CHECKING, Any, Self, final
 from scadpy.color.constants import BLACK, WHITE
 
 if TYPE_CHECKING:
+    # Lazy: IPython (~0.6s) is heavy; used only as a return type annotation here.
+    from IPython.core.display import HTML
+
+    from scadpy import TopologyFilter
     from scadpy.color import Color
     from scadpy.core.part import Part
-    from scadpy import TopologyFilter
 
 import numpy as np
-from IPython.core.display import HTML
 from numpy.typing import NDArray
 from trimesh import Trimesh
-from typeguard import typechecked
 
 from scadpy.core.assembly import Assembly
 
 
 @final
-@typechecked
 class Solid(Assembly[Trimesh]):
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # pyright: ignore[reportExplicitAny, reportAny]
         super().__init__(*args, **kwargs)
@@ -111,6 +111,40 @@ class Solid(Assembly[Trimesh]):
         from scadpy.d3.solid import get_solid_bounds
 
         return get_solid_bounds(self)
+
+    @cached_property
+    def bounding_box(self: Self) -> Solid:
+        """Return the axis-aligned bounding box of the solid as a cuboid.
+
+        See :func:`get_solid_bounding_box` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(2).bounding_box.bounds
+        array([-1., -1., -1.,  1.,  1.,  1.])
+        """
+        from scadpy import get_solid_bounding_box
+
+        return get_solid_bounding_box(self)
+
+    @cached_property
+    def centroid(self: Self) -> NDArray[np.float64]:
+        """Return the geometric centroid of the solid, weighted by part volume.
+
+        See :func:`get_solid_centroid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid
+
+        >>> cuboid(2).centroid
+        array([0., 0., 0.])
+        """
+        from scadpy import get_solid_centroid
+
+        return get_solid_centroid(self)
 
     ##############
     # topologies #
@@ -312,7 +346,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy.d3.solid import translate_solid
 
-        return translate_solid(solid=self, translation=translation, vertex_filter=vertex_filter)
+        return translate_solid(
+            solid=self, translation=translation, vertex_filter=vertex_filter
+        )
 
     def scale(
         self: Self,
@@ -337,7 +373,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy.d3.solid import scale_solid
 
-        return scale_solid(solid=self, scale=scale, pivot=pivot, vertex_filter=vertex_filter)
+        return scale_solid(
+            solid=self, scale=scale, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def resize(
         self: Self,
@@ -380,7 +418,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy.d3.solid import resize_solid
 
-        return resize_solid(solid=self, size=size, auto=auto, pivot=pivot, vertex_filter=vertex_filter)
+        return resize_solid(
+            solid=self, size=size, auto=auto, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def mirror(
         self: Self,
@@ -429,7 +469,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy.d3.solid import pull_solid
 
-        return pull_solid(solid=self, distance=distance, pivot=pivot, vertex_filter=vertex_filter)
+        return pull_solid(
+            solid=self, distance=distance, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def push(
         self: Self,
@@ -454,7 +496,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy.d3.solid import push_solid
 
-        return push_solid(solid=self, distance=distance, pivot=pivot, vertex_filter=vertex_filter)
+        return push_solid(
+            solid=self, distance=distance, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def rotate(
         self: Self,
@@ -480,7 +524,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy.d3.solid import rotate_solid
 
-        return rotate_solid(solid=self, angle=angle, axis=axis, pivot=pivot, vertex_filter=vertex_filter)
+        return rotate_solid(
+            solid=self, angle=angle, axis=axis, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def color(self: Self, color: Color) -> Solid:
         """Set the color of all parts in this solid.
@@ -526,9 +572,7 @@ class Solid(Assembly[Trimesh]):
 
         return convexify_solid(solid=self, part_filter=part_filter)
 
-    def recoordinate(
-        self: Self, vertex_coordinates: NDArray[np.float64]
-    ) -> Solid:
+    def recoordinate(self: Self, vertex_coordinates: NDArray[np.float64]) -> Solid:
         """Rebuild this solid with new vertex coordinates, preserving topology and colors.
 
         See :func:`recoordinate_solid` for parameter documentation.
@@ -547,6 +591,66 @@ class Solid(Assembly[Trimesh]):
         from scadpy.d3.solid import recoordinate_solid
 
         return recoordinate_solid(self, vertex_coordinates)
+
+    def linear_pattern(
+        self: Self,
+        counts: int | Sequence[int],
+        steps: NDArray[np.float64] | Sequence[NDArray[np.float64]],
+    ) -> Solid:
+        """Repeat this solid in a linear or grid pattern.
+
+        See :func:`linear_pattern_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import sphere, x, y, z
+
+        >>> sphere(1).linear_pattern(counts=4, steps=x(3))  # doctest: +SKIP
+
+        .. render-example::
+            :name: linear_pattern_solid_method
+            :example: sphere(1).linear_pattern(counts=4, steps=x(3))
+
+        >>> sphere(1).linear_pattern(counts=[3, 2], steps=[x(3), y(3)])  # doctest: +SKIP
+
+        .. render-example::
+            :name: linear_pattern_solid_method_2d
+            :example: sphere(1).linear_pattern(counts=[3, 2], steps=[x(3), y(3)])
+
+        >>> sphere(1).linear_pattern(counts=[3, 2, 4], steps=[x(3), y(3), z(4)])  # doctest: +SKIP
+
+        .. render-example::
+            :name: linear_pattern_solid_method_3d
+            :example: sphere(1).linear_pattern(counts=[3, 2, 4], steps=[x(3), y(3), z(4)])
+        """
+        from scadpy import linear_pattern_solid
+
+        return linear_pattern_solid(solid=self, counts=counts, steps=steps)
+
+    def radial_pattern(
+        self: Self,
+        count: int,
+        axis: float | Iterable[float],
+        angle: float = 360,
+        pivot: float | Iterable[float] = 0,
+    ) -> Solid:
+        """Repeat this solid in a radial pattern around an axis.
+
+        See :func:`radial_pattern_solid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import sphere, x
+
+        >>> sphere(1).translate(x(3)).radial_pattern(count=6, axis=z())  # doctest: +SKIP
+
+        .. render-example::
+            :name: radial_pattern_solid_method
+            :example: sphere(1).translate(x(3)).radial_pattern(count=6, axis=z())
+        """
+        from scadpy import radial_pattern_solid
+
+        return radial_pattern_solid(solid=self, count=count, angle=angle, axis=axis, pivot=pivot)
 
     #############
     # importers #

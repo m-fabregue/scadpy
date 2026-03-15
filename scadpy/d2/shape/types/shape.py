@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any, Self, final
 import numpy as np
 from numpy.typing import NDArray
 from shapely.geometry.polygon import Polygon
-from typeguard import typechecked
 
 from scadpy.color.constants import BLACK, WHITE
 from scadpy.core.assembly import Assembly
@@ -20,7 +19,6 @@ if TYPE_CHECKING:
 
 
 @final
-@typechecked
 class Shape(Assembly[Polygon]):
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # pyright: ignore[reportExplicitAny, reportAny]
         super().__init__(*args, **kwargs)
@@ -129,6 +127,44 @@ class Shape(Assembly[Polygon]):
         from scadpy import get_shape_bounds
 
         return get_shape_bounds(self)
+
+    @cached_property
+    def bounding_box(self: Self) -> Shape:
+        """Return the axis-aligned bounding box of the shape as a rectangle.
+
+        See :func:`get_shape_bounding_box` for parameter documentation.
+
+        Examples
+        --------
+        >>> from shapely.geometry import Polygon
+        >>> from scadpy import Shape
+
+        >>> polygon = Polygon([(0, 0), (2, 0), (2, 2), (0, 2)])
+        >>> Shape.from_geometry(polygon).bounding_box.bounds
+        array([0., 0., 2., 2.])
+        """
+        from scadpy import get_shape_bounding_box
+
+        return get_shape_bounding_box(self)
+
+    @cached_property
+    def centroid(self: Self) -> NDArray[np.float64]:
+        """Return the geometric centroid of the shape, weighted by part area.
+
+        See :func:`get_shape_centroid` for parameter documentation.
+
+        Examples
+        --------
+        >>> from shapely.geometry import Polygon
+        >>> from scadpy import Shape
+
+        >>> polygon = Polygon([(0, 0), (2, 0), (2, 2), (0, 2)])
+        >>> Shape.from_geometry(polygon).centroid
+        array([1., 1.])
+        """
+        from scadpy import get_shape_centroid
+
+        return get_shape_centroid(self)
 
     ################
     # combinations #
@@ -809,7 +845,9 @@ class Shape(Assembly[Polygon]):
         """
         from scadpy import scale_shape
 
-        return scale_shape(shape=self, scale=scale, pivot=pivot, vertex_filter=vertex_filter)
+        return scale_shape(
+            shape=self, scale=scale, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def resize(
         self: Self,
@@ -852,7 +890,9 @@ class Shape(Assembly[Polygon]):
         """
         from scadpy import resize_shape
 
-        return resize_shape(shape=self, size=size, auto=auto, pivot=pivot, vertex_filter=vertex_filter)
+        return resize_shape(
+            shape=self, size=size, auto=auto, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def mirror(
         self: Self,
@@ -1409,7 +1449,9 @@ class Shape(Assembly[Polygon]):
         """
         from scadpy import rotate_shape
 
-        return rotate_shape(shape=self, angle=angle, pivot=pivot, vertex_filter=vertex_filter)
+        return rotate_shape(
+            shape=self, angle=angle, pivot=pivot, vertex_filter=vertex_filter
+        )
 
     def shrink(self: Self, distance: float) -> Shape:
         """Shrink this shape inward by a given distance.
@@ -1438,6 +1480,59 @@ class Shape(Assembly[Polygon]):
         from scadpy import shrink_shape
 
         return shrink_shape(shape=self, distance=distance)
+
+    def linear_pattern(
+        self: Self,
+        counts: int | Sequence[int],
+        steps: NDArray[np.float64] | Sequence[NDArray[np.float64]],
+    ) -> Shape:
+        """Repeat this shape in a linear or grid pattern.
+
+        See :func:`linear_pattern_shape` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import circle, x, y
+
+        >>> circle(1).linear_pattern(counts=4, steps=x(3))  # doctest: +SKIP
+
+        .. render-example::
+            :name: linear_pattern_shape_method
+            :example: circle(1).linear_pattern(counts=4, steps=x(3))
+
+        >>> circle(1).linear_pattern(counts=[3, 2], steps=[x(3), y(3)])  # doctest: +SKIP
+
+        .. render-example::
+            :name: linear_pattern_shape_method_2d
+            :example: circle(1).linear_pattern(counts=[3, 2], steps=[x(3), y(3)])
+        """
+        from scadpy import linear_pattern_shape
+
+        return linear_pattern_shape(shape=self, counts=counts, steps=steps)
+
+    def radial_pattern(
+        self: Self,
+        count: int,
+        angle: float = 360,
+        pivot: float | Iterable[float] = 0,
+    ) -> Shape:
+        """Repeat this shape in a radial pattern around the origin.
+
+        See :func:`radial_pattern_shape` for parameter documentation.
+
+        Examples
+        --------
+        >>> from scadpy import circle
+
+        >>> circle(1).translate([3, 0]).radial_pattern(count=6)  # doctest: +SKIP
+
+        .. render-example::
+            :name: radial_pattern_shape_method
+            :example: circle(1).translate([3, 0]).radial_pattern(count=6)
+        """
+        from scadpy import radial_pattern_shape
+
+        return radial_pattern_shape(shape=self, count=count, angle=angle, pivot=pivot)
 
     #############
     # exporters #

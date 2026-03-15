@@ -94,8 +94,7 @@ Quick examples
    >>> bearing = race.radial_extrude(axis=y(), pivot=x(RACE_RADIUS)).color(GRAY)
 
    >>> ball = sphere(BALL_RADIUS).color(ORANGE)
-   >>> for angle in np.linspace(0, 360, NB_BALLS, endpoint=False):
-   ...     bearing += ball.rotate(angle, axis=y(), pivot=x(RACE_RADIUS))
+   >>> bearing += ball.radial_pattern(count=NB_BALLS, axis=y(), pivot=x(RACE_RADIUS))
 
    >>> bearing.to_screen() # doctest: +SKIP
 
@@ -200,16 +199,24 @@ Cheat sheet
    s.fillet(size=0.8)               # vertex_filter=None, segment_count=32, epsilon=1e-8
    s.grow(distance=0.5)             # part_filter=None
    s.linear_cut(axis=x())          # pivot=0
+   s.linear_pattern(counts=4, steps=x(3))        # counts=[nx, ny], steps=[sx, sy]
    s.linear_slice(thickness=2, direction=x())  # pivot=0, part_filter=None
    s.mirror(normal=[1, 0])          # pivot=0
    s.pull(distance=1.0)             # pivot=0, vertex_filter=None
    s.push(distance=1.0)             # pivot=0, vertex_filter=None
+   s.radial_pattern(count=6)        # angle=360, pivot=0
    s.radial_slice(start=0, end=180) # pivot=0, part_filter=None
    s.resize(size=[6, None])         # auto=False, pivot=None, vertex_filter=None
    s.rotate(angle=30)               # pivot=0, vertex_filter=None
    s.scale(scale=[2, 0.5])          # pivot=0, vertex_filter=None
    s.shrink(distance=0.5)           # part_filter=None
    s.translate(translation=[2, 1])  # vertex_filter=None
+
+   # features
+   s.bounds                         # [min_x, min_y, max_x, max_y]
+   s.bounding_box                   # → Shape (rectangle)
+   s.centroid                       # [cx, cy] — geometric centroid
+   s.is_empty                       # bool
 
    # topology — coordinates & attributes
    s.are_vertices_convex            # (n_vertices,)   — convexity mask
@@ -268,13 +275,21 @@ Cheat sheet
    # transforms
    a.color(color=RED)
    a.convexify()                    # part_filter=None
+   a.linear_pattern(counts=4, steps=x(3))        # counts=[nx, ny, nz], steps=[sx, sy, sz]
    a.mirror(normal=[1, 0, 0])       # pivot=0
    a.pull(distance=1.0)             # pivot=0, vertex_filter=None
    a.push(distance=1.0)             # pivot=0, vertex_filter=None
+   a.radial_pattern(count=6, axis=z())            # angle=360, pivot=0
    a.resize(size=[6, None, None])   # auto=False, pivot=None, vertex_filter=None
    a.rotate(angle=30, axis=z())    # pivot=0, vertex_filter=None
    a.scale(scale=[2, 1, 0.5])       # pivot=0, vertex_filter=None
    a.translate(translation=[1, 0, 0])  # vertex_filter=None
+
+   # features
+   a.bounds                         # [min_x, min_y, min_z, max_x, max_y, max_z]
+   a.bounding_box                   # → Solid (cuboid)
+   a.centroid                       # [cx, cy, cz] — geometric centroid
+   a.is_empty                       # bool
 
    # topology — coordinates & bridges (*_to_*)
    a.triangle_to_vertex    # triangle → [v0, v1, v2]

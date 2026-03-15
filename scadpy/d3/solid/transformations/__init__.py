@@ -1,7 +1,9 @@
 __all__ = [
     "color_solid",
     "convexify_solid",
+    "linear_pattern_solid",
     "mirror_solid",
+    "radial_pattern_solid",
     "pull_solid",
     "push_solid",
     "recoordinate_solid",
@@ -13,7 +15,9 @@ __all__ = [
 
 from .color_solid import color_solid
 from .convexify_solid import convexify_solid
+from .linear_pattern_solid import linear_pattern_solid
 from .mirror_solid import mirror_solid
+from .radial_pattern_solid import radial_pattern_solid
 from .pull_solid import pull_solid
 from .push_solid import push_solid
 from .recoordinate_solid import recoordinate_solid

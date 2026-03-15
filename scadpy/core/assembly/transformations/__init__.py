@@ -1,5 +1,7 @@
 __all__ = [
     "color_assembly",
+    "linear_pattern_assembly",
+    "radial_pattern_assembly",
     "mirror_vertex_coordinates",
     "pull_vertex_coordinates",
     "push_vertex_coordinates",
@@ -10,6 +12,8 @@ __all__ = [
 ]
 
 from .color_assembly import color_assembly
+from .linear_pattern_assembly import linear_pattern_assembly
+from .radial_pattern_assembly import radial_pattern_assembly
 from .mirror_vertex_coordinates import mirror_vertex_coordinates
 from .pull_vertex_coordinates import pull_vertex_coordinates
 from .push_vertex_coordinates import push_vertex_coordinates
