@@ -3,18 +3,14 @@ from __future__ import annotations
 from io import StringIO
 from typing import TYPE_CHECKING
 
-import matplotlib.pyplot as plt
-from IPython.core.display import HTML
-from shapely.plotting import plot_polygon
-from typeguard import typechecked
-
 from scadpy.color.constants import BLACK, WHITE
 
 if TYPE_CHECKING:
+    from IPython.core.display import HTML
+
     from scadpy import Color, Shape
 
 
-@typechecked
 def map_shape_to_html(
     shape: Shape,
     background_color: Color = WHITE,
@@ -42,6 +38,12 @@ def map_shape_to_html(
     HTML
         An IPython HTML object containing the SVG rendering of the shape.
     """
+    # Lazy imports: matplotlib (~1s) and IPython (~0.6s) are heavy at module level;
+    # importing here defers the cost until the function is actually called.
+    import matplotlib.pyplot as plt
+    from IPython.core.display import HTML
+    from shapely.plotting import plot_polygon
+
     foreground_color_hex = "#{:02X}{:02X}{:02X}".format(
         *(int(x * 255) for x in foreground_color[:-1])
     )

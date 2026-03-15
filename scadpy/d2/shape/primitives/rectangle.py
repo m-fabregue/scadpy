@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def rectangle(size: Iterable[float]) -> Shape:
     """
     Create a rectangle centered at the origin.

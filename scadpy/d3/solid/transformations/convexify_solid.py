@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from trimesh import Trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid, TopologyFilter
 
 
-@typechecked
 def convexify_solid(
     solid: Solid, part_filter: TopologyFilter[Solid] | None = None
 ) -> Solid:

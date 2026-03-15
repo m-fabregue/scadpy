@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
-from IPython.core.display import HTML
-from typeguard import typechecked
+if TYPE_CHECKING:
+    # Lazy: IPython (~0.6s) is heavy; used only as a type annotation here
+    # (from __future__ import annotations makes all annotations strings at runtime).
+    from IPython.core.display import HTML
 
 
-@typechecked
 def map_component_to_html_file[Component](
     component: Component, path: str, to_html: Callable[[Component], HTML]
 ) -> int:

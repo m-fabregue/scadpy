@@ -1,9 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def x(n: float = 1) -> NDArray[np.float64]:
     """
     Creates a 3D vector along the X-axis.

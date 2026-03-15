@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape
 
 
-@typechecked
 def concat_shape(shapes: Sequence[Shape]) -> Shape:
     """Concatenate a sequence of shapes into a single shape without any boolean operation.
 

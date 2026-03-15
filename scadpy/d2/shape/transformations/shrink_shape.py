@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
 
-@typechecked
 def shrink_shape(
     shape: Shape, distance: float, part_filter: TopologyFilter[Shape] | None = None
 ) -> Shape:

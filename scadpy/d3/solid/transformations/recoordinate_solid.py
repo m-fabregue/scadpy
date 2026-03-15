@@ -5,13 +5,11 @@ from typing import TYPE_CHECKING
 import numpy as np
 from numpy.typing import NDArray
 from trimesh import Trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def recoordinate_solid(
     solid: Solid, vertex_coordinates: NDArray[np.float64]
 ) -> Solid:

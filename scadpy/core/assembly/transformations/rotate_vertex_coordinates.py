@@ -4,10 +4,8 @@ from collections.abc import Iterable
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def rotate_vertex_coordinates(
     vertex_coordinates: NDArray[np.float64],
     rotation_matrix: NDArray[np.float64],

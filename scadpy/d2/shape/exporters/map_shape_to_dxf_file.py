@@ -3,13 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape
 
 
-@typechecked
 def map_shape_to_dxf_file(shape: Shape, path: str | Path) -> int:
     """Save a shape as a DXF file.
 

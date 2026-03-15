@@ -2,10 +2,8 @@ from collections.abc import Iterable
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def resolve_vector_2d(
     values: float | Iterable[float],
     default_value: float,

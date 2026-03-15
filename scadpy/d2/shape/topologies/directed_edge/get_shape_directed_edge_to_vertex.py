@@ -4,14 +4,12 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
 
-@typechecked
 def get_shape_directed_edge_to_vertex(
     shape: Shape,
 ) -> NDArray[np.int64]:

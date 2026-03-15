@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def get_solid_part_colors(solid: Solid) -> NDArray[np.float64]:
     """For each part in the solid, return its RGBA color.
 

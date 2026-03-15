@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.assembly import Assembly
 
 
-@typechecked
 def get_assembly_part_colors[G](
     assembly: Assembly[G],
 ) -> NDArray[np.float64]:

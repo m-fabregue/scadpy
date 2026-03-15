@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def get_component_bounds(vertex_coordinates: NDArray[np.float64]) -> NDArray[np.float64]:
     """
     Compute the axis-aligned bounding box from vertex coordinates.

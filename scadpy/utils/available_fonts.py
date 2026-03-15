@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-from matplotlib import font_manager as fm
-
-
 def available_fonts() -> list[str]:
     """Return a sorted list of font family names available on the system.
 
@@ -27,6 +24,10 @@ def available_fonts() -> list[str]:
     >>> all(isinstance(f, str) for f in fonts)
     True
     """
+    # Lazy imports: matplotlib (~1s) is heavy at module level;
+    # importing here defers the cost until the function is actually called.
+    from matplotlib import font_manager as fm
+
     names: set[str] = set()
     for path in fm.findSystemFonts():  # type: ignore[reportUnknownMemberType]
         if not path.lower().endswith((".ttf", ".otf")):

@@ -5,14 +5,12 @@ from typing import TYPE_CHECKING
 
 from shapely import intersection_all  # pyright: ignore[reportUnknownVariableType]
 from shapely.geometry.polygon import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def intersect_shape_parts(
     parts: Sequence[Part[Polygon]],
     make_assembly_from_parts: Callable[[Sequence[Part[Polygon]]], Shape],

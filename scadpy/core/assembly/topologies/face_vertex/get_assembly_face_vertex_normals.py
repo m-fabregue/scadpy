@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def get_assembly_face_vertex_normals(
     vertex_neighborhoods: NDArray[np.int64],
     vertex_coordinates: NDArray[np.float64],

@@ -4,13 +4,11 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from trimesh import Trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Part, Solid
 
 
-@typechecked
 def map_parts_to_solid(
     parts: Sequence[Part[Trimesh]],
 ) -> Solid:

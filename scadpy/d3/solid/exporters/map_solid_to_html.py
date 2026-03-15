@@ -5,12 +5,11 @@ import uuid
 
 from typing import TYPE_CHECKING
 
-from IPython.core.display import HTML
-from typeguard import typechecked
-
 from scadpy.color.constants import BLACK, WHITE
 
 if TYPE_CHECKING:
+    from IPython.core.display import HTML
+
     from scadpy import Color, Solid
 
 
@@ -284,7 +283,6 @@ _TEMPLATE = """\
 """
 
 
-@typechecked
 def map_solid_to_html(
     solid: Solid,
     background_color: Color = WHITE,
@@ -306,6 +304,10 @@ def map_solid_to_html(
     HTML
         An IPython HTML object containing a self-contained Three.js viewer.
     """
+    # Lazy import: IPython (~0.6s) is heavy at module level;
+    # importing here defers the cost until the function is actually called.
+    from IPython.core.display import HTML
+
     background_color_hex = "#{:02X}{:02X}{:02X}".format(
         *(int(x * 255) for x in background_color[:-1])
     )

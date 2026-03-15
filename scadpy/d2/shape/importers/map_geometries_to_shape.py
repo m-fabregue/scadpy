@@ -4,13 +4,11 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def map_geometries_to_shape(geometries: Sequence[Polygon]) -> Shape:
     """Map a sequence of polygons to a shape.
 

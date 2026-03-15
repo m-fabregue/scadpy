@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def get_assembly_face_vertex_to_incoming_directed_edge(
     vertex_neighborhoods: NDArray[np.int64],
     directed_edge_to_vertex: NDArray[np.int64],

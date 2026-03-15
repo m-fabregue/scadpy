@@ -4,13 +4,11 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
 import numpy as np
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def cuboid(size: float | Iterable[float]) -> Solid:
     """Create a box (rectangular cuboid) centered at the origin.
 

@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def get_solid_vertex_to_part(solid: Solid) -> NDArray[np.int64]:
     """For each vertex in the solid, return its part index.
 

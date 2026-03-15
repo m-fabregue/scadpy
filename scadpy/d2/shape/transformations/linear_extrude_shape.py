@@ -4,14 +4,12 @@ from typing import TYPE_CHECKING
 
 from trimesh import Trimesh
 from trimesh.creation import extrude_polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def linear_extrude_shape(shape: Shape, height: float) -> Solid:
     """
     Extrude a 2D shape along the Z axis into a 3D solid.

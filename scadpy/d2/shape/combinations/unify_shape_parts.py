@@ -5,14 +5,12 @@ from typing import TYPE_CHECKING
 
 from shapely.geometry.polygon import Polygon
 from shapely.ops import unary_union
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def unify_shape_parts(
     parts: Sequence[Part[Polygon]],
     make_assembly_from_parts: Callable[[Sequence[Part[Polygon]]], Shape],

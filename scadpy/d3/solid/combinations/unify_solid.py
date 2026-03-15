@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def unify_solid(solids: Sequence[Solid]) -> Solid:
     """Unite a sequence of solids into a single solid using boolean union.
 

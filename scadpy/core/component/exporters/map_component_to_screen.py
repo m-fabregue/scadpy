@@ -3,16 +3,14 @@ from __future__ import annotations
 import sys
 import tempfile
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 
-from IPython.core.display import HTML
-from PySide6.QtCore import QUrl
-from PySide6.QtWebEngineCore import QWebEngineSettings
-from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import QApplication
-from typeguard import typechecked
+if TYPE_CHECKING:
+    # Lazy: IPython (~0.6s) is heavy; used only as a type annotation here
+    # (from __future__ import annotations makes all annotations strings at runtime).
+    from IPython.core.display import HTML
 
 
-@typechecked
 def map_component_to_screen[Component](
     component: Component, to_html: Callable[[Component], HTML]
 ):
@@ -37,6 +35,13 @@ def map_component_to_screen[Component](
     ...     to_html=lambda c: HTML(f"<h1>{c}</h1>")
     ... )  # doctest: +SKIP
     """
+
+    # Lazy imports: PySide6 (~1s) is heavy at module level;
+    # importing here defers the cost until the function is actually called.
+    from PySide6.QtCore import QUrl
+    from PySide6.QtWebEngineCore import QWebEngineSettings
+    from PySide6.QtWebEngineWidgets import QWebEngineView
+    from PySide6.QtWidgets import QApplication
 
     html = str(to_html(component).data)
 

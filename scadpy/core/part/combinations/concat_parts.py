@@ -2,10 +2,8 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
-from typeguard import typechecked
 
 
-@typechecked
 def concat_parts[A, P](
     parts: Sequence[P],
     make_assembly_from_parts: Callable[[Sequence[P]], A],

@@ -5,13 +5,11 @@ from typing import TYPE_CHECKING
 import numpy as np
 from numpy.typing import NDArray
 from trimesh import Trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
 
 
-@typechecked
 def get_solid_part_bounds(part: Part[Trimesh]) -> NDArray[np.float64]:
     """Return the 3D bounding box of a solid part as [minx, miny, minz, maxx, maxy, maxz].
 

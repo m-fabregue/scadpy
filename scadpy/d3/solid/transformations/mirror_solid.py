@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def mirror_solid(
     solid: Solid,
     normal: float | Iterable[float],

@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def get_assembly_directed_edge_directions(
     directed_edge_to_vertex: NDArray[np.int64],
     vertex_coordinates: NDArray[np.float64],

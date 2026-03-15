@@ -5,13 +5,11 @@ from typing import TYPE_CHECKING
 import numpy as np
 from numpy.typing import NDArray
 from shapely.geometry.polygon import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
 
 
-@typechecked
 def get_shape_part_bounds(part: Part[Polygon]) -> NDArray[np.float64]:
     """Return the 2D bounding box of a shape part as [minx, miny, maxx, maxy].
 

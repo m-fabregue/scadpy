@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def intersect_solid(solids: Sequence[Solid]) -> Solid:
     """Compute the intersection of a sequence of solids.
 

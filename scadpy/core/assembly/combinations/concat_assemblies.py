@@ -2,10 +2,8 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Sequence
 
-from typeguard import typechecked
 
 
-@typechecked
 def concat_assemblies[A, P](
     assemblies: Iterable[A],
     get_assembly_parts: Callable[[A], Iterable[P]],

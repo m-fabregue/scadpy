@@ -3,13 +3,11 @@ from __future__ import annotations
 import random
 from typing import TYPE_CHECKING, cast
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.color import Color
 
 
-@typechecked
 def get_random_color() -> Color:
     from scadpy import color
 

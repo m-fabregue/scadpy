@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def get_solid_triangle_to_vertex(
     solid: Solid,
 ) -> NDArray[np.int64]:

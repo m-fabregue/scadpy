@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape
 
 
-@typechecked
 def intersect_shape(shapes: Sequence[Shape]) -> Shape:
     """Compute the intersection of a sequence of shapes.
 

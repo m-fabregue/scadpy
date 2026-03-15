@@ -4,10 +4,8 @@ from collections.abc import Callable, Iterable, Sequence
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def intersect_assemblies[A, P](
     assemblies: Sequence[A],
     get_assembly_parts: Callable[[A], Iterable[P]],

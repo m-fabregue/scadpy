@@ -7,13 +7,11 @@ from urllib.request import Request, urlopen
 
 from trimesh import load
 from trimesh.path import Path2D
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def map_dxf_to_shape(source: str | Path) -> Shape:
     """Load a 2D shape from a DXF file or URL.
 
@@ -33,6 +31,7 @@ def map_dxf_to_shape(source: str | Path) -> Shape:
         found in the DXF.
 
     """
+
     from scadpy import map_geometries_to_shape
 
     if isinstance(source, str) and source.startswith(("http://", "https://")):

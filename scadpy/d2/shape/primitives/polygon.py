@@ -4,13 +4,11 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def polygon(points: Iterable[Iterable[float]]) -> Shape:
     """
     Create a 2D polygon shape from a sequence of points.

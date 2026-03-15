@@ -3,12 +3,10 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 
 import numpy as np
-from typeguard import typechecked
 
 from scadpy.color import Color
 
 
-@typechecked
 def blend_component_colors[C](
     components: Sequence[C],
     get_component_color: Callable[[C], Color],

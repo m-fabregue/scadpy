@@ -6,13 +6,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from shapely.geometry.polygon import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
 
-@typechecked
 def radial_slice_shape(
     shape: Shape,
     start: float = 0,

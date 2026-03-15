@@ -4,14 +4,12 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
 import numpy as np
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
     from scadpy import TopologyFilter
 
 
-@typechecked
 def rotate_shape(
     shape: Shape,
     angle: float,

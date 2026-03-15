@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from trimesh import Trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def map_geometry_to_solid(geometry: Trimesh) -> Solid:
     """Map a single Trimesh geometry to a solid.
 

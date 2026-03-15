@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from shapely.geometry.polygon import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
 
 
-@typechecked
 def are_shape_parts_intersecting(
     part1: Part[Polygon],
     part2: Part[Polygon],

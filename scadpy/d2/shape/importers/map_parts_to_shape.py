@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 from shapely.geometry import Polygon
 from shapely.validation import make_valid
-from typeguard import typechecked
 
 from scadpy.d2.shape.types.utils import shapely_base_geometry_to_shapely_polygons
 
@@ -13,7 +12,6 @@ if TYPE_CHECKING:
     from scadpy import Part, Shape
 
 
-@typechecked
 def map_parts_to_shape(
     parts: Sequence[Part[Polygon]],
 ) -> Shape:

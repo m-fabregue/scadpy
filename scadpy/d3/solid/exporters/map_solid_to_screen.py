@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from scadpy.color.constants import BLACK, WHITE
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Color, Solid
 
 
-@typechecked
 def map_solid_to_screen(
     solid: Solid,
     background_color: Color = WHITE,

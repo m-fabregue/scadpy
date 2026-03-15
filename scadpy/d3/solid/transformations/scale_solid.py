@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid, TopologyFilter
 
 
-@typechecked
 def scale_solid(
     solid: Solid,
     scale: float | Iterable[float],

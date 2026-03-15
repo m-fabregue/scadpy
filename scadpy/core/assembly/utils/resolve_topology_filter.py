@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import TopologyFilter
 
 
-@typechecked
 def resolve_topology_filter[A](
     assembly: A,
     count: int,

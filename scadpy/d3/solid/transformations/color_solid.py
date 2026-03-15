@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Color, Solid
 
 
-@typechecked
 def color_solid(solid: Solid, color: Color) -> Solid:
     """Set the color of all parts in a solid.
 

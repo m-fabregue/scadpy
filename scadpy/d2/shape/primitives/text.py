@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from matplotlib import font_manager as fm
-from matplotlib.path import Path
-from matplotlib.textpath import TextPath
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
+    from matplotlib.path import Path
+
     from scadpy.d2.shape import Shape
 
 
@@ -103,6 +101,10 @@ def _path_to_contours(
     list[NDArray[np.float64]]
         List of contours, each of shape (n_points, 2).
     """
+    # Lazy imports: matplotlib (~1s) is heavy at module level;
+    # importing here defers the cost until the function is actually called.
+    from matplotlib.path import Path
+
     contours: list[NDArray[np.float64]] = []
     current: list[NDArray[np.float64]] = []
 
@@ -132,7 +134,6 @@ def _path_to_contours(
     return contours
 
 
-@typechecked
 def text(
     content: str,
     font: str | None = None,
@@ -176,6 +177,11 @@ def text(
         :example: text("ScadPy", font="DejaVu Sans", size=20)
     """
     from functools import reduce
+
+    # Lazy imports: matplotlib (~1s) is heavy at module level;
+    # importing here defers the cost until the function is actually called.
+    from matplotlib import font_manager as fm
+    from matplotlib.textpath import TextPath
 
     from scadpy.d2.shape.primitives import polygon
 

@@ -3,11 +3,9 @@ from typing import Iterable
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 from typing_extensions import cast
 
 
-@typechecked
 def resolve_vector(
     values: float | Iterable[float], default_value: float, length: int
 ) -> NDArray[np.float64]:

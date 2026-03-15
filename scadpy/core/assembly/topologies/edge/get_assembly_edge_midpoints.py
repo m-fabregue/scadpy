@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def get_assembly_edge_midpoints(
     edge_to_vertex: NDArray[np.int64],
     vertex_coordinates: NDArray[np.float64],

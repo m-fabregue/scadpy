@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from trimesh.creation import icosphere
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def sphere(radius: float, subdivision_count: int = 4) -> Solid:
     """Create a sphere approximated by an icosphere mesh.
 

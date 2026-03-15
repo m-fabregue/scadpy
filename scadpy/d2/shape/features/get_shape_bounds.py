@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape
 
 
-@typechecked
 def get_shape_bounds(shape: Shape) -> NDArray[np.float64]:
     """
     Return the axis-aligned bounding box of the shape.

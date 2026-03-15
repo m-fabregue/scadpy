@@ -4,13 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
 
-@typechecked
 def chamfer_shape(
     shape: Shape,
     size: float | np.ndarray,

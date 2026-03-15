@@ -5,10 +5,8 @@ from collections.abc import Callable, Sequence
 import numpy as np
 from numpy.typing import NDArray
 from rtree import index as rtree_index
-from typeguard import typechecked
 
 
-@typechecked
 def get_intersecting_component_index_groups[C](
     components: Sequence[C],
     get_component_bounds: Callable[[C], NDArray[np.float64]],

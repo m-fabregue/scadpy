@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def map_geometry_to_shape(geometry: Polygon) -> Shape:
     """Map a single polygon to a shape.
 

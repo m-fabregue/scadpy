@@ -5,14 +5,12 @@ from typing import TYPE_CHECKING
 
 from trimesh import Trimesh
 from trimesh.boolean import boolean_manifold  # pyright: ignore[reportUnknownVariableType]
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def unify_solid_parts(
     parts: Sequence[Part[Trimesh]],
     make_assembly_from_parts: Callable[[Sequence[Part[Trimesh]]], Solid],

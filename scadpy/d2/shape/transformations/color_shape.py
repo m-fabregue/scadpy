@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Color, Shape
 
 
-@typechecked
 def color_shape(shape: Shape, color: Color) -> Shape:
     """Set the color of all parts in a shape.
 

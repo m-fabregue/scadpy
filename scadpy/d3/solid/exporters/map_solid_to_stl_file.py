@@ -4,13 +4,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Solid
 
 
-@typechecked
 def map_solid_to_stl_file(solid: Solid, path: str | Path) -> int:
     """Export a solid to an STL file.
 
@@ -30,6 +28,7 @@ def map_solid_to_stl_file(solid: Solid, path: str | Path) -> int:
     int
         The number of bytes written.
     """
+
     meshes = [p.geometry for p in solid._parts if len(p.geometry.faces) > 0]
     if not meshes:
         data = b""

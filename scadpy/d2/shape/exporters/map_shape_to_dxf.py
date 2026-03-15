@@ -5,13 +5,11 @@ from typing import TYPE_CHECKING
 import trimesh
 from shapely.geometry import MultiPolygon
 from trimesh.path.exchange.dxf import export_dxf
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape
 
 
-@typechecked
 def map_shape_to_dxf(shape: Shape) -> str:
     """Export a shape to a DXF string.
 
@@ -29,6 +27,7 @@ def map_shape_to_dxf(shape: Shape) -> str:
         A DXF document as a string.
 
     """
+
     geometries = [part.geometry for part in shape._parts]
     if not geometries:
         return ""

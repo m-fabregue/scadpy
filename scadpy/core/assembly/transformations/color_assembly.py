@@ -3,14 +3,12 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.color import Color
     from scadpy.core.part import Part
 
 
-@typechecked
 def color_assembly[A, G](
     assembly: A,
     color: Color,

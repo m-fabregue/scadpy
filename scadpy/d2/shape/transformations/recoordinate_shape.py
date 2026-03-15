@@ -5,13 +5,11 @@ from typing import TYPE_CHECKING
 import numpy as np
 from numpy.typing import NDArray
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
 
 
-@typechecked
 def recoordinate_shape(
     shape: Shape, vertex_coordinates: NDArray[np.float64]
 ) -> Shape:

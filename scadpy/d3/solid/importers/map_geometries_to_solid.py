@@ -4,13 +4,11 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from trimesh import Trimesh
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def map_geometries_to_solid(geometries: Sequence[Trimesh]) -> Solid:
     """Map a sequence of Trimesh geometries to a solid.
 

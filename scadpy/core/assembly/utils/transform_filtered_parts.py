@@ -4,13 +4,11 @@ from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING
 
 import numpy as np
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Part, TopologyFilter
 
 
-@typechecked
 def transform_filtered_parts[A, G](
     assembly: A,
     parts: Sequence[Part[G]],

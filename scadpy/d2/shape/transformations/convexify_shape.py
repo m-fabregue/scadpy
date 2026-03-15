@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, cast
 
 from shapely.geometry import MultiPolygon, Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
 
-@typechecked
 def convexify_shape(
     shape: Shape, part_filter: TopologyFilter[Shape] | None = None
 ) -> Shape:

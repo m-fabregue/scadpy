@@ -4,10 +4,8 @@ from collections.abc import Iterable
 
 import numpy as np
 from numpy.typing import NDArray
-from typeguard import typechecked
 
 
-@typechecked
 def mirror_vertex_coordinates(
     vertex_coordinates: NDArray[np.float64],
     normal: float | Iterable[float],

@@ -1,10 +1,8 @@
 from shapely.geometry import MultiPolygon, Polygon
 from shapely.geometry.base import BaseGeometry
 from shapely.geometry.polygon import orient
-from typeguard import typechecked
 
 
-@typechecked
 def shapely_base_geometry_to_shapely_polygons(
     base_geometry: BaseGeometry,
 ) -> list[Polygon]:

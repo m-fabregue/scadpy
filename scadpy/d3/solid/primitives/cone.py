@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-@typechecked
 def cone(radius: float, height: float, section_count: int = 32) -> Solid:
     """Create a cone centered at the origin, apex pointing along +z.
 

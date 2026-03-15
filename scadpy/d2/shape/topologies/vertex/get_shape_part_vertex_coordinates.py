@@ -6,13 +6,11 @@ import numpy as np
 from numpy.typing import NDArray
 from shapely.coords import CoordinateSequence
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.core.part import Part
 
 
-@typechecked
 def get_shape_part_vertex_coordinates(part: Part[Polygon]) -> NDArray[np.float64]:
     """
     For each vertex in the part, return its coordinates

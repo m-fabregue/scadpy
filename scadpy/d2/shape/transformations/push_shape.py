@@ -3,14 +3,12 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
 
-@typechecked
 def push_shape(
     shape: Shape,
     distance: float,

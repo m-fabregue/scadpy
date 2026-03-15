@@ -4,7 +4,6 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
 import numpy as np
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy.d2.shape import Shape
@@ -38,7 +37,6 @@ def _make_half_plane(
     )
 
 
-@typechecked
 def linear_cut_shape(
     shape: Shape,
     axis: float | Iterable[float],

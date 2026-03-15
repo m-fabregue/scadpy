@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
-from shapely.geometry.polygon import Polygon
 from trimesh import Trimesh
 from trimesh.creation import triangulate_polygon
 from trimesh.geometry import faces_to_edges
 from trimesh.grouping import group_rows
-from typeguard import typechecked
 
 if TYPE_CHECKING:
+    from shapely.geometry.polygon import Polygon
+
     from scadpy.d2.shape import Shape
     from scadpy.d3.solid import Solid
 
@@ -198,7 +198,6 @@ def _create_slice_border_faces(
     return faces
 
 
-@typechecked
 def radial_extrude_shape(
     shape: Shape,
     axis: float | Iterable[float],

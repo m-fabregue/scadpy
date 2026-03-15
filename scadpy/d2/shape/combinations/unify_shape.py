@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape
 
 
-@typechecked
 def unify_shape(shapes: Sequence[Shape]) -> Shape:
     """Unite a sequence of shapes into a single shape using boolean union.
 

@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from shapely.geometry import Polygon
-from typeguard import typechecked
 
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
 
-@typechecked
 def fill_shape(shape: Shape, part_filter: TopologyFilter[Shape] | None = None) -> Shape:
     """
     Fill the interior holes of each selected part, keeping only the exterior ring.
