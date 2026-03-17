@@ -338,6 +338,7 @@ API reference
 .. toctree::
    :maxdepth: 4
 
+   Examples <examples>
    core <scadpy/core>
    2D <scadpy/d2>
    3D <scadpy/d3>
