@@ -20,14 +20,15 @@ dependencies = ["triangle == 20250106", "trimesh[easy] ~= 4.10", "manifold3d == 
 
 [project.optional-dependencies]
 dev = [
-    "sphinx",
-    "sphinx-pyproject",
-    "numpydoc",
-    "sphinx-autodoc-typehints",
-    "furo == 2025.7.19",
-    "interrogate",
+    "basedpyright",
     "coverage",
-    "genbadge[coverage]"
+    "furo == 2025.7.19",
+    "genbadge[coverage]",
+    "interrogate",
+    "numpydoc",
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-pyproject",
 ]
 
 [tool.pyright]
