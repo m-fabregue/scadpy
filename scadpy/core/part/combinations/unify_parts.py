@@ -10,7 +10,6 @@ if TYPE_CHECKING:
     from scadpy.color import Color
 
 
-# @typechecked
 def unify_parts[A, P, G](
     parts: Sequence[P],
     get_part_color: Callable[[P], Color],

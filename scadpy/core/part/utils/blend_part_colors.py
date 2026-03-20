@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from scadpy import Color, Part
 
 
-# @typechecked
 def blend_part_colors[G](
     parts: Sequence[Part[G]],
     get_part_magnitude: Callable[[Part[G]], float],

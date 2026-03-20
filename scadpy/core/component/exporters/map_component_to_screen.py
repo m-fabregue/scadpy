@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import sys
-import tempfile
+import threading
+import webbrowser
 from collections.abc import Callable
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -15,7 +16,10 @@ def map_component_to_screen[Component](
     component: Component, to_html: Callable[[Component], HTML]
 ):
     """
-    Render a component as HTML and display it in a Qt-based window.
+    Render a component as HTML and display it in the system browser.
+
+    Starts a one-shot local HTTP server on a random available port, opens the
+    browser, and shuts the server down as soon as the page has been served.
 
     Parameters
     ----------
@@ -35,34 +39,41 @@ def map_component_to_screen[Component](
     ...     to_html=lambda c: HTML(f"<h1>{c}</h1>")
     ... )  # doctest: +SKIP
     """
+    inner = str(to_html(component).data)
+    html_bytes = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  html, body {{ width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #ffffff; }}
+  #scadpy-content {{ width: min(100vw, 100vh); height: min(100vw, 100vh); }}
+  #scadpy-content svg {{ width: 100%; height: 100%; }}
+</style>
+</head>
+<body><div id="scadpy-content">{inner}</div></body>
+</html>""".encode("utf-8")
+    served = threading.Event()
 
-    # Lazy imports: PySide6 (~1s) is heavy at module level;
-    # importing here defers the cost until the function is actually called.
-    from PySide6.QtCore import QUrl
-    from PySide6.QtWebEngineCore import QWebEngineSettings
-    from PySide6.QtWebEngineWidgets import QWebEngineView
-    from PySide6.QtWidgets import QApplication
+    class _OneShot(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(html_bytes)))
+            self.end_headers()
+            self.wfile.write(html_bytes)
+            served.set()
 
-    html = str(to_html(component).data)
+        def log_message(self, format: str, *args: object) -> None:
+            pass  # suppress request logs
 
-    app = QApplication.instance()
-    if app is None:
-        app = QApplication(sys.argv)
+    server = HTTPServer(("127.0.0.1", 0), _OneShot)
+    port = server.server_address[1]
 
-    tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False, encoding="utf-8")
-    tmp.write(html)
-    tmp.close()
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
 
-    view = QWebEngineView()
-    view.settings().setAttribute(
-        QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls, True
-    )
-    view.load(QUrl.fromLocalFile(tmp.name))
-    view.setWindowTitle("ScadPy")
-    view.resize(800, 800)
-    view.show()
+    webbrowser.open(f"http://127.0.0.1:{port}")
 
-    view.raise_()
-    view.activateWindow()
-
-    sys.exit(app.exec())
+    served.wait()
+    server.shutdown()

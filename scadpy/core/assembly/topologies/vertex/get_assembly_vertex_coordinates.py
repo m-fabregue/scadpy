@@ -10,8 +10,6 @@ if TYPE_CHECKING:
     from scadpy.core.part import Part
 
 
-# @typechecked is intentionally omitted: typeguard v4 cannot validate Callable types
-# that contain generic type variables (e.g. Part[G]) at runtime.
 def get_assembly_vertex_coordinates[G](
     parts: Sequence[Part[G]],
     get_part_vertex_coordinates: Callable[[Part[G]], NDArray[np.float64]],

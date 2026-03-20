@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from scadpy.color import Color
 
 
-# @typechecked
 def subtract_parts[A, P, G](
     to_be_subtracted: P,
     to_subtract: Sequence[P],
