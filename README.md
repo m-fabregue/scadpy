@@ -229,6 +229,13 @@ s.vertex_to_ring                    # vertex        → ring
 # extrusions → Solid
 s.linear_extrude(height=3)
 s.radial_extrude(axis=y(), pivot=x(5))  # start=0, end=360, segment_count=64
+s.path_extrude(path)                    # fillet_segments=None, min_fillet_radius=None, intermediate_sections=None, strategy=None
+
+# sweep strategies (for path_extrude strategy= parameter)
+scale_sweep(end=3)                      # start=1.0
+rotate_sweep(angle=360)                 # start_angle=0.0
+resize_sweep(end_size=[2, 4])           # start_size=None
+reverse_sweep(strategy=scale_sweep(3))
 
 # export
 s.to_dxf_file("output.dxf")

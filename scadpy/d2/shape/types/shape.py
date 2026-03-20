@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from functools import cached_property
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, final
 
 import numpy as np
-from numpy.typing import NDArray
+from numpy.typing import ArrayLike, NDArray
 from shapely.geometry.polygon import Polygon
 
 from scadpy.color.constants import BLACK, WHITE
@@ -1383,6 +1383,65 @@ class Shape(Assembly[Polygon]):
             end=end,
             pivot=pivot,
             segment_count=segment_count,
+        )
+
+    def path_extrude(
+        self: Self,
+        path: ArrayLike,
+        fillet_segments: int | None = None,
+        min_fillet_radius: float | None = None,
+        intermediate_sections: int | None = None,
+        strategy: list[Callable[[NDArray[np.float64], float], NDArray[np.float64]]]
+        | Callable[[NDArray[np.float64], float], NDArray[np.float64]]
+        | None = None,
+    ) -> Solid:
+        """Sweep this shape along a 3D path.
+
+        See :func:`path_extrude_shape` for parameter documentation.
+
+        Examples
+        --------
+        >>> import numpy as np
+        >>> from scadpy import circle, reverse_sweep, rotate_sweep, scale_sweep
+
+        >>> path = np.array([
+        ...     [0, 0, 0], [10, 0, 0], [10, 4, 0], [10, 4, 8],
+        ...     [6, 4, 8], [6, 9, 8], [6, 9, 3], [0, 9, 3],
+        ...     [0, 0, 3], [0, 0, 10],
+        ... ], dtype=float)
+
+        >>> # hollow tube swept along a 3D polyline with light filleting
+        >>> (circle(0.5, segment_count=6) - circle(0.4, segment_count=6)).path_extrude(
+        ...     path, fillet_segments=2,
+        ... )  # doctest: +SKIP
+
+        .. render-example::
+            :name: path_extrude_shape_tube
+            :example: (circle(0.5, segment_count=6) - circle(0.4, segment_count=6)).path_extrude(np.array([[0,0,0],[10,0,0],[10,4,0],[10,4,8],[6,4,8],[6,9,8],[6,9,3],[0,9,3],[0,0,3],[0,0,10]],dtype=float), fillet_segments=2)
+
+        >>> # same path with scale, twist and intermediate sections
+        >>> (circle(0.5, segment_count=6) - circle(0.4, segment_count=6)).path_extrude(
+        ...     path,
+        ...     fillet_segments=32,
+        ...     min_fillet_radius=100,
+        ...     intermediate_sections=50,
+        ...     strategy=[reverse_sweep(scale_sweep(3)), rotate_sweep(360)],
+        ... )  # doctest: +SKIP
+
+        .. render-example::
+            :name: path_extrude_shape_tube_strategy
+            :example: (circle(0.5, segment_count=6) - circle(0.4, segment_count=6)).path_extrude(np.array([[0,0,0],[10,0,0],[10,4,0],[10,4,8],[6,4,8],[6,9,8],[6,9,3],[0,9,3],[0,0,3],[0,0,10]],dtype=float), fillet_segments=32, min_fillet_radius=100, intermediate_sections=50, strategy=[reverse_sweep(scale_sweep(3)), rotate_sweep(360)])
+
+        """
+        from scadpy import path_extrude_shape
+
+        return path_extrude_shape(
+            shape=self,
+            path=path,
+            fillet_segments=fillet_segments,
+            min_fillet_radius=min_fillet_radius,
+            intermediate_sections=intermediate_sections,
+            strategy=strategy,
         )
 
     def radial_slice(

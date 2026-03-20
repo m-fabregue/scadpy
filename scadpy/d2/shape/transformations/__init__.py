@@ -8,6 +8,7 @@ __all__ = [
     "linear_cut_shape",
     "linear_extrude_shape",
     "linear_pattern_shape",
+    "path_extrude_shape",
     "linear_slice_shape",
     "mirror_shape",
     "pull_shape",
@@ -17,8 +18,12 @@ __all__ = [
     "radial_slice_shape",
     "recoordinate_shape",
     "resize_shape",
+    "resize_sweep",
+    "reverse_sweep",
     "rotate_shape",
+    "rotate_sweep",
     "scale_shape",
+    "scale_sweep",
     "shrink_shape",
     "translate_shape",
 ]
@@ -32,6 +37,8 @@ from .grow_shape import grow_shape
 from .linear_cut_shape import linear_cut_shape
 from .linear_extrude_shape import linear_extrude_shape
 from .linear_pattern_shape import linear_pattern_shape
+from .extrusion_strategies import resize_sweep, reverse_sweep, rotate_sweep, scale_sweep
+from .path_extrude_shape import path_extrude_shape
 from .linear_slice_shape import linear_slice_shape
 from .mirror_shape import mirror_shape
 from .pull_shape import pull_shape
