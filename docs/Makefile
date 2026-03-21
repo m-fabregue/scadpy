@@ -15,7 +15,7 @@ skills:
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile snapshots
+.PHONY: help Makefile snapshots doctest-without-snapshots
 
 # Build the documentation
 html:
@@ -25,6 +25,10 @@ html:
 # Run doctests only
 doctest:
 	@$(SPHINXBUILD) -b doctest "$(SOURCEDIR)" "$(BUILDDIR)/doctest" $(SPHINXOPTS)
+	@rm -rf $(BUILDDIR)/doctrees
+
+doctest-without-snapshots:
+	@SCADPY_UPDATE_SNAPSHOTS=1 $(SPHINXBUILD) -b doctest "$(SOURCEDIR)" "$(BUILDDIR)/doctest" $(SPHINXOPTS)
 	@rm -rf $(BUILDDIR)/doctrees
 
 snapshots:
