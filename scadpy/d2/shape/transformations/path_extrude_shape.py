@@ -380,7 +380,7 @@ def _path_extrude_polygon(
     n_path_points = len(path)
 
     triangulated_vertices, triangulated_faces = triangulate_polygon(
-        polygon, engine="manifold"
+        polygon, engine="earcut"
     )
     n_cross_section_vertices = len(triangulated_vertices)
 
