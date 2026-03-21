@@ -1,3 +1,4 @@
+# pyright: reportImportCycles=false
 from .color import *  # noqa: F403
 from .core import *  # noqa: F403
 from .d2 import *  # noqa: F403

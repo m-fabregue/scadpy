@@ -1,3 +1,4 @@
+# pyright: reportImportCycles=false
 from .combinations import *  # noqa: F403
 from .exporters import *  # noqa: F403
 from .features import *  # noqa: F403

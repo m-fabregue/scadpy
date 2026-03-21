@@ -88,11 +88,11 @@ def _radial_extrude_shapely_polygon_into_trimesh(
 
     triangulated_border_vertex_count = len(triangulated_vertex_coordinates)
     triangulated_edge_to_vertex_sorted = np.sort(triangulated_edge_to_vertex, axis=1)
-    triangulated_edge_unique = group_rows(
-        triangulated_edge_to_vertex_sorted, require_count=1
+    triangulated_edge_unique = np.asarray(
+        group_rows(triangulated_edge_to_vertex_sorted, require_count=1), dtype=np.intp
     )
     slice_border_faces = _create_slice_border_faces(
-        triangulated_edge_to_vertex[triangulated_edge_unique],
+        triangulated_edge_to_vertex[triangulated_edge_unique].astype(np.int64),
         triangulated_border_vertex_count,
         slice_count - 1,
         is_ring,

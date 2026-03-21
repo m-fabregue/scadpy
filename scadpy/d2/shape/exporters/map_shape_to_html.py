@@ -84,13 +84,16 @@ def map_shape_to_html(
 
     for part in shape._parts:
         color = part.color
-        edge_color = tuple((c + b) / 2 for c, b in zip(color[:3], background_color[:3]))
+        edge_color = [(c + b) / 2 for c, b in zip(color[:3], background_color[:3])]
+        edge_color_rgba: tuple[float, float, float, float] = (
+            edge_color[0], edge_color[1], edge_color[2], 1.0
+        )
         plot_polygon(
             part.geometry,
             ax=ax,
             add_points=False,
             facecolor=(color[0], color[1], color[2], color[3]),
-            edgecolor=(*edge_color, 1.0),
+            edgecolor=edge_color_rgba,
             linewidth=2,
         )
 

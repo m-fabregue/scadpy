@@ -8,6 +8,7 @@ import json
 import re
 import tomllib
 from pathlib import Path
+from typing import Any
 
 # Dunder → operator symbol
 DUNDER_OPERATORS: dict[str, str] = {
@@ -239,15 +240,15 @@ def _referenced_func(description: str | None) -> str | None:
 # ---------------------------------------------------------------------------
 
 
-def _extract_params(func: ast.FunctionDef | ast.AsyncFunctionDef) -> list[dict]:
-    params: list[dict] = []
+def _extract_params(func: ast.FunctionDef | ast.AsyncFunctionDef) -> list[dict[str, Any]]:
+    params: list[dict[str, Any]] = []
     args = func.args
     defaults_start = len(args.args) - len(args.defaults)
 
     for i, arg in enumerate(args.args):
         if arg.arg in ("self", "cls"):
             continue
-        p: dict = {"name": arg.arg}
+        p: dict[str, Any] = {"name": arg.arg}
         if arg.annotation:
             p["type"] = _unparse_annotation(arg.annotation)
         di = i - defaults_start
@@ -259,15 +260,16 @@ def _extract_params(func: ast.FunctionDef | ast.AsyncFunctionDef) -> list[dict]:
         p = {"name": arg.arg}
         if arg.annotation:
             p["type"] = _unparse_annotation(arg.annotation)
-        if args.kw_defaults[i] is not None:
-            p["default"] = ast.unparse(args.kw_defaults[i])
+        kw_default = args.kw_defaults[i]
+        if kw_default is not None:
+            p["default"] = ast.unparse(kw_default)
         params.append(p)
 
     return params
 
 
 def _build_signature(
-    name: str, params: list[dict], returns: str | None, is_property: bool
+    name: str, params: list[dict[str, Any]], returns: str | None, is_property: bool
 ) -> str:
     if is_property:
         sig = name
@@ -290,7 +292,7 @@ def _parse_function(
     node: ast.FunctionDef | ast.AsyncFunctionDef,
     func_index: dict[str, str],
     is_method: bool = False,
-) -> dict:
+) -> dict[str, Any]:
     decorator_names = [
         (
             d.id
@@ -323,7 +325,7 @@ def _parse_function(
             if p["name"] in param_descs and param_descs[p["name"]]:
                 p["description"] = param_descs[p["name"]]
 
-    entry: dict = {
+    entry: dict[str, Any] = {
         "kind": kind,
         "signature": _build_signature(node.name, params, returns, is_property),
         "description": _extract_description(raw_docstring),
@@ -339,8 +341,8 @@ def _parse_function(
     return entry
 
 
-def _parse_class(node: ast.ClassDef, func_index: dict[str, str]) -> dict:
-    methods: dict[str, dict] = {}
+def _parse_class(node: ast.ClassDef, func_index: dict[str, str]) -> dict[str, Any]:
+    methods: dict[str, dict[str, Any]] = {}
     for item in ast.iter_child_nodes(node):
         if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
             methods[item.name] = _parse_function(item, func_index, is_method=True)
@@ -352,9 +354,9 @@ def _parse_class(node: ast.ClassDef, func_index: dict[str, str]) -> dict:
     }
 
 
-def parse_file(path: Path, func_index: dict[str, str]) -> dict:
+def parse_file(path: Path, func_index: dict[str, str]) -> dict[str, Any]:
     tree = ast.parse(path.read_text())
-    result: dict = {}
+    result: dict[str, Any] = {}
     for node in ast.iter_child_nodes(tree):
         if isinstance(node, ast.ClassDef):
             result[node.name] = _parse_class(node, func_index)
@@ -382,7 +384,7 @@ def main() -> None:
     func_index = _build_function_index(root)
     print(f"  {len(func_index)} functions indexed")
 
-    skills: dict = {}
+    skills: dict[str, Any] = {}
     for src in sources:
         p = root / src
         if p.is_dir():
