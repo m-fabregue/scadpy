@@ -51,7 +51,6 @@ def _rotate_3d(points, axis, angle, pivot):
     return rotated + pivot
 
 
-
 def _radial_extrude_shapely_polygon_into_trimesh(
     polygon: Polygon,
     axis: float | Iterable[float],
@@ -78,7 +77,7 @@ def _radial_extrude_shapely_polygon_into_trimesh(
     pivot = resolve_vector_2d(pivot, 0)
 
     triangulated_vertex_coordinates, triangulated_face_to_vertex = triangulate_polygon(
-        polygon, engine="triangle"
+        polygon, engine="manifold"
     )
     triangulated_edge_to_vertex = faces_to_edges(triangulated_face_to_vertex)
 

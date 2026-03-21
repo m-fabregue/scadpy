@@ -1271,7 +1271,14 @@ class Shape(Assembly[Polygon]):
 
         return linear_cut_shape(shape=self, axis=axis, pivot=pivot)
 
-    def linear_extrude(self: Self, height: float) -> Solid:
+    def linear_extrude(
+        self: Self,
+        height: float,
+        intermediate_sections: int | None = None,
+        strategy: list[Callable[[NDArray[np.float64], float], NDArray[np.float64]]]
+        | Callable[[NDArray[np.float64], float], NDArray[np.float64]]
+        | None = None,
+    ) -> Solid:
         """Extrude this shape linearly along the Z-axis.
 
         See :func:`linear_extrude_shape` for parameter documentation.
@@ -1293,10 +1300,23 @@ class Shape(Assembly[Polygon]):
         .. render-example::
             :name: linear_extrude_shape_tube
             :example: (circle(5) - circle(3)).linear_extrude(10)
+
+        >>> # tapered box using scale_sweep strategy
+        >>> from scadpy import scale_sweep
+        >>> square(10).linear_extrude(5, intermediate_sections=10, strategy=scale_sweep(0.5))  # doctest: +SKIP
+
+        .. render-example::
+            :name: linear_extrude_shape_tapered
+            :example: square(10).linear_extrude(5, intermediate_sections=10, strategy=scale_sweep(0.5))
         """
         from scadpy import linear_extrude_shape
 
-        return linear_extrude_shape(shape=self, height=height)
+        return linear_extrude_shape(
+            shape=self,
+            height=height,
+            intermediate_sections=intermediate_sections,
+            strategy=strategy,
+        )
 
     def linear_slice(
         self: Self,
