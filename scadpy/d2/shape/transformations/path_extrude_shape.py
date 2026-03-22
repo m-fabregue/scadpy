@@ -279,7 +279,7 @@ def _compute_rmf_frames(
     if abs(float(np.dot(initial_tangent, up))) > 0.9:
         up = np.array([0.0, 1.0, 0.0])
     initial_normal: NDArray[np.float64] = np.asarray(
-        np.cross(initial_tangent, up), dtype=np.float64
+        np.cross(up, initial_tangent), dtype=np.float64
     )
     initial_normal /= float(np.linalg.norm(initial_normal))
 
