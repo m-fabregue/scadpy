@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.4.10"
+version = "0.4.11"
 description = "Simplified 2D/3D modeling for Python with fluent API and boolean operations"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
@@ -15,6 +15,8 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = ["trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6", "python-fcl ~= 0.7"]
 

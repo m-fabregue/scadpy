@@ -24,9 +24,12 @@ def get_solid_centroid(solid: Solid) -> NDArray[np.float64]:
 
     Examples
     --------
-    >>> from scadpy import cuboid
+    >>> from scadpy import cuboid, Solid
 
     >>> cuboid(2).centroid
+    array([0., 0., 0.])
+
+    >>> Solid.from_parts([]).centroid
     array([0., 0., 0.])
     """
     parts = solid._parts  # pyright: ignore[reportPrivateUsage]

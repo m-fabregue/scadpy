@@ -24,11 +24,43 @@ from scadpy.core.assembly import Assembly
 
 @final
 class Solid(Assembly[Trimesh]):
+    """A 3D assembly of :class:`~trimesh.Trimesh` parts.
+
+    ``Solid`` is the central 3D modeling object in ScadPy.  It wraps one or
+    more colored Trimesh meshes and exposes a fluent API for boolean
+    operations, geometric transforms, topology queries, and 3D export.
+
+    Use the primitives (:func:`~scadpy.cuboid`, :func:`~scadpy.cylinder`,
+    :func:`~scadpy.sphere`, …) or importers (:meth:`Solid.from_stl`) to
+    create solids; do not instantiate this class directly.
+
+    Examples
+    --------
+    >>> from scadpy import cuboid, sphere
+    >>> s = cuboid(4) - sphere(3)
+    >>> s.is_empty
+    False
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # pyright: ignore[reportExplicitAny, reportAny]
+        """Initialize a Solid (internal — use primitives instead)."""
         super().__init__(*args, **kwargs)
 
     @classmethod
     def dimensions(cls) -> int:
+        """Return the number of spatial dimensions: always ``3``.
+
+        Returns
+        -------
+        int
+            Always ``3``.
+
+        Examples
+        --------
+        >>> from scadpy import Solid
+        >>> Solid.dimensions()
+        3
+        """
         return 3
 
     ##########
@@ -205,7 +237,14 @@ class Solid(Assembly[Trimesh]):
         return unify_solid(solids=[self, other])
 
     def __and__(self: Self, other: Solid) -> Solid:
-        """Intersect two solids. Shortcut for :func:`intersect_solid`."""
+        """Intersect two solids. Shortcut for :func:`intersect_solid`.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere
+        >>> (cuboid(4) & sphere(3)).is_empty
+        False
+        """
         from scadpy import intersect_solid
 
         return intersect_solid(solids=[self, other])
@@ -217,7 +256,14 @@ class Solid(Assembly[Trimesh]):
         return subtract_solid(to_be_subtracted=self, to_subtract=other)
 
     def __xor__(self: Self, other: Solid) -> Solid:
-        """Compute symmetric difference with another solid. Shortcut for :func:`exclude_solid`."""
+        """Compute symmetric difference with another solid. Shortcut for :func:`exclude_solid`.
+
+        Examples
+        --------
+        >>> from scadpy import cuboid, sphere
+        >>> (cuboid(4) ^ sphere(3)).is_empty
+        False
+        """
         from scadpy import exclude_solid
 
         return exclude_solid(solids=[self, other])
@@ -658,6 +704,27 @@ class Solid(Assembly[Trimesh]):
 
     @classmethod
     def from_parts(cls, parts: Sequence[Part[Trimesh]]) -> Solid:
+        """Assemble a :class:`Solid` from a sequence of :class:`~scadpy.Part`.
+
+        This is the low-level constructor used internally.  In most cases you
+        should use primitives or boolean operations instead.
+
+        Parameters
+        ----------
+        parts : Sequence[Part[Trimesh]]
+            The parts that make up the solid.
+
+        Returns
+        -------
+        Solid
+            A new solid containing exactly the given parts.
+
+        Examples
+        --------
+        >>> from scadpy import Solid
+        >>> Solid.from_parts([]).is_empty
+        True
+        """
         solid = Solid()
         solid._parts = parts
         return solid

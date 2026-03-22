@@ -20,11 +20,44 @@ if TYPE_CHECKING:
 
 @final
 class Shape(Assembly[Polygon]):
+    """A 2D assembly of :class:`~shapely.geometry.Polygon` parts.
+
+    ``Shape`` is the central 2D modeling object in ScadPy.  It wraps one or
+    more colored Shapely polygons and exposes a fluent API for boolean
+    operations, geometric transforms, topology queries, and 2D→3D extrusions.
+
+    Use the primitives (:func:`~scadpy.circle`, :func:`~scadpy.rectangle`,
+    :func:`~scadpy.square`, …) or importers (:meth:`Shape.from_dxf`,
+    :meth:`Shape.from_svg`) to create shapes; do not instantiate this class
+    directly.
+
+    Examples
+    --------
+    >>> from scadpy import circle, square
+    >>> s = square(4) - circle(1)
+    >>> s.is_empty
+    False
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # pyright: ignore[reportExplicitAny, reportAny]
+        """Initialize a Shape (internal — use primitives instead)."""
         super().__init__(*args, **kwargs)
 
     @classmethod
     def dimensions(cls) -> int:
+        """Return the number of spatial dimensions: always ``2``.
+
+        Returns
+        -------
+        int
+            Always ``2``.
+
+        Examples
+        --------
+        >>> from scadpy import Shape
+        >>> Shape.dimensions()
+        2
+        """
         return 2
 
     ##########

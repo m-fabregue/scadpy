@@ -349,3 +349,4 @@ API reference
    core <scadpy/core>
    2D <scadpy/d2>
    3D <scadpy/d3>
+   Utils <scadpy/utils>
