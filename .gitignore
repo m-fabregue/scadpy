@@ -42,3 +42,6 @@ tests/
 .mypy_cache/
 .pytype/
 .pyre/
+
+# --- Claude config ---
+.claude/
