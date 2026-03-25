@@ -30,14 +30,7 @@ their own terms:
 | Package | License |
 |---------|---------|
 | [trimesh](https://github.com/mikedh/trimesh) | MIT |
-| [Shapely](https://github.com/shapely/shapely) | BSD 3-Clause |
-| [typeguard](https://github.com/agronholm/typeguard) | MIT |
+| [manifold3d](https://github.com/elalish/manifold) | Apache 2.0 |
 | [IPython](https://github.com/ipython/ipython) | BSD 3-Clause |
-| [PySide6](https://doc.qt.io/qtforpython) | LGPL v3 |
-| [triangle](https://github.com/drufat/triangle) | See note below |
-
-**Note on `triangle`:** The `triangle` package wraps Jonathan Shewchuk's
-Triangle library, which restricts commercial use without written permission
-from the author. Users intending commercial applications should review
-[Triangle's license](https://www.cs.cmu.edu/~quake/triangle.html) and
-consider replacing the `triangle` dependency accordingly.
+| [matplotlib](https://github.com/matplotlib/matplotlib) | PSF-based (BSD-compatible) |
+| [python-fcl](https://github.com/BerkeleyAutomation/python-fcl) | BSD 3-Clause |
