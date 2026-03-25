@@ -696,7 +696,9 @@ class Solid(Assembly[Trimesh]):
         """
         from scadpy import radial_pattern_solid
 
-        return radial_pattern_solid(solid=self, count=count, angle=angle, axis=axis, pivot=pivot)
+        return radial_pattern_solid(
+            solid=self, count=count, angle=angle, axis=axis, pivot=pivot
+        )
 
     #############
     # importers #

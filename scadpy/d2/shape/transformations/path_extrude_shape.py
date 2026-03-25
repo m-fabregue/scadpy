@@ -266,13 +266,23 @@ def _compute_rmf_frames(
     segment_tangents: NDArray[np.float64] = segment_deltas / segment_lengths
 
     tangents: NDArray[np.float64] = np.zeros((n_points, 3), dtype=np.float64)
-    tangents[0] = segment_tangents[0]
-    tangents[-1] = segment_tangents[-1]
     if n_points > 2:
         averaged = segment_tangents[:-1] + segment_tangents[1:]
         tangents[1:-1] = averaged / np.maximum(
             np.linalg.norm(averaged, axis=1, keepdims=True), 1e-10
         )
+        # Second-order one-sided differences at endpoints give the correct
+        # instantaneous tangent, avoiding the half-step angular error of the
+        # first-segment direction used for the initial RMF frame.
+        for vec, idx in (
+            (-3.0 * path[0] + 4.0 * path[1] - path[2], 0),
+            (3.0 * path[-1] - 4.0 * path[-2] + path[-3], -1),
+        ):
+            n = float(np.linalg.norm(vec))
+            tangents[idx] = vec / n if n > 1e-10 else segment_tangents[idx]
+    else:
+        tangents[0] = segment_tangents[0]
+        tangents[-1] = segment_tangents[-1]
 
     initial_tangent: NDArray[np.float64] = tangents[0]
     up = np.array([0.0, 0.0, 1.0])
