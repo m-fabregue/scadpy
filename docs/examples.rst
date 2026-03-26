@@ -181,3 +181,28 @@ Examples
 .. render-example::
    :name: examples_storage_box
    :example: storage_box
+
+.. _helicoid:
+
+.. doctest::
+
+   >>> # 3D — helicoid (circle swept along a helix)
+
+   >>> RADIUS = 5.0
+   >>> PITCH = 2.0
+   >>> TURNS = 4
+   >>> SEGMENTS_PER_TURN = 64
+
+   >>> t = np.linspace(0, TURNS * 2 * np.pi, TURNS * SEGMENTS_PER_TURN + 1)
+   >>> helix = np.column_stack([
+   ...     RADIUS * np.cos(t),
+   ...     RADIUS * np.sin(t),
+   ...     t / (2 * np.pi) * PITCH,
+   ... ])
+
+   >>> helicoid = circle(0.5).path_extrude(helix)
+   >>> helicoid.to_screen() # doctest: +SKIP
+
+.. render-example::
+   :name: examples_helicoid
+   :example: helicoid
