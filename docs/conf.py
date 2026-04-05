@@ -152,10 +152,13 @@ html_theme_options = {
     },
 }
 
+html_title = "ScadPy — Parametric CAD in Pure Python"
+html_baseurl = "https://m-fabregue.github.io/scadpy/"
 html_logo = "_static/logo.png"
 html_favicon = "_static/logo.ico"
 html_static_path = ["_static"]
 html_extra_path = ["build/AI_SKILLS.txt"]
+sitemap_url_scheme = "{link}"
 html_css_files = [
     "css/custom.css",
 ]
