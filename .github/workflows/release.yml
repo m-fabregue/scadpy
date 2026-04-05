@@ -32,6 +32,9 @@ jobs:
       - name: Generate badges
         run: cd docs && make coverage && make interrogate
 
+      - name: Generate AI skill file
+        run: cd docs && make skills
+
       - name: Build documentation
         run: cd docs && make html
 

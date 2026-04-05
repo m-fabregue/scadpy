@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.4.14"
+version = "0.4.15"
 description = "Simplified 2D/3D modeling for Python with fluent API and boolean operations"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
@@ -48,8 +48,10 @@ extensions = [
 ]
 
 [tool.skills]
-output = "docs/build/AI_SKILLS.json"
+output = "AI_SKILLS.json"
 sources = [
+    "scadpy/core/assembly/types/assembly.py",
+    "scadpy/core/assembly/types/topology_filter.py",
     "scadpy/d2/shape/primitives/",
     "scadpy/d2/shape/types/shape.py",
     "scadpy/d3/solid/primitives/",

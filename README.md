@@ -315,9 +315,16 @@ source .venv/bin/activate
 # Install with dev dependencies
 pip install -e .[dev]
 
-# Run doctests & generate documentation
-cd docs && make doctest && make html
+# Run doctests & generate documentation & AI skill file
+cd docs && make doctest && make html && make skills
 ```
+
+## AI integration
+
+ScadPy ships a machine-readable skill file (`AI_SKILLS.json`) that lets AI
+assistants understand the full API without reading source code — signatures,
+descriptions, parameters, return types, and usage examples, extracted directly
+from the source.
 
 ## License
 

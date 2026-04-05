@@ -354,6 +354,19 @@ def _parse_class(node: ast.ClassDef, func_index: dict[str, str]) -> dict[str, An
     }
 
 
+def _parse_type_alias(node: ast.TypeAlias) -> dict[str, Any]:
+    name = node.name.id  # type: ignore[attr-defined]
+    type_params = [ast.unparse(tp) for tp in node.type_params]
+    value = ast.unparse(node.value)
+    params_str = f"[{', '.join(type_params)}]" if type_params else ""
+    return {
+        "kind": "type_alias",
+        "signature": f"type {name}{params_str} = {value}",
+        "type_params": type_params,
+        "value": value,
+    }
+
+
 def parse_file(path: Path, func_index: dict[str, str]) -> dict[str, Any]:
     tree = ast.parse(path.read_text())
     result: dict[str, Any] = {}
@@ -362,6 +375,9 @@ def parse_file(path: Path, func_index: dict[str, str]) -> dict[str, Any]:
             result[node.name] = _parse_class(node, func_index)
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             result[node.name] = _parse_function(node, func_index)
+        elif isinstance(node, ast.TypeAlias):
+            name = node.name.id  # type: ignore[attr-defined]
+            result[name] = _parse_type_alias(node)
     return result
 
 
