@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.4.21"
+version = "0.4.22"
 description = "Parametric 2D/3D CAD modeling in pure Python — fluent API, boolean operations, built on Shapely and trimesh"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
@@ -48,7 +48,7 @@ dev = [
     "sphinx",
     "sphinx-autodoc-typehints",
     "sphinx-pyproject",
-    "sphinxcontrib-sitemap",
+    "sphinx-sitemap",
 ]
 
 [tool.pyright]
@@ -63,7 +63,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.doctest',
-    'sphinxcontrib.sitemap',
+    'sphinx_sitemap',
 ]
 
 [tool.skills]
