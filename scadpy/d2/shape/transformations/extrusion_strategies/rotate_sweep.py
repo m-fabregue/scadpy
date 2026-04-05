@@ -18,6 +18,14 @@ def rotate_sweep(
         Total rotation angle in degrees at ``t=1``.
     start_angle:
         Rotation angle in degrees at ``t=0``.  Defaults to ``0.0``.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from scadpy import rectangle
+    >>> path = np.column_stack([np.zeros(20), np.zeros(20), np.linspace(0, 30, 20)])
+    >>> rectangle([4, 2]).path_extrude(path, strategy=rotate_sweep(angle=360))  # full twist # doctest: +SKIP
+    >>> rectangle([4, 2]).path_extrude(path, strategy=rotate_sweep(angle=90))   # quarter twist # doctest: +SKIP
     """
     from scadpy import rotate_vertex_coordinates
 

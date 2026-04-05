@@ -15,6 +15,13 @@ def reverse_sweep(
     ----------
     strategy:
         Any extrusion strategy callable.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from scadpy import circle
+    >>> path = np.column_stack([np.zeros(10), np.zeros(10), np.linspace(0, 20, 10)])
+    >>> circle(5).path_extrude(path, strategy=reverse_sweep(scale_sweep(end=0.2)))  # taper from tip # doctest: +SKIP
     """
 
     def _strategy(points: NDArray[np.float64], t: float) -> NDArray[np.float64]:

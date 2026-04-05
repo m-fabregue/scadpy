@@ -152,6 +152,13 @@ storage_box.to_screen()
   <img src="https://raw.githubusercontent.com/m-fabregue/scadpy/main/docs/_static/examples/storage_box_light.png" alt="chamfered mounting plate" width="400">
 </picture>
 
+## AI integration
+
+ScadPy ships a machine-readable skill file ([`AI_SKILLS.txt`](https://m-fabregue.github.io/scadpy/AI_SKILLS.txt)) that lets AI
+assistants understand the full API without reading source code — signatures,
+descriptions, parameters, return types, and usage examples, extracted directly
+from the source.
+
 ## Cheat sheet
 
 *Parameters shown in `# comments` are optional, with their default values.*
@@ -318,13 +325,6 @@ pip install -e .[dev]
 # Run doctests & generate documentation & AI skill file
 cd docs && make doctest && make html && make skills
 ```
-
-## AI integration
-
-ScadPy ships a machine-readable skill file (`AI_SKILLS.json`) that lets AI
-assistants understand the full API without reading source code — signatures,
-descriptions, parameters, return types, and usage examples, extracted directly
-from the source.
 
 ## License
 

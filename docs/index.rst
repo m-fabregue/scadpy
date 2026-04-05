@@ -167,10 +167,10 @@ Quick examples
 AI integration
 ==============
 
-   ScadPy ships a machine-readable skill file (``AI_SKILLS.json``) that lets AI
-   assistants understand the full API without reading source code — signatures,
-   descriptions, parameters, return types, and usage examples, extracted directly
-   from the source.
+ScadPy ships a machine-readable skill file (`AI_SKILLS.txt <AI_SKILLS.txt>`_) that lets AI
+assistants understand the full API without reading source code — signatures,
+descriptions, parameters, return types, and usage examples, extracted directly
+from the source.
 
 Cheat sheet
 ===========

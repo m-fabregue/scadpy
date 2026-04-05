@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import ast
-import json
 import re
 import tomllib
 from pathlib import Path
@@ -42,8 +41,11 @@ DUNDER_OPERATORS: dict[str, str] = {
 
 
 def _strip_sphinx_refs(text: str) -> str:
-    """Remove :func:`name`, :class:`name`, :meth:`name`, etc., keeping only `name`."""
-    return re.sub(r":[a-z]+:`([^`]+)`", r"\1", text)
+    """Remove :func:`name`, ~module.name, etc., keeping only the short name."""
+    text = re.sub(r":[a-z]+:`~?[^`]*\.([^`]+)`", r"\1", text)  # :func:`~mod.name` → name
+    text = re.sub(r":[a-z]+:`([^`]+)`", r"\1", text)             # :func:`name` → name
+    text = re.sub(r"~\S+\.(\w+)", r"\1", text)                   # ~module.Class → Class
+    return text
 
 
 def _clean_description(text: str | None) -> str | None:
@@ -143,6 +145,7 @@ def _extract_numpy_params(docstring: str | None) -> dict[str, str]:
 
 
 def _extract_examples(docstring: str | None) -> list[str]:
+    """Return up to 3 REPL blocks, each line either '>>> code', '... cont', or output."""
     if not docstring:
         return []
     m = re.search(
@@ -153,55 +156,59 @@ def _extract_examples(docstring: str | None) -> list[str]:
     if not m:
         return []
 
-    # Group consecutive >>> / ... blocks, tracking setup lines
     examples: list[str] = []
-    setup_lines: list[str] = []
-    current_call: list[str] = []
+    setup_lines: list[str] = []  # pure-assignment lines to prepend to next real block
+    current_block: list[str] = []
     in_block = False
+
+    def _flush() -> None:
+        nonlocal setup_lines, current_block, in_block
+        if not current_block:
+            return
+        # Remove doctest directives from code lines
+        cleaned = []
+        for l in current_block:
+            l = re.sub(r"\s*#\s*doctest:[^\n]*", "", l).strip()
+            if l:
+                cleaned.append(l)
+        if not cleaned:
+            current_block = []
+            in_block = False
+            return
+        # Pure-assignment code blocks (no calls) → keep as setup context
+        code_lines = [l[4:] if l.startswith(">>> ") else l[4:] if l.startswith("... ") else None for l in cleaned]
+        is_setup = all(
+            c is not None and re.match(r"^\w+\s*=", c) and "(" not in c
+            for c in code_lines if c is not None
+        ) and all(c is not None for c in code_lines)
+        if is_setup:
+            setup_lines = cleaned
+        else:
+            full = setup_lines + cleaned if setup_lines else cleaned
+            examples.append("\n".join(full))
+            setup_lines = []
+        current_block = []
+        in_block = False
 
     for line in m.group(1).splitlines():
         stripped = line.strip()
         if stripped.startswith(">>> "):
             code = stripped[4:]
-            if code.startswith(("from ", "import ", "#")):
+            if code.startswith(("from ", "import ")):
                 continue
             in_block = True
-            current_call.append(code)
+            current_block.append(f">>> {code}")
         elif stripped.startswith("... ") and in_block:
-            current_call.append(stripped[4:])
+            current_block.append(f"... {stripped[4:]}")
+        elif stripped and in_block:
+            # Output line — truncate long lines
+            out = stripped if len(stripped) <= 72 else stripped[:69] + "..."
+            current_block.append(out)
         elif not stripped and in_block:
-            # End of a block — decide if it's setup or a real example
-            block = "\n".join(current_call)
-            # Pure assignments with no method/function call → setup context
-            if all(
-                re.match(r"^\w+\s*=", l) and "(" not in l
-                for l in current_call
-                if l.strip()
-            ):
-                setup_lines = current_call[:]
-            else:
-                full = (
-                    ("\n".join(setup_lines) + "\n" + block).strip()
-                    if setup_lines
-                    else block
-                )
-                examples.append(full)
-                setup_lines = []
-            current_call = []
-            in_block = False
+            _flush()
 
-    if current_call:
-        block = "\n".join(current_call)
-        full = ("\n".join(setup_lines) + "\n" + block).strip() if setup_lines else block
-        examples.append(full)
-
-    cleaned: list[str] = []
-    for ex in examples:
-        ex = re.sub(r"\s*#\s*doctest:[^\n]*", "", ex).strip()
-        if ex:
-            cleaned.append(ex)
-
-    return cleaned[:3]
+    _flush()
+    return [ex for ex in examples if ex][:3]
 
 
 # ---------------------------------------------------------------------------
@@ -354,16 +361,16 @@ def _parse_class(node: ast.ClassDef, func_index: dict[str, str]) -> dict[str, An
     }
 
 
-def _parse_type_alias(node: ast.TypeAlias) -> dict[str, Any]:
+def _parse_type_alias(node: ast.TypeAlias, module_tree: ast.Module) -> dict[str, Any]:
     name = node.name.id  # type: ignore[attr-defined]
     type_params = [ast.unparse(tp) for tp in node.type_params]
     value = ast.unparse(node.value)
     params_str = f"[{', '.join(type_params)}]" if type_params else ""
+    description = _clean_description(ast.get_docstring(module_tree))
     return {
         "kind": "type_alias",
         "signature": f"type {name}{params_str} = {value}",
-        "type_params": type_params,
-        "value": value,
+        "description": description,
     }
 
 
@@ -374,11 +381,69 @@ def parse_file(path: Path, func_index: dict[str, str]) -> dict[str, Any]:
         if isinstance(node, ast.ClassDef):
             result[node.name] = _parse_class(node, func_index)
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if node.name.startswith("_"):
+                continue
             result[node.name] = _parse_function(node, func_index)
         elif isinstance(node, ast.TypeAlias):
             name = node.name.id  # type: ignore[attr-defined]
-            result[name] = _parse_type_alias(node)
+            result[name] = _parse_type_alias(node, tree)
     return result
+
+
+# ---------------------------------------------------------------------------
+# Plain-text renderer
+# ---------------------------------------------------------------------------
+
+
+def _render_entry(name: str, v: dict[str, Any], indent: str = "") -> str:
+    lines: list[str] = []
+    kind = v.get("kind")
+
+    if kind == "type_alias":
+        lines.append(f"{indent}{v['signature']}")
+        if v.get("description"):
+            for desc_line in v["description"].splitlines():
+                lines.append(f"{indent}  {desc_line}")
+
+    elif kind == "class":
+        lines.append(f"{indent}[{name}]")
+        if v.get("description"):
+            lines.append(f"{indent}  {v['description']}")
+        for mname, method in v.get("methods", {}).items():
+            if mname.startswith("_") and mname not in DUNDER_OPERATORS:
+                continue
+            lines.append("")
+            prefix = f"  .{mname}"
+            sig = method.get("signature", "")
+            op = method.get("operator")
+            op_suffix = f"  [{op}]" if op else ""
+            lines.append(f"{indent}{prefix}{sig[len(mname):]}{op_suffix}")
+            if method.get("description"):
+                lines.append(f"{indent}    {method['description']}")
+            for ex in method.get("examples") or []:
+                for ex_line in ex.splitlines():
+                    lines.append(f"{indent}    {ex_line}")
+
+    else:  # function / classmethod / property
+        lines.append(f"{indent}{v.get('signature', name)}")
+        if v.get("description"):
+            lines.append(f"{indent}  {v['description']}")
+        for ex in v.get("examples") or []:
+            for ex_line in ex.splitlines():
+                lines.append(f"{indent}  {ex_line}")
+
+    return "\n".join(lines)
+
+
+def _render(skills: dict[str, Any], color_names: list[str]) -> str:
+    preamble = "\n".join([
+        "# Import: from scadpy import *",
+        f"# Color constants: {', '.join(color_names)}",
+    ])
+    sections: list[str] = [preamble]
+    for name, v in skills.items():
+        sections.append(_render_entry(name, v))
+    return "\n\n".join(sections) + "\n"
 
 
 # ---------------------------------------------------------------------------
@@ -415,7 +480,12 @@ def main() -> None:
                 continue
             skills.update(parse_file(py_file, func_index))
 
-    output_path.write_text(json.dumps(skills, indent=2))
+    constants_dir = root / "scadpy" / "color" / "constants"
+    color_names = sorted(
+        p.stem for p in constants_dir.glob("*.py")
+        if p.stem not in ("__init__",) and p.stem.isupper()
+    )
+    output_path.write_text(_render(skills, color_names))
     total = sum(
         len(v.get("methods", {})) if v.get("kind") == "class" else 1
         for v in skills.values()

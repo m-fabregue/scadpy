@@ -19,6 +19,14 @@ def scale_sweep(
         a 2-element list applies ``[sx, sy]`` independently.
     start:
         Scale factor at ``t=0``.  Defaults to ``1.0`` (no scale at start).
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from scadpy import circle
+    >>> path = np.column_stack([np.zeros(10), np.zeros(10), np.linspace(0, 20, 10)])
+    >>> circle(5).path_extrude(path, strategy=scale_sweep(end=0.2))  # taper to 20% # doctest: +SKIP
+    >>> circle(3).path_extrude(path, strategy=scale_sweep(end=[2.0, 0.5]))  # squash Y # doctest: +SKIP
     """
     from scadpy import scale_vertex_coordinates
 

@@ -22,6 +22,14 @@ def resize_sweep(
         Target ``[width, height]`` at ``t=0``.  When ``None`` (default) the
         bounding box of the cross-section is captured on the first call and
         used as the starting size.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from scadpy import circle
+    >>> path = np.column_stack([np.zeros(10), np.zeros(10), np.linspace(0, 20, 10)])
+    >>> circle(5).path_extrude(path, strategy=resize_sweep(end_size=[2, 8]))  # squish to 2×8 # doctest: +SKIP
+    >>> circle(5).path_extrude(path, strategy=resize_sweep(end_size=[None, 2]))  # proportional height # doctest: +SKIP
     """
     from scadpy import resize_vertex_coordinates
 

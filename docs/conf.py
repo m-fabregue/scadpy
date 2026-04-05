@@ -155,6 +155,7 @@ html_theme_options = {
 html_logo = "_static/logo.png"
 html_favicon = "_static/logo.ico"
 html_static_path = ["_static"]
+html_extra_path = ["build/AI_SKILLS.txt"]
 html_css_files = [
     "css/custom.css",
 ]
