@@ -160,6 +160,27 @@ html_css_files = [
     "css/custom.css",
 ]
 
+_META_DESCRIPTION = (
+    "ScadPy — parametric 2D/3D CAD modeling in pure Python. "
+    "Fluent API, boolean operations, path extrusion, topology queries. "
+    "Built on Shapely and trimesh. OpenSCAD alternative."
+)
+html_meta = {
+    "description": _META_DESCRIPTION,
+    "keywords": (
+        "cad, parametric, 3d modeling, 2d geometry, openscad, python, "
+        "boolean operations, shapely, trimesh, stl, extrude, solid, mesh"
+    ),
+    "og:title": "ScadPy — Parametric CAD in Pure Python",
+    "og:description": _META_DESCRIPTION,
+    "og:type": "website",
+    "og:url": "https://m-fabregue.github.io/scadpy/",
+    "og:image": "https://m-fabregue.github.io/scadpy/_static/logo.png",
+    "twitter:card": "summary",
+    "twitter:title": "ScadPy — Parametric CAD in Pure Python",
+    "twitter:description": _META_DESCRIPTION,
+}
+
 with open("../pyproject.toml", "rb") as f:
     config = tomllib.load(f)
 
