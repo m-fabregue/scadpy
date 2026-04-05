@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.4.20"
+version = "0.4.21"
 description = "Parametric 2D/3D CAD modeling in pure Python — fluent API, boolean operations, built on Shapely and trimesh"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
@@ -29,13 +29,13 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 
+dependencies = ["trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6", "python-fcl ~= 0.7"]
+
 [project.urls]
 Homepage = "https://m-fabregue.github.io/scadpy/"
 Documentation = "https://m-fabregue.github.io/scadpy/"
 Repository = "https://github.com/m-fabregue/scadpy"
 Changelog = "https://github.com/m-fabregue/scadpy/releases"
-
-dependencies = ["trimesh[easy] ~= 4.10", "manifold3d == 3.2.1", "ipython ~= 8.30", "matplotlib == 3.10.6", "python-fcl ~= 0.7"]
 
 [project.optional-dependencies]
 dev = [
