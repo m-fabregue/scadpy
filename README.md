@@ -7,10 +7,14 @@
 
 **Programmatic CAD in Pure Python.** — [Documentation](https://m-fabregue.github.io/scadpy/)
 
-ScadPy provides a fluent, type-safe API for 2D and 3D parametric modeling,
-built on [Shapely](https://shapely.readthedocs.io) and
-[trimesh](https://trimesh.org).
-Write designs with the conciseness of OpenSCAD and the full power of Python.
+ScadPy is a parametric modeling library for Python. Define 2D shapes and 3D
+solids with a fluent, chainable API: boolean operations, extrusions, fillets,
+patterns and topology queries. Export to STL, DXF, SVG or render interactively.
+
+Built on [Shapely](https://shapely.readthedocs.io) for 2D geometry,
+[trimesh](https://trimesh.org) for 3D meshes and [NumPy](https://numpy.org)
+for topology queries (vertex coordinates, edge normals, ring types and more).
+If you know OpenSCAD, the approach will feel familiar.
 
 ## Installation
 
