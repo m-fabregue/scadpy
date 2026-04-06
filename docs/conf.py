@@ -183,7 +183,6 @@ html_meta = {
     "twitter:card": "summary",
     "twitter:title": "ScadPy — Parametric CAD in Pure Python",
     "twitter:description": _META_DESCRIPTION,
-    "google-site-verification": "mFRfp0pBBUPEFKDqp2F-TduU4OLD3Kwczb4VueoZRJs",
 }
 
 with open("../pyproject.toml", "rb") as f:
