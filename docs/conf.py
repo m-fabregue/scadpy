@@ -152,7 +152,7 @@ html_theme_options = {
     },
 }
 
-html_title = "ScadPy — Parametric CAD in Pure Python"
+html_title = "ScadPy - Programmatic CAD in Pure Python"
 html_baseurl = "https://m-fabregue.github.io/scadpy/"
 html_logo = "_static/logo.png"
 html_favicon = "_static/logo.ico"
@@ -175,13 +175,13 @@ html_meta = {
         "cad, parametric, 3d modeling, 2d geometry, openscad, python, "
         "boolean operations, shapely, trimesh, stl, extrude, solid, mesh"
     ),
-    "og:title": "ScadPy — Parametric CAD in Pure Python",
+    "og:title": "ScadPy - Programmatic CAD in Pure Python",
     "og:description": _META_DESCRIPTION,
     "og:type": "website",
     "og:url": "https://m-fabregue.github.io/scadpy/",
     "og:image": "https://m-fabregue.github.io/scadpy/_static/logo.png",
     "twitter:card": "summary",
-    "twitter:title": "ScadPy — Parametric CAD in Pure Python",
+    "twitter:title": "ScadPy - Programmatic CAD in Pure Python",
     "twitter:description": _META_DESCRIPTION,
 }
 

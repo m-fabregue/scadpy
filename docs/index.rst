@@ -2,7 +2,7 @@
 ScadPy
 ======
 
-|pypi| |ci| |coverage| |interrogate|
+|pypi| |ci| |coverage| |interrogate| |github|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/scadpy
    :target: https://pypi.org/project/scadpy/
@@ -11,6 +11,10 @@ ScadPy
 .. |ci| image:: https://img.shields.io/github/actions/workflow/status/m-fabregue/scadpy/ci.yml?branch=main&label=CI
    :target: https://github.com/m-fabregue/scadpy/actions
    :alt: CI
+
+.. |github| image:: https://img.shields.io/badge/GitHub-m--fabregue%2Fscadpy-blue?logo=github
+   :target: https://github.com/m-fabregue/scadpy
+   :alt: GitHub
 
 .. |coverage| image:: https://m-fabregue.github.io/scadpy/_static/badges/coverage.svg
    :alt: test coverage
