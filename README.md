@@ -158,7 +158,7 @@ storage_box.to_screen()
 
 ## AI integration
 
-ScadPy ships a machine-readable skill file ([`AI_SKILLS.txt`](https://m-fabregue.github.io/scadpy/AI_SKILLS.txt)) that lets AI
+ScadPy ships a machine-readable skill file ([`ai-skills.txt`](https://m-fabregue.github.io/scadpy/ai-skills.txt)) that lets AI
 assistants understand the full API without reading source code — signatures,
 descriptions, parameters, return types, and usage examples, extracted directly
 from the source.

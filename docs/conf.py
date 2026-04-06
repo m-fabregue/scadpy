@@ -157,7 +157,8 @@ html_baseurl = "https://m-fabregue.github.io/scadpy/"
 html_logo = "_static/logo.png"
 html_favicon = "_static/logo.ico"
 html_static_path = ["_static"]
-html_extra_path = ["build/AI_SKILLS.txt"]
+templates_path = ["_templates"]
+html_extra_path = ["build/ai-skills.txt"]
 sitemap_url_scheme = "{link}"
 html_css_files = [
     "css/custom.css",
@@ -182,6 +183,7 @@ html_meta = {
     "twitter:card": "summary",
     "twitter:title": "ScadPy — Parametric CAD in Pure Python",
     "twitter:description": _META_DESCRIPTION,
+    "google-site-verification": "mFRfp0pBBUPEFKDqp2F-TduU4OLD3Kwczb4VueoZRJs",
 }
 
 with open("../pyproject.toml", "rb") as f:

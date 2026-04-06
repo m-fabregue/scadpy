@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.4.22"
+version = "0.4.23"
 description = "Parametric 2D/3D CAD modeling in pure Python — fluent API, boolean operations, built on Shapely and trimesh"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
@@ -67,7 +67,7 @@ extensions = [
 ]
 
 [tool.skills]
-output = "docs/build/AI_SKILLS.txt"
+output = "docs/build/ai-skills.txt"
 sources = [
     "scadpy/core/assembly/types/assembly.py",
     "scadpy/core/assembly/types/topology_filter.py",
