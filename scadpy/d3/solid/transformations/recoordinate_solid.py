@@ -44,6 +44,7 @@ def recoordinate_solid(
                 Trimesh(
                     vertices=part_vertex_coordinates,
                     faces=solid._parts[part_index].geometry.faces,
+                    process=False,
                 ),
                 color,
             )
