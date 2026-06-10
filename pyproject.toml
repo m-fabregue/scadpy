@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ScadPy"
-version = "0.4.26"
+version = "0.4.27"
 description = "Parametric 2D/3D CAD modeling in pure Python — fluent API, boolean operations, built on Shapely and trimesh"
 requires-python = ">= 3.12"
 authors = [{ name = "m-fabregue" }]
@@ -39,7 +39,7 @@ Changelog = "https://github.com/m-fabregue/scadpy/releases"
 
 [project.optional-dependencies]
 dev = [
-    "basedpyright",
+    "basedpyright == 1.39.0",
     "coverage",
     "furo == 2025.7.19",
     "genbadge[coverage]",
