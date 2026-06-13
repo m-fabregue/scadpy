@@ -1,4 +1,5 @@
 __all__ = [
+    "are_shape_part_bounding_boxes_intersecting",
     "are_shape_parts_intersecting",
     "concat_shape",
     "exclude_shape",
@@ -10,6 +11,9 @@ __all__ = [
     "unify_shape_parts",
 ]
 
+from .are_shape_part_bounding_boxes_intersecting import (
+    are_shape_part_bounding_boxes_intersecting,
+)
 from .are_shape_parts_intersecting import are_shape_parts_intersecting
 from .concat_shape import concat_shape
 from .exclude_shape import exclude_shape

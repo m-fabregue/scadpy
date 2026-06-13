@@ -1,4 +1,5 @@
 __all__ = [
+    "are_solid_part_bounding_boxes_intersecting",
     "are_solid_parts_intersecting",
     "concat_solid",
     "exclude_solid",
@@ -10,6 +11,9 @@ __all__ = [
     "unify_solid_parts",
 ]
 
+from .are_solid_part_bounding_boxes_intersecting import (
+    are_solid_part_bounding_boxes_intersecting,
+)
 from .are_solid_parts_intersecting import are_solid_parts_intersecting
 from .concat_solid import concat_solid
 from .exclude_solid import exclude_solid

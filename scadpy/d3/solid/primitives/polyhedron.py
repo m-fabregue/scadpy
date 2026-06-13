@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
-import numpy as np
-from numpy.typing import NDArray
 from trimesh import Trimesh
 
 if TYPE_CHECKING:
@@ -11,19 +10,20 @@ if TYPE_CHECKING:
 
 
 def polyhedron(
-    vertices: NDArray[np.float64],
-    faces: NDArray[np.int64],
+    vertices: Iterable[Iterable[float]],
+    faces: Iterable[Iterable[int]],
 ) -> Solid:
-    """Create a solid from raw vertex coordinates and triangular face indices.
+    """Create a solid from vertex coordinates and triangular face indices.
 
     This is the base primitive constructor. All other solid primitives ultimately
     call this function with numpy-computed geometry.
 
     Parameters
     ----------
-    vertices : NDArray[np.float64]
-        Vertex coordinates of shape ``(n, 3)``.
-    faces : NDArray[np.int64]
+    vertices : Iterable[Iterable[float]]
+        Vertex coordinates of shape ``(n, 3)``. Accepts any nested sequence
+        (Python lists/tuples or a NumPy array).
+    faces : Iterable[Iterable[int]]
         Triangle face indices of shape ``(m, 3)``. Each row contains the indices
         of three vertices forming a triangle. Winding order follows the
         right-hand rule: outward-pointing normals require counter-clockwise

@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
+import numpy as np
 from shapely.geometry import Polygon
 
 if TYPE_CHECKING:
@@ -13,15 +14,16 @@ def polygon(points: Iterable[Iterable[float]]) -> Shape:
     """
     Create a 2D polygon shape from a sequence of points.
 
-    This function constructs a :class:`~scadpy.d2.shape.types.Shape` from the given 2D points.
+    Constructs a :class:`~scadpy.d2.shape.types.Shape` from the given 2D points.
     The polygon is automatically closed by connecting the last point to the first.
     If the polygon is self-intersecting, it may be split into multiple parts.
 
     Parameters
     ----------
     points : Iterable[Iterable[float]]
-        A sequence of coordinate pairs ``[x, y]`` defining the vertices
-        of the polygon. At least three points are required.
+        The polygon vertices as ``(n, 2)`` coordinates ``[x, y]``. Accepts any
+        nested sequence (Python lists/tuples or a NumPy array). At least three
+        points are required.
 
     Returns
     -------
@@ -31,7 +33,6 @@ def polygon(points: Iterable[Iterable[float]]) -> Shape:
     Notes
     -----
     - The polygon is automatically closed by connecting the last point to the first.
-    - The input points are converted into 2D coordinates; extra dimensions are ignored.
     - If the polygon is self-intersecting, it may be split into multiple parts.
 
     Examples
@@ -73,12 +74,12 @@ def polygon(points: Iterable[Iterable[float]]) -> Shape:
         ...
     ValueError: A polygon must have at least 3 points
     """
-    from scadpy.d2 import resolve_vector_2d
     from scadpy.d2.shape import Shape
 
-    coords = [tuple(resolve_vector_2d(p, 0)) for p in points]
-    if len(coords) < 3:
+    coordinates = np.asarray(points, dtype=float)
+    if coordinates.ndim != 2 or coordinates.shape[1] != 2:
+        raise ValueError("A polygon requires points of shape (n, 2)")
+    if len(coordinates) < 3:
         raise ValueError("A polygon must have at least 3 points")
 
-    polygon = Polygon(coords)
-    return Shape.from_geometry(polygon)
+    return Shape.from_geometry(Polygon(coordinates))

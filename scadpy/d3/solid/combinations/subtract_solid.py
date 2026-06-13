@@ -26,7 +26,7 @@ def subtract_solid(to_be_subtracted: Solid, to_subtract: Solid) -> Solid:
     """
     from scadpy import (
         Solid,
-        are_solid_parts_intersecting,
+        are_solid_part_bounding_boxes_intersecting,
         subtract_solid_parts,
     )
     from scadpy.core.assembly import subtract_assemblies
@@ -35,7 +35,7 @@ def subtract_solid(to_be_subtracted: Solid, to_subtract: Solid) -> Solid:
         to_be_subtracted=to_be_subtracted,
         to_subtract=to_subtract,
         get_assembly_parts=lambda assembly: assembly._parts,
-        are_parts_intersecting=are_solid_parts_intersecting,
+        are_parts_intersecting=are_solid_part_bounding_boxes_intersecting,
         subtract_parts=lambda part_base, parts_cutter: subtract_solid_parts(
             to_be_subtracted=part_base,
             to_subtract=parts_cutter,

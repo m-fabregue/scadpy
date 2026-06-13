@@ -26,7 +26,7 @@ def subtract_shape(to_be_subtracted: Shape, to_subtract: Shape) -> Shape:
     """
     from scadpy import (
         Shape,
-        are_shape_parts_intersecting,
+        are_shape_part_bounding_boxes_intersecting,
         subtract_shape_parts,
     )
     from scadpy.core.assembly import subtract_assemblies
@@ -35,7 +35,7 @@ def subtract_shape(to_be_subtracted: Shape, to_subtract: Shape) -> Shape:
         to_be_subtracted=to_be_subtracted,
         to_subtract=to_subtract,
         get_assembly_parts=lambda assembly: assembly._parts,
-        are_parts_intersecting=are_shape_parts_intersecting,
+        are_parts_intersecting=are_shape_part_bounding_boxes_intersecting,
         subtract_parts=lambda part_base, parts_cutter: subtract_shape_parts(
             to_be_subtracted=part_base,
             to_subtract=parts_cutter,
