@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
+import numpy as np
 from trimesh import Trimesh
 
 if TYPE_CHECKING:
@@ -55,4 +56,9 @@ def polyhedron(
     """
     from scadpy.d3.solid import Solid
 
-    return Solid.from_geometry(Trimesh(vertices=vertices, faces=faces))
+    return Solid.from_geometry(
+        Trimesh(
+            vertices=np.asarray(vertices, dtype=np.float64),
+            faces=np.asarray(faces, dtype=np.int64),
+        )
+    )

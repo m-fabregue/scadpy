@@ -261,9 +261,9 @@ s.to_svg_file("output.svg")
 from scadpy import *
 
 # primitives
-cone(radius=2, height=4)         # section_count=32
+cone(radius=2, height=4)         # segment_count=64
 cuboid(size=[4, 3, 2])
-cylinder(radius=2, height=4)     # section_count=32
+cylinder(radius=2, height=4)     # segment_count=64
 polyhedron(vertices=vertices, faces=faces)
 sphere(radius=3)                 # subdivision_count=4
 Solid.from_stl("model.stl")

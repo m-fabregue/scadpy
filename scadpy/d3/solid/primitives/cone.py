@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-def cone(radius: float, height: float, section_count: int = 32) -> Solid:
+def cone(radius: float, height: float, segment_count: int = 64) -> Solid:
     """Create a cone centered at the origin, apex pointing along +z.
 
     Parameters
@@ -17,8 +17,9 @@ def cone(radius: float, height: float, section_count: int = 32) -> Solid:
         The radius of the base circle.
     height : float
         The total height of the cone.
-    section_count : int, optional
-        The number of sides of the polygonal base approximation. Default is 32.
+    segment_count : int, optional
+        The number of segments used to approximate the circular base.
+        Default is 64.
 
     Returns
     -------
@@ -36,15 +37,15 @@ def cone(radius: float, height: float, section_count: int = 32) -> Solid:
         :name: cone
         :example: cone(radius=2, height=4)
 
-    >>> cone(radius=2, height=4, section_count=6)  # doctest: +SKIP
+    >>> cone(radius=2, height=4, segment_count=6)  # doctest: +SKIP
 
     .. render-example::
         :name: hexagonal_cone
-        :example: cone(radius=2, height=4, section_count=6)
+        :example: cone(radius=2, height=4, segment_count=6)
     """
     from scadpy.d3.solid.primitives.polyhedron import polyhedron
 
-    n = section_count
+    n = segment_count
     angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
     cos_a = np.cos(angles)
     sin_a = np.sin(angles)

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from scadpy.d3.solid import Solid
 
 
-def cylinder(radius: float, height: float, section_count: int = 32) -> Solid:
+def cylinder(radius: float, height: float, segment_count: int = 64) -> Solid:
     """Create a cylinder centered at the origin, aligned along the z-axis.
 
     Parameters
@@ -17,8 +17,9 @@ def cylinder(radius: float, height: float, section_count: int = 32) -> Solid:
         The radius of the cylinder.
     height : float
         The total height of the cylinder.
-    section_count : int, optional
-        The number of sides of the polygonal approximation. Default is 32.
+    segment_count : int, optional
+        The number of segments used to approximate the circular section.
+        Default is 64.
 
     Returns
     -------
@@ -36,15 +37,15 @@ def cylinder(radius: float, height: float, section_count: int = 32) -> Solid:
         :name: cylinder
         :example: cylinder(radius=2, height=4)
 
-    >>> cylinder(radius=2, height=4, section_count=6)  # doctest: +SKIP
+    >>> cylinder(radius=2, height=4, segment_count=6)  # doctest: +SKIP
 
     .. render-example::
         :name: hexagonal_cylinder
-        :example: cylinder(radius=2, height=4, section_count=6)
+        :example: cylinder(radius=2, height=4, segment_count=6)
     """
     from scadpy.d3.solid.primitives.polyhedron import polyhedron
 
-    n = section_count
+    n = segment_count
     angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
     cos_a = np.cos(angles)
     sin_a = np.sin(angles)
