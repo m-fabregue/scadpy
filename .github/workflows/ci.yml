@@ -14,13 +14,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, ubuntu-24.04, macos-latest, windows-latest]
         python-version: ["3.12", "3.13", "3.14"]
         include:
-          # Snapshot comparison is only meaningful on the reference platform.
-          # On macOS and Windows, matplotlib produces slightly different SVG
-          # floating-point values, so we use doctest-without-snapshots there.
+          # Snapshots are only checked on ubuntu-24.04 (pinned, not "latest")
+          # so OS/font drift can't break them.
           - os: ubuntu-latest
+            doctest_target: doctest-without-snapshots
+          - os: ubuntu-24.04
             doctest_target: doctest
           - os: macos-latest
             doctest_target: doctest-without-snapshots
