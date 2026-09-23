@@ -7,23 +7,9 @@ from shapely.geometry import Polygon
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
-# Mitre joins can overshoot at concave/thin features when the buffer is
-# eroding (negative distance), producing self-intersections. GEOS resolves
-# these internally so the result stays topologically valid, but it can do so
-# by splitting the output into a real polygon plus a handful of numerically
-# degenerate sliver fragments (areas many orders of magnitude below any real
-# geometry) right around the distance where a thin bridge collapses. Left in,
-# these slivers triangulate into degenerate 3D geometry with no validation
-# anywhere downstream (Solid.from_parts and to_stl_file are unchecked), so
-# broken solids can slip through silently until some unrelated later
-# operation (translate, rotate, ...) happens to trigger a manifold check.
-#
-# The threshold is scaled by distance**2 rather than a fixed epsilon so it
-# adapts to both the requested offset and the model's own unit scale, instead
-# of assuming millimetres. In practice degenerate slivers measure ~1e-13 to
-# ~1e-17 of distance**2 (essentially floating-point noise); 1e-3 leaves many
-# orders of magnitude of headroom before a real, intentionally tiny detail
-# would ever be at risk of being dropped.
+# Drops numerically-degenerate sliver fragments a mitre-join erosion can
+# leave behind near thin/concave features. Scaled by distance**2 to stay
+# unit-agnostic.
 _DEGENERATE_AREA_RATIO = 1e-3
 
 
