@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
@@ -23,7 +24,9 @@ def map_parts_to_solid(
       a mirror transform), the face winding order is reversed to restore
       outward-pointing normals.
 
-    A mesh copy is only made when a repair is actually needed.
+    A mesh copy is only made when a repair is actually needed. Parts that are
+    still non-manifold after repair (e.g. degenerate slivers left by a boolean
+    op) are dropped, with a warning reporting how many were dropped.
 
     Parameters
     ----------
@@ -33,7 +36,7 @@ def map_parts_to_solid(
     Returns
     -------
     Solid
-        A new solid containing all parts with corrected geometry.
+        A new solid containing all valid parts with corrected geometry.
 
     Examples
     --------
@@ -51,6 +54,7 @@ def map_parts_to_solid(
     from scadpy.d3.solid.types.solid import Solid
 
     fixed_parts: list[Part[Trimesh]] = []
+    dropped = 0
     for part in parts:
         mesh = part.geometry
         needs_fix = (not mesh.is_winding_consistent) or (mesh.volume < 0)
@@ -61,15 +65,15 @@ def map_parts_to_solid(
             mesh.is_winding_consistent and mesh.is_watertight and mesh.volume > 0
         )
         if not is_mesh_valid:
-            raise ValueError(
-                (
-                    f"Solid must be manifold. Mesh check results:\n"
-                    f" - Winding consistent: {mesh.is_winding_consistent}\n"
-                    f" - Watertight: {mesh.is_watertight}\n"
-                    f" - Positive volume: {mesh.volume > 0}"
-                )
-            )
+            dropped += 1
+            continue
         fixed_parts.append(Part[Trimesh].from_geometry(mesh, part.color))
+
+    if dropped:
+        warnings.warn(
+            f"map_parts_to_solid: dropped {dropped} non-manifold part(s)",
+            stacklevel=2,
+        )
 
     solid = Solid()
     solid._parts = fixed_parts

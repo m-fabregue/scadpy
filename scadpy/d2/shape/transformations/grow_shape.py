@@ -7,9 +7,6 @@ from shapely.geometry import Polygon
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
-# Drops degenerate slivers left by mitre-join erosion, relative to distance**2.
-_DEGENERATE_AREA_RATIO = 1e-3
-
 
 def grow_shape(
     shape: Shape, distance: float, part_filter: TopologyFilter[Shape] | None = None
@@ -37,14 +34,11 @@ def grow_shape(
     from scadpy import Part, Shape, transform_filtered_parts
     from scadpy.d2.shape.types.utils import shapely_base_geometry_to_shapely_polygons
 
-    min_area = (distance**2) * _DEGENERATE_AREA_RATIO
-
     def _grow_part(p):
         grown = p.geometry.buffer(distance, join_style="mitre")
         return [
             Part[Polygon].from_geometry(polygon, p.color)
             for polygon in shapely_base_geometry_to_shapely_polygons(grown)
-            if polygon.area >= min_area
         ]
 
     return transform_filtered_parts(
