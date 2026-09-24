@@ -727,9 +727,9 @@ class Solid(Assembly[Trimesh]):
         >>> Solid.from_parts([]).is_empty
         True
         """
-        solid = Solid()
-        solid._parts = parts
-        return solid
+        from scadpy.d3.solid.importers import map_parts_to_solid
+
+        return map_parts_to_solid(parts)
 
     @classmethod
     def from_geometries(cls, geometries: Sequence[Trimesh]) -> Solid:
