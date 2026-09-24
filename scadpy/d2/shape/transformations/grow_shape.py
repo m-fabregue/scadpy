@@ -7,9 +7,7 @@ from shapely.geometry import Polygon
 if TYPE_CHECKING:
     from scadpy import Shape, TopologyFilter
 
-# Drops numerically-degenerate sliver fragments a mitre-join erosion can
-# leave behind near thin/concave features. Scaled by distance**2 to stay
-# unit-agnostic.
+# Drops degenerate slivers left by mitre-join erosion, relative to distance**2.
 _DEGENERATE_AREA_RATIO = 1e-3
 
 
